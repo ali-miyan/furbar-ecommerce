@@ -1,0 +1,28 @@
+<%- include('../layouts/header.ejs') -%>
+<%- include('../layouts/usernav.ejs') -%>
+
+
+<form action="/verifyOTP" method="post" class="py-27 px-27 ">
+
+
+    <%
+    if(typeof message !== 'undefined'){
+        %>
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+            <i class="bi-exclamation-octagon-fill"></i>
+            <strong class="mx-auto" >  <%- message %></strong>  
+           
+        </div>
+        <%
+    } 
+    %>
+
+    <label for="otp">Enter OTP:</label><br>
+    <input type="text" id="otp" name="otp" maxlength="4" pattern="\d{4}" required><br>
+    <button type="submit">Verify OTP</button>
+
+</form>
+
+
+<%- include('../layouts/userfoot.ejs') -%>
+<%- include('../layouts/footer.ejs') -%>
