@@ -13,6 +13,12 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+const sessionSecret = 'mysitesessionsecret';
+
+module.exports = {
+    sessionSecret,
+    connectDB
+}
+
 
  

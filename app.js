@@ -6,6 +6,13 @@ const app = express();
 const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const PORT = process.env.PORT || 3000;
+const session = require('express-session');
+
+app.use(session({
+    secret: "xx",
+    saveUninitialized: true,
+    resave: false
+  }))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
