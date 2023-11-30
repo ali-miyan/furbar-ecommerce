@@ -25,6 +25,8 @@ app.set('view engine','ejs');
 app.set('views','./views/user');
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname,'public/assets')));
+
 
 
 app.use('/',userRoute)

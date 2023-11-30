@@ -22,6 +22,8 @@ routeUser.get('/',userController.loadHome,auth.isLogout)
 
 routeUser.get('/home',userController.loadHome,auth.isLogout)
 
+routeUser.get('/shop',userController.loadShop)
+
 routeUser.get('/profile',userController.loadProfile)
 
 routeUser.get('/signup',userController.loadSignup)

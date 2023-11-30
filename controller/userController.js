@@ -22,6 +22,16 @@ const loadHome=async(req,res)=>{
         console.log(error);
     }
 }
+
+//shop page
+const loadShop=async(req,res)=>{
+    try {
+        res.render('shop')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //signup page
 const loadSignup=async(req,res)=>{
     try {
@@ -80,6 +90,7 @@ const signupPost = async (req, res) => {
                     email: req.body.email,
                     password: hashedPassword,
                     verified: false,
+                    isAdmin:0
                 });
 
                 const result = await newUser.save();
@@ -245,7 +256,7 @@ const userLogout = async (req, res) => {
                 console.log("Error destroying session:", err.message);
             } else {
                 console.log("Session destroyed");
-                // Redirect to the home page or another appropriate route
+
                 res.redirect('/home');
             }
         });
@@ -264,5 +275,6 @@ module.exports={
     userLogout,
     loadSignup,
     loadProfile,
-    loadLogin
+    loadLogin,
+    loadShop
 }
