@@ -7,6 +7,9 @@ const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const PORT = process.env.PORT || 3000;
 const session = require('express-session');
+const nocache = require('nocache');
+
+app.use(nocache())
 
 app.use(session({
     secret: "xx",

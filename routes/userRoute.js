@@ -4,7 +4,6 @@ const session = require('express-session');
 const auth = require('../middleware/auth');
 const userController=require('../controller/userController')
 
-
 const routeUser=express()
 
 routeUser.use(session({
@@ -13,8 +12,6 @@ routeUser.use(session({
     resave: false
   }))
 
-
-
 routeUser.use(express.urlencoded({ extended: true }));
 routeUser.use(express.json());
 
@@ -22,12 +19,12 @@ routeUser.set('view engine','ejs');
 routeUser.set('views','./views/user');
 
 routeUser.get('/',userController.loadHome,auth.isLogout)
-routeUser.get('/home',userController.loadHome,auth.isLogin)
 
-routeUser.get('/signup',(req,res)=>{
-    res.render('signup')
-})
+routeUser.get('/home',userController.loadHome,auth.isLogout)
 
+routeUser.get('/profile',userController.loadProfile)
+
+routeUser.get('/signup',userController.loadSignup)
 
 routeUser.post('/signup',userController.signupPost)
 
@@ -35,10 +32,10 @@ routeUser.get('/verifyOTP',userController.verifyOTP)
 
 routeUser.post('/verifyOTP',userController.verifyPost)
 
-routeUser.get('/login',(req,res)=>{
-    res.render('login')
-})
+routeUser.get('/login',userController.loadLogin)
 
+routeUser.post('/login',userController.loginPost)
 
+routeUser.get('/logout',userController.userLogout)
 
 module.exports=routeUser

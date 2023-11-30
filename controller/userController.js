@@ -6,8 +6,6 @@ const nodemailer = require('nodemailer');
 const session = require('express-session');
 const auth = require('../middleware/auth');
 const userController=require('../controller/userController')
-
-
 const userVerification=require('../models/userOTP');
 const User = require('../models/userModel');
 const userOTP = require('../models/userOTP');
@@ -15,7 +13,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 config.connectDB();
 
-
+//route to home page
 const loadHome=async(req,res)=>{
     try {
         res.render('home')
@@ -24,9 +22,39 @@ const loadHome=async(req,res)=>{
         console.log(error);
     }
 }
+//signup page
+const loadSignup=async(req,res)=>{
+    try {
+        res.render('signup')
+    } catch (error) {
+        console.log(error);
+    }
+}
+//profile page
+const loadProfile=async(req,res)=>{
+    try {
+        if(req.session.user_id){
+            console.log("profile session"+req.session.user_id);
+            res.render('profile')
+        }else{
+        res.render('signup')
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    
+}
 
+//login page
+const loadLogin=async(req,res)=>{
+    try {
+        res.render('login')
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-
+//signup and storing data to database
 const signupPost = async (req, res) => {
     try {
         let { name, email, password } = req.body;
@@ -66,6 +94,7 @@ const signupPost = async (req, res) => {
 };
 
 
+//rendering otp page
 const verifyOTP=async (req, res) => {
     try {
         req.session.userId = req.query.id; 
@@ -78,6 +107,7 @@ const verifyOTP=async (req, res) => {
     }
 };
 
+//verifying otp
 const verifyPost=async(req,res)=>{
     try {
       const otp= req.body.otp
@@ -112,7 +142,7 @@ const verifyPost=async(req,res)=>{
                     //     status:"VERIFIED",
                     //     message:"user email verified successfully"
                     //    })
-                    res.redirect(`/`)
+                    res.redirect(`/login`)
                     }
                 }
             }
@@ -126,7 +156,7 @@ const verifyPost=async(req,res)=>{
 }
 
 
-
+//hashing password
 const securePassword=async(password)=>{
     try {
         const hashedPassword=bcrypt.hash(password,10)
@@ -136,7 +166,7 @@ const securePassword=async(password)=>{
     }
 }
 
-
+//sending otp
 const sendOTPverification=async({_id,email},res)=>{
     try {
         const otp=`${Math.floor(1000+Math.random()*900)}`
@@ -178,10 +208,61 @@ let transporter=nodemailer.createTransport({
 })
 
 
+//login the user
+let loginPost=async(req,res)=>{
+    try {
+        const email=req.body.email;
+        const password=req.body.password;
+        console.log(password);
+        console.log(email);
+    
+        const validUser=await User.findOne({email:email})
+        console.log(validUser);
+        if(validUser){
+            const passwordMatch=await bcrypt.compare(password,validUser.password)
+            if(passwordMatch){
+                req.session.user_id=validUser._id;
+                res.redirect('/home')
+            }else{
+                res.render('login',{message:'incorrect password'})
+
+            }
+        }else{
+            res.render('login',{message:'ivalid email or password'})
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+//user logout
+const userLogout = async (req, res) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log("Error destroying session:", err.message);
+            } else {
+                console.log("Session destroyed");
+                // Redirect to the home page or another appropriate route
+                res.redirect('/home');
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports={
     verifyOTP,
     verifyPost,
     loadHome,
-    signupPost
+    signupPost,
+    loginPost,
+    userLogout,
+    loadSignup,
+    loadProfile,
+    loadLogin
 }

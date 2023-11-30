@@ -26,12 +26,23 @@
             <a href="/login"><button id="login-toggle" >log in</button></a>
             <a href="/signup"><button id="signup-toggle" >sign up</button></a>
         </div>
+        <%
+        if(typeof message !== 'undefined'){
+            %>
+            <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                <i class="bi-exclamation-octagon-fill"></i>
+                <strong class="mx-auto" >  <%- message %></strong>  
+               
+            </div>
+            <%
+        } 
+        %>
 
         <div id="login-form">
-            <form>
-                <input type="text" placeholder="Enter email or username"/>
-                <input type="password" placeholder="Enter password"/>
-                <button type="button" class="btn login">login</button>
+            <form action="/login" method="post">
+                <input type="email" name="email" placeholder="Enter email or username"/>
+                <input type="password" name="password" placeholder="Enter password"/>
+                <button type="submit" class="btn login">login</button>
                 <p><a href="javascript:void(0)">Forgotten account</a></p>
                 <hr/>
     
