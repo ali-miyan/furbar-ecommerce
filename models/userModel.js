@@ -12,11 +12,22 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:true
     },
+    mobile:{
+        type:Number,
+        required:true
+
+    },
     verfied:{
-      type:Boolean
+      type:Boolean,
+      default:false
+
     },
     isAdmin:{
         type:Number
+    },
+    is_blocked: {
+        type: Boolean,
+        default:false
     }
 });
 

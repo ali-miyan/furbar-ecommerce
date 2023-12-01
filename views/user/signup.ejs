@@ -1,5 +1,24 @@
 <%- include('../layouts/header.ejs') -%>
 <%- include('../layouts/usernav.ejs') -%>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Nest Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
+        <!-- Template CSS -->
+        <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
 
 		<!-- main -->
         <div class="login-signup">
@@ -18,44 +37,58 @@
             </div>
         </section>
 
-<div class="form-modal">
-    
-    
-    <div class="form-toggle">
-        <a href="/signup"><button id="login-toggle" >sign up</button></a>
-        <a href="/login"><button id="signup-toggle" >log in</button></a>
-    </div>
+        <section class="content-main mt-80 mb-80">
+            <div class="card mx-auto card-login">
+                <div class="card-body">
+                    <h4 class="card-title mb-4 mx-24">Sign Up</h4>
+                    <form action="/signup" method="post">
 
+                        <%
+                        if(typeof message !== 'undefined'){
+                            %>
+                            <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                                <i class="bi-exclamation-octagon-fill"></i>
+                                <strong class="mx-auto" >  <%- message %></strong>  
+                               
+                            </div>
+                            <%
+                        } 
+                        %>
 
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="username" type="name" name="name" />
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="email" type="email" name="email" />
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="mobile" type="tel" name="mobile" />
+                        </div>
+                        <!-- form-group// -->
+                         <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" name="password" />
+                        </div>
+                        
+                        <!-- form-group form-check .// -->
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary w-100">sign up</button>
+                        </div>
+                        <!-- form-group// -->
+                        <div class="mb-3">
+                            <a href="#" class="font-sm text-muted">Forgot password?</a>
+                            <!-- <label class="form-check">
+                                <input type="checkbox" class="form-check-input" checked="" />
+                                <span class="form-check-label">Remember</span>
+                            </label> -->
+                        </div>
+                    </form>
+                    
 
-    <div id="login-form">
-        <%
-        if(typeof message !== 'undefined'){
-            %>
-            <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                <i class="bi-exclamation-octagon-fill"></i>
-                <strong class="mx-auto" >  <%- message %></strong>  
-               
+                    <p class="text-center mb-4">Already have an account?<a href="/login">Sign in</a></p>
+                </div>
             </div>
-            <%
-        } 
-        %>
-        <form method="post" action="/signup">
-            <input type="text" name="name" placeholder="Enter your name"/>
-            <input type="email" name="email" placeholder="Email"/>
-            <input type="password" name="password" placeholder="Create password"/>
-            <button type="submit"  class="btn signup" >create account</button>
-            <p>Clicking <a href="">create account</a> means that you are agree to our <a href="javascript:void(0)">terms of services</a>.</p>
-            <hr/>
-           
-        </form>
-    </div>
+        </section>
 
-</div>
-
-<br>
-<br>
-<br>
 </div>
 
 

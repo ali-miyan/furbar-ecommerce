@@ -4,8 +4,30 @@
 
 <div class="my-23">
 
+    <%
+                            if(typeof message !== 'undefined'){
+                                %>
+                                <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                                    <i class="bi-exclamation-octagon-fill"></i>
+                                    <strong class="mx-auto" >  <%- message %></strong>  
+                                   
+                                </div>
+                                <%
+                            } 
+     %>
 
 <h1>wellcomeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</h1>
+<%
+if(typeof message !== 'undefined'){
+    %>
+    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+        <i class="bi-exclamation-octagon-fill"></i>
+        <strong class="mx-auto" >  <%- message %></strong>  
+       
+    </div>
+    <%
+} 
+%>
 
 <a href="/logout"><button type="submit" class="btn btn-success mx-20" >Logout</button></a>
 

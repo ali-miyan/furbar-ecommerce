@@ -67,9 +67,9 @@ const loadLogin=async(req,res)=>{
 //signup and storing data to database
 const signupPost = async (req, res) => {
     try {
-        let { name, email, password } = req.body;
+        let { name, email,mobile,password } = req.body;
 
-        if (name === "" || email === "" || password === "") {
+        if (name === "" || email === "" || mobile === ""||password === "") {
             res.render('signup', { message: 'Empty input fields' });
         } else if (!/^[a-zA-Z]+$/.test(name)) {
             res.render('signup', { message: 'Invalid name entered' });
@@ -88,6 +88,7 @@ const signupPost = async (req, res) => {
                 const newUser = new User({
                     name: req.body.name,
                     email: req.body.email,
+                    mobile: req.body.mobile,
                     password: hashedPassword,
                     verified: false,
                     isAdmin:0
@@ -108,8 +109,8 @@ const signupPost = async (req, res) => {
 //rendering otp page
 const verifyOTP=async (req, res) => {
     try {
-        req.session.userId = req.query.id; 
-        console.log("Session ID set:", req.session.userId);   
+        req.session.user_id = req.query.id; 
+        console.log("Session ID set:", req.session.user_id);   
         console.log("Session ID set:", req.query.id);   
 
         res.render('otp');
@@ -147,8 +148,8 @@ const verifyPost=async(req,res)=>{
                         // throw new ("Invalid code")
                         res.render('otp',{message:"Invalid code"})
                     }else{
-                       await User.updateOne({_id:userId},{verfied:true});
-                       await userVerification.deleteMany({userId});
+                       await User.updateOne({_id:user_id},{verfied:true});
+                       await userVerification.deleteMany({user_id});
                     //    res.json({
                     //     status:"VERIFIED",
                     //     message:"user email verified successfully"
@@ -193,7 +194,7 @@ const sendOTPverification=async({_id,email},res)=>{
     const hashedOTP=await bcrypt.hash(otp,10);
     
     const newOTP = await new userOTP({
-        userId:_id,
+        user_id:_id,
         otp:hashedOTP,
         createAt:Date.now(),
         expiresAt:Date.now()+3600000,
@@ -233,10 +234,10 @@ let loginPost=async(req,res)=>{
             const passwordMatch=await bcrypt.compare(password,validUser.password)
             if(passwordMatch){
                 req.session.user_id=validUser._id;
-                res.redirect('/home')
+
+                res.render('home')
             }else{
                 res.render('login',{message:'incorrect password'})
-
             }
         }else{
             res.render('login',{message:'ivalid email or password'})

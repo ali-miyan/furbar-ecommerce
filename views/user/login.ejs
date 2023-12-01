@@ -1,11 +1,28 @@
 <%- include('../layouts/header.ejs') -%>
 <%- include('../layouts/usernav.ejs') -%>
 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Nest Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
+        <!-- Template CSS -->
+        <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    </head>
 
-
+    <body>
 		<!-- main -->
         <div class="login-signup">
-            <section class="introBannerHolder d-flex w-100 bgCover my-23" style="background-image: url(images/b-bg7.jpg);">
+            <section class="introBannerHolder d-flex w-100 bgCover my-23">
                 <div class="container">
                     <div class="row">
                         <div class="col-12 pt-lg-23 pt-md-15 pt-sm-10 pt-6 text-center">
@@ -20,36 +37,51 @@
                 </div>
             </section>
     
-    <div class="form-modal">
-        
-        <div class="form-toggle">
-            <a href="/login"><button id="login-toggle" >log in</button></a>
-            <a href="/signup"><button id="signup-toggle" >sign up</button></a>
-        </div>
-        <%
-        if(typeof message !== 'undefined'){
-            %>
-            <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                <i class="bi-exclamation-octagon-fill"></i>
-                <strong class="mx-auto" >  <%- message %></strong>  
-               
-            </div>
-            <%
-        } 
-        %>
+            <section class="content-main mt-80 mb-80">
+                <div class="card mx-auto card-login">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 mx-24">Sign in</h4>
+                        <form action="/login" method="post">
 
-        <div id="login-form">
-            <form action="/login" method="post">
-                <input type="email" name="email" placeholder="Enter email or username"/>
-                <input type="password" name="password" placeholder="Enter password"/>
-                <button type="submit" class="btn login">login</button>
-                <p><a href="javascript:void(0)">Forgotten account</a></p>
-                <hr/>
-    
-            </form>
-        </div>
-    
-        </div>
+                            <%
+                            if(typeof message !== 'undefined'){
+                                %>
+                                <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                                    <i class="bi-exclamation-octagon-fill"></i>
+                                    <strong class="mx-auto" >  <%- message %></strong>  
+                                   
+                                </div>
+                                <%
+                            } 
+                            %>
+
+                            <div class="mb-3">
+                                <input class="form-control" placeholder="email" type="email" name="email" />
+                            </div>
+                            <!-- form-group// -->
+                             <div class="mb-3">
+                                <input class="form-control" placeholder="Password" type="password" name="password" />
+                            </div>
+                            
+                            <!-- form-group form-check .// -->
+                            <div class="mb-4">
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </div>
+                            <!-- form-group// -->
+                            <div class="mb-3">
+                                <a href="#" class="font-sm text-muted">Forgot password?</a>
+                                <!-- <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" checked="" />
+                                    <span class="form-check-label">Remember</span>
+                                </label> -->
+                            </div>
+                        </form>
+                        
+
+                        <p class="text-center mb-4">Don't have account? <a href="/signup">Sign up</a></p>
+                    </div>
+                </div>
+            </section>
     
     </div>
     
