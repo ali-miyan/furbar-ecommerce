@@ -18,25 +18,25 @@ routeUser.use(express.json());
 routeUser.set('view engine','ejs');
 routeUser.set('views','./views/user');
 
-routeUser.get('/',userController.loadHome,auth.isLogout)
+routeUser.get('/',userController.loadHome)
 
-routeUser.get('/home',userController.loadHome,auth.isLogout)
+// routeUser.get('/home',userController.loadHome,auth.isLogout)
 
 routeUser.get('/shop',userController.loadShop)
 
 routeUser.get('/profile',userController.loadProfile)
 
-routeUser.get('/signup',userController.loadSignup)
+routeUser.get('/signup',auth.isLogout,userController.loadSignup)
 
-routeUser.post('/signup',userController.signupPost)
+routeUser.post('/signup',auth.isLogout,userController.signupPost)
 
-routeUser.get('/verifyOTP',userController.verifyOTP)
+routeUser.get('/verifyOTP',auth.isLogout,userController.verifyOTP)
 
-routeUser.post('/verifyOTP',userController.verifyPost)
+routeUser.post('/verifyOTP',auth.isLogout,userController.verifyPost)
 
-routeUser.get('/login',userController.loadLogin)
+routeUser.get('/login',auth.isLogout,userController.loadLogin)
 
-routeUser.post('/login',userController.loginPost)
+routeUser.post('/login',auth.isLogout,userController.loginPost)
 
 routeUser.get('/logout',userController.userLogout)
 

@@ -47,8 +47,8 @@ const loadProfile=async(req,res)=>{
             console.log("profile session"+req.session.user_id);
             res.render('profile')
         }else{
-        res.render('signup')
-        }
+            res.redirect('/signup')
+            }
     } catch (error) {
         console.log(error);
     }
@@ -111,8 +111,7 @@ const verifyOTP=async (req, res) => {
     try {
         req.session.user_id = req.query.id; 
         console.log("Session ID set:", req.session.user_id);   
-        console.log("Session ID set:", req.query.id);   
-
+        console.log("Session ID set:", req.query.id);
         res.render('otp');
     } catch (error) {
         console.log("Error setting session:", error.message);
@@ -225,8 +224,6 @@ let loginPost=async(req,res)=>{
     try {
         const email=req.body.email;
         const password=req.body.password;
-        console.log(password);
-        console.log(email);
     
         const validUser=await User.findOne({email:email})
         console.log(validUser);
@@ -234,8 +231,7 @@ let loginPost=async(req,res)=>{
             const passwordMatch=await bcrypt.compare(password,validUser.password)
             if(passwordMatch){
                 req.session.user_id=validUser._id;
-
-                res.render('home')
+                res.redirect('/')
             }else{
                 res.render('login',{message:'incorrect password'})
             }
@@ -258,7 +254,7 @@ const userLogout = async (req, res) => {
             } else {
                 console.log("Session destroyed");
 
-                res.redirect('/home');
+                res.redirect('/');
             }
         });
     } catch (error) {

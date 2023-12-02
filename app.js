@@ -7,12 +7,21 @@ const userRoute=require('./routes/userRoute')
 const adminRoute=require('./routes/adminRoute')
 const PORT = process.env.PORT || 3000;
 const session = require('express-session');
-const nocache = require('nocache');
+const nocache = require('nocache');   
+const Config=require('./config/config')
+const { config } = require('dotenv');
 
-app.use(nocache())
+
+app.use((req, res, next) => {
+  res.set('Cache-control', `no-store,no-cache,must-revalidate`)
+  next()
+})
+
+app.use(nocache());
+
 
 app.use(session({
-    secret: "xx",
+    secret: Config.sessionSecret,
     saveUninitialized: true,
     resave: false
   }))

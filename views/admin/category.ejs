@@ -40,13 +40,13 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" href="">
+                        <a class="menu-link" href="/admin/users">
                             <i class="icon material-icons md-shopping_bag"></i>
                             <span class="text">Users</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" href="/admin/category">
+                        <a class="menu-link" href="/admin/users">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Orders</span>
                         </a>
@@ -142,6 +142,8 @@
                             <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
                             <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
                         </div>
+
+
                         <datalist id="search_terms">
                             <option value="Products"></option>
                             <option value="New orders"></option>
@@ -192,8 +194,29 @@
             <section class="content-main">
                 <div class="content-header">
                     <div>
-                        <h2 class="content-title card-title">Users List</h2>
+                        <h2 class="content-title card-title">Category</h2>
+                        <a href="/admin/addcategory"><button type="button" class="btn btn-success">add Category</button></a>
                         <p>Lorem ipsum dolor sit amet.</p>
+                        <%
+if (typeof message !== 'undefined') {
+    %>
+    <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
+        <i class="bi-exclamation-octagon-fill"></i>
+        <strong class="mx-auto"><%- message %></strong>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        // Add a script to hide the alert after 5 seconds
+        $(document).ready(function () {
+            setTimeout(function () {
+                $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
+            }, 3000); // 3000 milliseconds = 3 seconds
+        });
+    </script>
+    <%
+}
+%>
+
                     </div>
                     <div>
                         <input type="text" placeholder="Search order ID" class="form-control bg-white" />
@@ -223,39 +246,50 @@
                         </div>
                     </header>
                     <!-- card-header end// -->
+                    <!-- card-body end// -->
+
                     <div class="card-body">
                         <div class="table-responsive" >
                             <table id="tablePagination" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>#ID</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">mobile</th>
-                                        <th scope="col">status</th>
-                                        <th scope="col">action</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">action</th>                                        
+                                        <th scope="col">Delete</th>                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if (users.length > 0) { %>
+                                    <% if (users) { %>
                                         <% for (let i = 0; i < users.length; i++) { %>
-                                            <% if (users[i].isAdmin === 0) { %>
+                                            
 
                                             <tr>
                                                 <td><%= i  %></td>
-                                                <td><b><%= users[i].email %></b></td>
-                                                <td><b><%= users[i].mobile %></b></td>
-                                                <td><%= users[i].verfied%></td>
-                                                <td>
-                                                    <% if (users[i].is_blocked) { %>
-                                                        <a href="/admin/blockuser?id=<%=users[i]._id%>" class="unblock-user"><span class="badge rounded-pill alert-success">unblock</span></a>
+                                                <td><b><%= users[i].name %></b></td>
+                                                <td><b><%= users[i].description %></b></td> 
+                                                <td>EDIT</td>     
+                                                <td>                                        
+                                                    <% if (users[i].is_list) { %>
+                                                        <a href="/admin/blockcategory?id=<%=users[i]._id%>" class="unblock-user"><span class="badge rounded-pill alert-success">unblock</span></a>
                                                         <% } else { %>
-                                                            <a href="/admin/blockuser?id=<%=users[i]._id%> " class="block-user"><span class="badge rounded-pill alert-warning">block</span></a>
+                                                            <a href="/admin/blockcategory?id=<%=users[i]._id%> " class="block-user"><span class="badge rounded-pill alert-warning">block</span></a>
                                                     <% } %>
 
                                                     <!-- dropdown //end -->
                                                 </td>
+                                                <td>
+                                                    <% if (users[i].is_deleted) { %>
+                                                        <a href="/admin/deletecategory?id=<%=users[i]._id%>" class="unblock-user"><span class="badge rounded-pill alert-success">Active</span></a>
+                                                        <% } else { %>
+                                                        <a href="/admin/deletecategory?id=<%=users[i]._id%> " class="block-user"><span class="badge rounded-pill alert-warning">inActive</span></a>
+                                                    <% } %>
+                                                </td>
+                                                
                                             </tr>
-                                            <% } %>
+                                            
                                         <% } %>
                                     <% } else { %>
                                         <tr>
@@ -268,6 +302,10 @@
                         <!-- table-responsive //end -->
                     </div>
                     <!-- card-body end// -->
+                    
+                <!-- card end// -->
+            
+            </section>
                     
                 <!-- card end// -->
             
@@ -288,13 +326,13 @@
             </footer>
         </main>
 
-<!-- 
+
         <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
         <script src="assets/js/vendors/select2.min.js"></script>
         <script src="assets/js/vendors/perfect-scrollbar.js"></script>
-        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script> -->
-        <!-- Main Script -->
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        Main Script
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
 
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -306,9 +344,8 @@
       $('#tablePagination').DataTable();
     });
   </script>
-
-              <!-- Include SweetAlert library -->
-             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+         <!-- Include SweetAlert library -->
+         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <script>
     // Block user click event
