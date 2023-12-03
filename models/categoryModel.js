@@ -12,10 +12,6 @@ const mongoose = require("mongoose");
     is_list:{
         type:Boolean,
         default:false
-    },
-    is_deleted:{
-        type:Boolean,
-        default:false
     }
  })
 

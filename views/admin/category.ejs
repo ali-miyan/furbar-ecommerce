@@ -200,7 +200,7 @@
                         <%
 if (typeof message !== 'undefined') {
     %>
-    <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
+    <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
         <i class="bi-exclamation-octagon-fill"></i>
         <strong class="mx-auto"><%- message %></strong>
     </div>
@@ -216,12 +216,15 @@ if (typeof message !== 'undefined') {
     <%
 }
 %>
-
-                    </div>
+            
+</div>
+    </div>
+        
+            <main>
                     <div>
                         <input type="text" placeholder="Search order ID" class="form-control bg-white" />
                     </div>
-                </div>
+               
                 <div class="card mb-4">
                     <header class="card-header">
                         <div class="row gx-3">
@@ -258,36 +261,29 @@ if (typeof message !== 'undefined') {
                                         <th scope="col">Description</th>
                                         <th scope="col">Edit</th>
                                         <th scope="col">action</th>                                        
-                                        <th scope="col">Delete</th>                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% if (users) { %>
                                         <% for (let i = 0; i < users.length; i++) { %>
-                                            
-
+                                  
                                             <tr>
                                                 <td><%= i  %></td>
                                                 <td><b><%= users[i].name %></b></td>
                                                 <td><b><%= users[i].description %></b></td> 
-                                                <td>EDIT</td>     
+                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span class="badge rounded-pill alert-success">EDIT</span></a>                                                </td>     
                                                 <td>                                        
+                                   
                                                     <% if (users[i].is_list) { %>
-                                                        <a href="/admin/blockcategory?id=<%=users[i]._id%>" class="unblock-user"><span class="badge rounded-pill alert-success">unblock</span></a>
-                                                        <% } else { %>
-                                                            <a href="/admin/blockcategory?id=<%=users[i]._id%> " class="block-user"><span class="badge rounded-pill alert-warning">block</span></a>
-                                                    <% } %>
+                                                        <a class="unblock-user" data-user-id="<%= users[i]._id %>"><span class="badge rounded-pill alert-success">unblock</span></a>
+                                                      <% } else { %>
+                                                        <a class="block-user" data-user-id="<%= users[i]._id %>"><span class="badge rounded-pill alert-warning">block</span></a>
+                                                   <% } %>
+                                                      
+                                                      
 
-                                                    <!-- dropdown //end -->
                                                 </td>
-                                                <td>
-                                                    <% if (users[i].is_deleted) { %>
-                                                        <a href="/admin/deletecategory?id=<%=users[i]._id%>" class="unblock-user"><span class="badge rounded-pill alert-success">Active</span></a>
-                                                        <% } else { %>
-                                                        <a href="/admin/deletecategory?id=<%=users[i]._id%> " class="block-user"><span class="badge rounded-pill alert-warning">inActive</span></a>
-                                                    <% } %>
-                                                </td>
-                                                
+                                               
                                             </tr>
                                             
                                         <% } %>
@@ -301,15 +297,6 @@ if (typeof message !== 'undefined') {
                         </div>
                         <!-- table-responsive //end -->
                     </div>
-                    <!-- card-body end// -->
-                    
-                <!-- card end// -->
-            
-            </section>
-                    
-                <!-- card end// -->
-            
-            </section>
             <!-- content-main end// -->
             <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">
@@ -324,7 +311,8 @@ if (typeof message !== 'undefined') {
                     </div>
                 </div>
             </footer>
-        </main>
+        </section>
+      </main>
 
 
         <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
@@ -332,7 +320,6 @@ if (typeof message !== 'undefined') {
         <script src="assets/js/vendors/select2.min.js"></script>
         <script src="assets/js/vendors/perfect-scrollbar.js"></script>
         <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
-        Main Script
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
 
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -344,52 +331,39 @@ if (typeof message !== 'undefined') {
       $('#tablePagination').DataTable();
     });
   </script>
-         <!-- Include SweetAlert library -->
-         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-  <script>
-    // Block user click event
-    document.querySelectorAll('.block-user').forEach(function(element) {
-                              element.addEventListener('click', function(event) {
-                                event.preventDefault(); // Prevent the default link behavior
-                          
-                                // Show SweetAlert confirmation
-                                swal({
-                                  title: 'Are you sure?',
-                                  text: 'You want to block this user?',
-                                  icon: 'info',
-                                  buttons: ['Cancel', 'Block'],
-                                  dangerMode: true,
-                                  className:'custom-swal'
-                                }).then(function(confirm) {
-                                  if (confirm) {
-                                    window.location.href = element.getAttribute('href'); // Proceed with the link action
-                                  }
-                                });
-                              });
-                            });
-                          
-                            // Unblock user click event
-                            document.querySelectorAll('.unblock-user').forEach(function(element) {
-                              element.addEventListener('click', function(event) {
-                                event.preventDefault() // Prevent the default link behavior
-                          
-                                // Show SweetAlert confirmation
-                                swal({
-                                  title: 'Are you sure?',
-                                  text: 'You want to unblock this user?',
-                                  icon: 'info',
-                                  buttons: ['Cancel', 'Unblock'],
-                                  dangerMode: true,
-                                  className:'custom-swal'
-                                }).then(function(confirm) {
-                                  if (confirm) {
-                                    window.location.href = element.getAttribute('href'); // Proceed with the link action
-                                  }
-                                });
-                              });
-                            });
-                    
+<script>
+document.querySelectorAll('.block-user, .unblock-user').forEach(function(element) {
+    console.log(element);
+    element.addEventListener('click', function(event) {
+      event.preventDefault();
+  
+      const userId = element.getAttribute('data-user-id');
+      const action = element.classList.contains('block-user') ? 'block' : 'unblock';
+      
+      fetch(`/admin/blockcategory/${userId}`, {
+        method: 'PATCH',
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.block === true) {
+            //updating the button text and color
+            element.querySelector('span').classList.toggle('alert-success');
+            element.querySelector('span').classList.toggle('alert-warning');
+            element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
+            
+            // Replace button class
+            element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
+            element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
+          }
+        }).catch((error)=>{
+            console.log(error.message);
+        })
+        
+    });
+  });
   </script>
+  
+  
     </body>
 </html>

@@ -5,6 +5,7 @@ const User = require("../models/userModel");
 const categoryModel = require('../models/categoryModel');
 const bcrypt = require("bcrypt");
 const adminController = require("../controller/adminConroller");
+const { trusted } = require("mongoose");
 // const auth=require('../middleware/auth')
 
 routeAdmin.set("view engine", "ejs");
@@ -22,8 +23,9 @@ routeAdmin.post("/signin", adminController.loadSignin);
 
 routeAdmin.get('/category',async(req,res)=>{
     try {
+      const message=req.query.message
         const users=await categoryModel.find({})
-        res.render('category',{users:users})
+        res.render('category',{users:users,message:message})
     } catch (error) {
         console.log(error.message);
     }
@@ -52,43 +54,49 @@ routeAdmin.post('/addcategory',async(req,res)=>{
     res.redirect('/admin/category')
 }
 
-    } catch (error) {
-        
-        console.log(error.message);
+    } catch (error) {    
+    console.log(error.message);
     } 
-
 })
 
-routeAdmin.get('/blockcategory', async (req, res) => {
-    try {
-      const user = req.query.id;
-      const userValue = await categoryModel.findOne({ _id: user });
-      if (userValue.is_list) {
-        await categoryModel.updateOne({ _id: user }, { $set: { is_list: false } });
-      } else {
-        await categoryModel.updateOne({ _id: user }, { $set: { is_list: true } });
-      }
-      res.redirect("/admin/category");
-    } catch (error) {
-      console.log(error.message);
-    }
-  });
+routeAdmin.get('/editcategory',async(req,res)=>{
+  try {
 
-  routeAdmin.get('/deletecategory', async (req, res) => {
-    try {
-      const user = req.query.id;
-      const userValue = await categoryModel.findOne({ _id: user });
-      if (userValue.is_deleted) {
-        await categoryModel.updateOne({ _id: user }, { $set: { is_deleted: false } });
-      } else {
-        await categoryModel.updateOne({ _id: user }, { $set: { is_deleted: true } });
-      }
-      res.redirect("/admin/category");
-    } catch (error) {
-      console.log(error.message);
+    const id = req.query.id;
+    const userData = await categoryModel.findById({ _id: id });
+        if (userData) {
+            res.render('editcategory', { data: userData });
+        }
+  } catch (error) {
+    console.log(error.message);
+  }
+})
+routeAdmin.patch('/blockcategory/:id', async (req, res) => {
+  try {
+    const user = req.params.id; 
+    const userValue = await categoryModel.findOne({ _id: user });
+    if (userValue.is_list) {
+      await categoryModel.updateOne({ _id: user }, { $set: { is_list: false } });
+    } else {
+      await categoryModel.updateOne({ _id: user }, { $set: { is_list: true } });
     }
-  });
+    res.json({ block: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
+routeAdmin.post('/editcategory',async(req,res)=>{
+  try {
+    await categoryModel.findByIdAndUpdate(
+        { _id: req.body.id },
+        { $set: { name: req.body.name, description: req.body.description } }
+    );
+    res.redirect(`/admin/category?message=${'successfully added'}`)
+}  catch (error) {
+    console.log(error.message);
+  }
+})
 
 
 module.exports = routeAdmin;

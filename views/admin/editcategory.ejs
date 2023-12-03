@@ -13,6 +13,7 @@
         <!-- Favicon -->
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+
         <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
         <!-- Template CSS -->
         <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
@@ -168,47 +169,32 @@
                 <div class="container-fluid">
                     <div class="card mt-4">
                         <div class="card-header">
-                            <h3>Add Category</h3>
+                            <h3>EDIT Category</h3>
                         </div>
                         <div class="card-body">
                             <!-- Category Form -->
-                            <form action="/admin/addcategory" method="post">
-                                <%
-                                if (typeof message !== 'undefined') {
-                                    %>
-                                    <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
-                                        <i class="bi-exclamation-octagon-fill"></i>
-                                        <strong class="mx-auto"><%- message %></strong>
-                                    </div>
-                                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                                    <script>
-                                        // Add a script to hide the alert after 5 seconds
-                                        $(document).ready(function () {
-                                            setTimeout(function () {
-                                                $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                            }, 3000); // 3000 milliseconds = 3 seconds
-                                        });
-                                    </script>
-                                    <%
-                                }
-                                %>
+                            <form action="" method="post">
                                 <!-- Category Name -->
+                                <% console.log("Data:", data); %>
+
                                 <div class="form-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" class="form-control" id="categoryName" name="name" required>
+                                    <input type="text" value="<%=data.name%>" class="form-control" id="categoryName" name="name" required>
                                 </div>
             
                                 <!-- Category Description -->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
-                                    <textarea class="form-control" id="categoryDescription" name="description" rows="4"
-                                        required></textarea>
+                                    <input class="form-control" value="<%=data.description%>" id="categoryDescription" name="description" rows="4"
+                                        required></input>
+                                        <input type="hidden" name="id" value="<%=data._id %>">
                                 </div>
                                 <div  style="margin-top: 1.2rem;">
                                     <button type="submit" class="btn btn-primary">Add Category</button>
                                     <a href="/admin/category" type="submit" class="btn btn-primary">Back</a>
                                 </div>
                             </form>
+                       
                             <!-- End Category Form -->
                         </div>
                     </div>
@@ -238,9 +224,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
         <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="utf8"
-          src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
-      
-        
+          src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>  
         <!-- Main Script -->
         <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
     </body>
