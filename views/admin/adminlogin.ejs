@@ -1,31 +1,27 @@
 <%- include('../layouts/adminnav.ejs') -%>
 
-            <section class="content-main mt-80 mb-80">
-                <div class="card mx-auto card-login">
-                    <div class="card-body">
-                        <h4 class="card-title mb-4">Sign in</h4>
-                        <form action="/admin/signin" method="post">
+    <section class="content-main mt-80 mb-80">
+        <div class="card mx-auto card-login">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Sign in</h4>
+                <form action="/admin/signin" method="post">
 
-                            <%
-                            if(typeof message !== 'undefined'){
-                                %>
-                                <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                                    <i class="bi-exclamation-octagon-fill"></i>
-                                    <strong class="mx-auto" >  <%- message %></strong>  
-                                   
-                                </div>
-                                <%
-                            } 
-                            %>
+                    <% if(typeof message !=='undefined' ){ %>
+                        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                            <i class="bi-exclamation-octagon-fill"></i>
+                            <strong class="mx-auto"> <%- message %></strong>
+
+                        </div>
+                        <% } %>
 
                             <div class="mb-3">
                                 <input class="form-control" placeholder="Username or email" type="email" name="email" />
                             </div>
                             <!-- form-group// -->
-                             <div class="mb-3">
+                            <div class="mb-3">
                                 <input class="form-control" placeholder="Password" type="password" name="password" />
                             </div>
-                            
+
                             <!-- form-group form-check .// -->
                             <div class="mb-4">
                                 <button type="submit" class="btn btn-primary w-100">Login</button>
@@ -38,27 +34,27 @@
                                     <span class="form-check-label">Remember</span>
                                 </label> -->
                             </div>
-                        </form>
-                        
+                </form>
 
-                        <p class="text-center mb-4">Don't have account? <a href="#">Sign up</a></p>
-                    </div>
-                </div>
-            </section>
-            <footer class="main-footer text-center">
-                <p class="font-xs">
-                    <script>
-                        document.write(new Date().getFullYear());
-                    </script>
-                    &copy; Nest - HTML Ecommerce Template .
-                </p>
-                <p class="font-xs mb-30">All rights reserved</p>
-            </footer>
-        </main>
-        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
-        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
-        <!-- Main Script -->
-        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
 
-        <%- include('../layouts/footer.ejs') -%>
+                <p class="text-center mb-4">Don't have account? <a href="#">Sign up</a></p>
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer text-center">
+        <p class="font-xs">
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            &copy; Nest - HTML Ecommerce Template .
+        </p>
+        <p class="font-xs mb-30">All rights reserved</p>
+    </footer>
+    </main>
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <%- include('../layouts/footer.ejs') -%>

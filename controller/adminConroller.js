@@ -3,6 +3,7 @@ const routeAdmin = express();
 const config = require("../config/config");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const categoryModel = require('../models/categoryModel');
 const adminController = require("../controller/adminConroller");
 
 const adminLogin=async(req,res)=>{
@@ -55,9 +56,11 @@ const loadSignin = async (req, res) => {
   }
 };
 
+
+
 const blockUser = async (req, res) => {
   try {
-    const user = req.query.id;
+    const user = req.params.id;
     const userValue = await User.findOne({ _id: user });
     if (userValue.is_blocked) {
       await User.updateOne({ _id: user }, { $set: { is_blocked: false } });
@@ -65,16 +68,108 @@ const blockUser = async (req, res) => {
     } else {
       await User.updateOne({ _id: user }, { $set: { is_blocked: true } });
     }
-    res.redirect("/admin/users");
+    res.json({ block: true });
   } catch (error) {
     console.log(error.message);
   }
 };
+//load category
+const loadCategory=async(req,res)=>{
+  try {
+    const message=req.query.message
+      const users=await categoryModel.find({})
+      res.render('category',{users:users,message:message})
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+//add category
+const addCategory=(req,res)=>{
+  try {
+    res.render('addcategory')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//add category post
+const addCategoryPost=async(req,res)=>{
+  try {
+      const name=req.body.name.trim();
+  const description=req.body.description.trim();
+  const validData=await categoryModel.findOne({name:name})
+
+  if(validData){
+      res.render('addcategory',{message:'you cant add category with same name'})
+  }else{
+
+  const newUser = new categoryModel({
+      name: name,
+      description:description,
+  });
+
+  await newUser.save()
+  res.redirect('/admin/category')
+}
+
+  } catch (error) {    
+  console.log(error.message);
+  } 
+}
+
+//edit categoty 
+const editCategory=async(req,res)=>{
+  try {
+
+    const id = req.query.id;
+    const userData = await categoryModel.findById({ _id: id });
+        if (userData) {
+            res.render('editcategory', { data: userData });
+        }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//block category(patch)
+const blockCategory=async (req, res) => {
+  try {
+    const user = req.params.id; 
+    const userValue = await categoryModel.findOne({ _id: user });
+    if (userValue.is_list) {
+      await categoryModel.updateOne({ _id: user }, { $set: { is_list: false } });
+    } else {
+      await categoryModel.updateOne({ _id: user }, { $set: { is_list: true } });
+    }
+    res.json({ block: true });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//edit category post
+const editCategoryPost=async(req,res)=>{
+  try {
+    await categoryModel.findByIdAndUpdate(
+        { _id: req.body.id },
+        { $set: { name: req.body.name, description: req.body.description } }
+    );
+    res.redirect(`/admin/category?message=${'successfully added'}`)
+}  catch (error) {
+    console.log(error.message);
+  }
+}
 
 module.exports = {
   loadDashboard,
   loadSignin,
-  blockUser,
   loadUser,
-  adminLogin
+  adminLogin,
+  loadCategory,
+  addCategory,
+  addCategoryPost,
+  editCategory,
+  blockCategory,
+  editCategoryPost,
+  blockUser
 };
