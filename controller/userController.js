@@ -109,7 +109,7 @@ const signupPost = async (req, res) => {
 //rendering otp page
 const verifyOTP=async (req, res) => {
     try {
-        req.session.user_id = req.query.id; 
+        req.session.userId = req.query.id; 
         console.log("Session ID set:", req.session.user_id);   
         console.log("Session ID set:", req.query.id);
         res.render('otp');
@@ -125,12 +125,10 @@ const verifyPost=async(req,res)=>{
       const userId=req.session.userId
       console.log("Session ID:", userId);
         
-            const userOTPVerificationrecord=await userVerification.find({
-               userId
-            })
+            const userOTPVerificationrecord=await userVerification.find({user_id:userId})
             console.log(userOTPVerificationrecord);            
 
-            if (userOTPVerificationrecord.length===0) {
+            if (userOTPVerificationrecord.length==0) {
                 res.render('otp',{message:"record doesn't exist or has been verified already"})
                 // throw Error("record doesn't exist or has been verified already")       
             }else{
@@ -147,8 +145,8 @@ const verifyPost=async(req,res)=>{
                         // throw new ("Invalid code")
                         res.render('otp',{message:"Invalid code"})
                     }else{
-                       await User.updateOne({_id:user_id},{verfied:true});
-                       await userVerification.deleteMany({user_id});
+                       await User.updateOne({_id:userId},{verfied:true});
+                       await userVerification.deleteMany({userId});
                     //    res.json({
                     //     status:"VERIFIED",
                     //     message:"user email verified successfully"
@@ -159,10 +157,7 @@ const verifyPost=async(req,res)=>{
             }
         
     } catch (error) {
-        res.json({
-            status:"FAILED",
-            message:error.message
-        })
+        console.log(error.message);
     }
 }
 
@@ -196,7 +191,7 @@ const sendOTPverification=async({_id,email},res)=>{
         user_id:_id,
         otp:hashedOTP,
         createAt:Date.now(),
-        expiresAt:Date.now()+3600000,
+        expiresAt:Date.now()+36000,
     })
 
     //save otp records

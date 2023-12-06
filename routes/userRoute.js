@@ -34,7 +34,7 @@ routeUser.post("/signup", auth.isLogout, userController.signupPost);
 
 routeUser.get("/verifyOTP", auth.isLogout, userController.verifyOTP);
 
-routeUser.post("/verifyOTP", auth.isLogout, userController.verifyPost);
+routeUser.post("/verifyOTP",  userController.verifyPost);
 
 routeUser.get("/login", auth.isLogout, userController.loadLogin);
 

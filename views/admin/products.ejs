@@ -179,7 +179,7 @@
                                     class="material-icons md-account_balance_wallet"></i>Wallet</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
-                                center</a>
+                                </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="#"><i
                                     class="material-icons md-exit_to_app"></i>Logout</a>
@@ -191,8 +191,8 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Category</h2>
-                    <a href="/admin/addcategory"><button type="button" class="btn btn-success">add Category</button></a>
+                    <h2 class="content-title card-title">Products</h2>
+                    <a href="/admin/addproducts"><button type="button" class="btn btn-success">add products</button></a>
                     <p>Lorem ipsum dolor sit amet.</p>
                     <% if (typeof message !=='undefined' ) { %>
                         <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
@@ -224,7 +224,7 @@
                             <div class="col-lg-4 col-md-6 me-auto">
                                 <input type="text" placeholder="Search..." class="form-control" />
                             </div>
-                            <div class="col-lg-2 col-6 col-md-3">
+                            <div class="col-lg-2 col-6 col-md-3"> 
                                 <select class="form-select">
                                     <option>Status</option>
                                     <option>Active</option>
@@ -246,55 +246,52 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tablePagination" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Edit</th>
-                                        <th scope="col">action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if (users) { %>
-                                        <% for (let i=0; i < users.length; i++) { %>
+                            <% if (products.length > 0) { %>
+                                <table id="tablePagination" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">NO</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Offer</th>
+                                            <th scope="col">edit</th>
+                                            <th scope="col">update</th>
 
-                                            <tr>
-                                                <td>
-                                                    <%= i %>
-                                                </td>
-                                                <td><b>
-                                                        <%= users[i].name %>
-                                                    </b></td>
-                                                <td><b>
-                                                        <%= users[i].description %>
-                                                    </b></td>
-                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span
-                                                            class="badge rounded-pill alert-success">EDIT</span></a>
-                                                </td>
-                                                <td>
-
-                                                    <% if (users[i].is_list) { %>
-                                                        <a class="unblock-user" data-user-id="<%= users[i]._id %>"><span
-                                                                class="badge rounded-pill alert-success">unblock</span></a>
-                                                        <% } else { %>
-                                                            <a class="block-user"
-                                                                data-user-id="<%= users[i]._id %>"><span
-                                                                    class="badge rounded-pill alert-warning">block</span></a>
-                                                            <% } %>
-                                                </td>
-
-                                            </tr>
-
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (let i = 0; i < products.length; i++) { %>
+                                            <% if (products[i].is_blocked == false) { %>
+                                                <tr>
+                                                    <td><%= i+1 %></td>
+                                                    <td>
+                                                        <img src="/sharpimages/<%=products[i].images.image1 %>" style="width: 50px;" alt="">
+                                                    </td>
+                                                    <td><%= products[i].name %></td>
+                                                    <td><%= products[i].quantity %></td>
+                                                    <td><%= products[i].category %></td>
+                                                    <td><%= products[i].price %></td>
+                                                    <td><%= products[i].offer %></td>
+                                                    <td>Edit</td>
+                                                    <td><a href="/admin/editproducts?id=<%=products[i]._id%>">Block</a></td>
+                                                </tr>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="8">No users found in the database.</td>
+                                                </tr>
                                             <% } %>
-                                                <% } else { %>
-                                                    <tr>
-                                                        <td colspan="4">No users found in the database.</td>
-                                                    </tr>
-                                                    <% } %>
-                                </tbody>
-                            </table>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            <% } else { %>
+                                <p>No products found in the database.</p>
+                            <% } %>
+                        </div>
+                    </div>
+                    
                         </div>
                         <!-- table-responsive //end -->
                     </div>
