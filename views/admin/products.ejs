@@ -60,60 +60,7 @@
                     </a>
 
                 </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="page-form-product-1.html">
-                        <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
-                    </a>
-
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="page-transactions-1.html">
-                        <i class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transactions</span>
-                    </a>
-
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="#">
-                        <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html">
-                        <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> <span
-                            class="text">Brands</span> </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#">
-                        <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li>
-            </ul>
-            <hr />
-            <ul class="menu-aside">
-                <li class="menu-item">
-                    <a class="menu-link" href="#">
-                        <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="page-blank.html">
-                        <i class="icon material-icons md-local_offer"></i>
-                        <span class="text"> Starter page </span>
-                    </a>
-                </li>
-            </ul>
+                
             <br />
             <br />
         </nav>
@@ -189,11 +136,12 @@
             </div>
         </header>
         <section class="content-main">
-            <div class="content-header">
+
                 <div>
-                    <h2 class="content-title card-title">Products</h2>
-                    <a href="/admin/addproducts"><button type="button" class="btn btn-success">add products</button></a>
+                    <div class="container">
+                    <h2>Products</h2>
                     <p>Lorem ipsum dolor sit amet.</p>
+                </div>
                     <% if (typeof message !=='undefined' ) { %>
                         <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
                             <i class="bi-exclamation-octagon-fill"></i>
@@ -209,41 +157,13 @@
                             });
                         </script>
                         <% } %>
-
-                </div>
             </div>
 
             <main>
-                <div>
-                    <input type="text" placeholder="Search order ID" class="form-control bg-white" />
-                </div>
+
 
                 <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row gx-3">
-                            <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div>
-                            <div class="col-lg-2 col-6 col-md-3"> 
-                                <select class="form-select">
-                                    <option>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-6 col-md-3">
-                                <select class="form-select">
-                                    <option>Show 20</option>
-                                    <option>Show 30</option>
-                                    <option>Show 40</option>
-                                </select>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- card-header end// -->
-                    <!-- card-body end// -->
-
+                    
                     <div class="card-body">
                         <div class="table-responsive">
                             <% if (products.length > 0) { %>
@@ -275,8 +195,17 @@
                                                     <td><%= products[i].category %></td>
                                                     <td><%= products[i].price %></td>
                                                     <td><%= products[i].offer %></td>
-                                                    <td>Edit</td>
-                                                    <td><a href="/admin/editproducts?id=<%=products[i]._id%>">Block</a></td>
+                                                    <td><a href="/admin/editproducts?id=<%=products[i]._id%>">edit</a></td>
+                                                    <td>
+                                                    <% if (products[i].is_blocked) { %>
+                                                        <a class="unblock-user" data-user-id="<%= products[i]._id %>"><span
+                                                                class="badge rounded-pill alert-success">unblock</span></a>
+                                                        <% } else { %>
+                                                            <a class="block-user"
+                                                                data-user-id="<%= products[i]._id %>"><span
+                                                                    class="badge rounded-pill alert-warning">block</span></a>
+                                                        <% } %>
+                                                    </td>
                                                 </tr>
                                             <% } else { %>
                                                 <tr>
@@ -292,10 +221,11 @@
                         </div>
                     </div>
                     
-                        </div>
-                        <!-- table-responsive //end -->
                     </div>
-                    <!-- content-main end// -->
+                    <div class="container">
+                    <a href="/admin/addproducts"><button type="button" class="btn btn-primary">+Add Products</button></a>
+                </div>
+                    </div>
                     <footer class="main-footer font-xs">
                         <div class="row pb-30 pt-15">
                             <div class="col-sm-6">
@@ -339,7 +269,7 @@
                 const userId = element.getAttribute('data-user-id');
                 const action = element.classList.contains('block-user') ? 'block' : 'unblock';
 
-                fetch(`/admin/blockcategory/${userId}`, {
+                fetch(`/admin/blockproducts/${userId}`, {
                     method: 'PATCH',
                 })
                     .then(response => response.json())
