@@ -6,6 +6,7 @@ const categoryModel = require('../models/categoryModel');
 const bcrypt = require("bcrypt");
 const adminController = require("../controller/adminConroller");
 const { trusted } = require("mongoose");
+const auth = require("../middleware/auth");
 const Product=require("../models/productModel")
 const sharp = require('sharp');
 const multer=require('../middleware/multer')
@@ -15,6 +16,9 @@ const productController=require("../controller/productController")
 
 routeAdmin.set("view engine", "ejs");
 routeAdmin.set("views", "./views/admin");
+
+
+
 
 routeAdmin.get("/", adminController.adminLogin);
 
@@ -49,5 +53,7 @@ routeAdmin.get('/editproducts',productController.editProducts)
 routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProductsPost)
 
 routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
+
+
 
 module.exports = routeAdmin;

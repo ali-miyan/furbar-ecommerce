@@ -1,7 +1,17 @@
 const express = require("express");
+const routeAdmin = express();
 const config = require("../config/config");
-const session = require("express-session");
+const User = require("../models/userModel");
+const categoryModel = require('../models/categoryModel');
+const bcrypt = require("bcrypt");
+const adminController = require("../controller/adminConroller");
+const { trusted } = require("mongoose");
 const auth = require("../middleware/auth");
+const Product=require("../models/productModel")
+const sharp = require('sharp');
+const multer=require('../middleware/multer')
+const productController=require("../controller/productController")
+const session = require("express-session");
 const userController = require("../controller/userController");
 
 const routeUser = express();
@@ -41,5 +51,17 @@ routeUser.get("/login", auth.isLogout, userController.loadLogin);
 routeUser.post("/login", auth.isLogout, userController.loginPost);
 
 routeUser.get("/logout", userController.userLogout);
+
+routeUser.get('/detailshop',async(req,res)=>{
+  try {
+      const id=req.query.id;
+      const data=await Product.findOne({_id:id})
+      console.log(data);
+      res.render('detailshop',{data:data})
+  } catch (error) {
+      console.log(error.message);
+  }
+
+})
 
 module.exports = routeUser;

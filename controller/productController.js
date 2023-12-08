@@ -1,5 +1,6 @@
 const express = require("express");
 const routeAdmin = express();
+const sharp = require("sharp")
 const config = require("../config/config");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
@@ -31,16 +32,19 @@ const addProductsPost=async(req,res)=>{
         const details=req.body;
         console.log(details);
         const files=await req.files;
+        console.log(files);
         const img = [
-            files.image1[0].filename,
-            files.image2[0].filename,
-            files.image3[0].filename,
-            files.image4[0].filename,
-          ];
+          files?.image1 ? files.image1[0].filename : null,
+          files?.image2 ? files.image2[0].filename : null,
+          files?.image3 ? files.image3[0].filename : null,
+          files?.image4 ? files.image4[0].filename : null,
+      ];
           for (let i = 0; i < img.length; i++) {
+            if (img[i]) {
             await sharp("public/multerimages/" + img[i])
               .resize(500, 500)
               .toFile("public/sharpimages/" + img[i]);
+            }
           }
           if (details.quantity > 0 && details.price > 0) {
             const product = new Product({
@@ -60,9 +64,10 @@ const addProductsPost=async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
-    }
 
+      }
 }
+
 
 const editProducts=async(req,res)=>{
     try {

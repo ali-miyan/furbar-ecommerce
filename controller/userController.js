@@ -12,6 +12,8 @@ const userOTP = require('../models/userOTP');
 const dotenv = require('dotenv')
 dotenv.config()
 config.connectDB();
+const Product=require("../models/productModel")
+
 
 //route to home page
 const loadHome=async(req,res)=>{
@@ -26,7 +28,8 @@ const loadHome=async(req,res)=>{
 //shop page
 const loadShop=async(req,res)=>{
     try {
-        res.render('shop')
+        const product=await Product.find({})
+        res.render('shop',{product:product})
     } catch (error) {
         console.log(error);
     }
