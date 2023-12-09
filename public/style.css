@@ -794,6 +794,48 @@ a {
   -ms-flex-pack: center;
   justify-content: center;
 }
+.zoom-container {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto; /* Centers the container horizontally */
+  max-width: 500px; /* Adjust the max-width as needed */
+}
+
+.zoom-image {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+#zoom-image.zoomed {
+  transform: scale(1.5); /* Adjust the scale factor for zooming */
+}
+
+
+.imgBlock {
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-right: 10px; /* Adjust the right margin for space between images */
+  width: 90%;
+  max-width: 250px;
+}
+
+.paggSlider1 {
+  display: flex;
+  justify-content: space-around; /* Adjust for even distribution */
+  overflow: auto; /* Enable horizontal scrolling if needed */
+}
+
+@media (max-width: 768px) {
+  .imgBlock {
+    width: 100%; /* Take up full width on smaller screens */
+    margin-right: 10px; /* Adjust the margin for space between images */
+  }
+
+  .paggSlider1 {
+    justify-content: center; /* Center the images on smaller screens */
+  }
+}
 
 .comming-timer .countdown-row .countdown-section {
   min-width: 30px;

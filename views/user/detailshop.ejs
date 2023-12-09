@@ -26,12 +26,10 @@
 				<div class="row mb-6">
 					<div class="col-12 col-lg-6 order-lg-1">
 						<!-- productSliderImage -->
-						<div class=" mb-lg-0 mb-4">
-							<%console.log(data)%>
-							<div class="container">
-								<img src="sharpimages/<%=data.images.image1%>" alt="image description">
-							</div>
-						</div>
+						<div class="zoom-container" id="zoom-container" >
+							<img src="sharpimages/<%=data.images.image1%>" alt="Original Image" id="zoom-image" class="mainImage">
+						  </div>
+						
 					</div>
 					<div class="col-12 col-lg-6 order-lg-3 px-7">
 						<!-- productTextHolder -->
@@ -45,8 +43,8 @@
 								<li class="mr-2"><a href="javascript:void(0);"><i class="far fa-star"></i></a></li>
 								<li>( 5 customer reviews )</li>
 							</ul>
-							<strong class="price d-block mb-5 text-green">65.00 $</strong>
-							<p class="mb-5">Aenean id ullamcorper libero. Vestibulum imperdiet nibh. Lorem ullamcorper volutpat. Vestibulum lacinia risus.</p>
+							<strong class="price d-block mb-5 text-green"><%=data.price%></strong>
+							<p class="mb-5"><%=data.description%></p>
 							<ul class="list-unstyled productInfoDetail mb-5 overflow-hidden">
 								<li class="mb-2">Product Code: <span>FA008</span></li>
 								<li class="mb-2">Quantity: <span>68 Items</span></li>
@@ -100,17 +98,11 @@
 								<input type="number" placeholder="1">
 								<a href="javascript:void(0);" class="btn btnTheme btnShop fwEbold text-white md-round py-3 px-4 py-md-3 px-md-4">Add To Cart <i class="fas fa-arrow-right ml-2"></i></a>
 							</div>
-							<ul class="list-unstyled socialNetwork d-flex flex-wrap mb-sm-11 mb-4">
-								<li class="text-uppercase mr-5">SHARE THIS PRODUCT:</li>
-								<li class="mr-4"><a href="javascript:void(0);" class="fab fa-facebook-f"></a></li>
-								<li class="mr-4"><a href="javascript:void(0);" class="fab fa-google-plus-g"></a></li>
-								<li class="mr-4"><a href="javascript:void(0);" class="fab fa-twitter"></a></li>
-								<li class="mr-4"><a href="javascript:void(0);" class="fab fa-pinterest-p"></a></li>
-							</ul>
+
 							<ul class="list-unstyled productInfoDetail mb-0">
 								<li class="mb-2">Categories: <a href="javascript:void(0);">Butter &amp; Eggs,</a> <a href="javascript:void(0);">Fruits,</a> <a href="javascript:void(0);">Milk &amp; Cream,</a> <a href="javascript:void(0);">Vegetables</a></li>
 								<li class="mb-2">Tags: <a href="javascript:void(0);">organic food,</a> <a href="javascript:void(0);">fruits,</a> <a href="javascript:void(0);">juice</a></li>
-								<li>Brand: <a href="javascript:void(0);">KFC</a></li>
+								
 							</ul>
 						</div>
 					</div>
@@ -118,42 +110,29 @@
 				<div class="row">
 					<div class="col-12">
 						<!-- paggSlider -->
-						<div class="paggSlider">
+						<div class="paggSlider1">
+							
 							<div>
-								<div class="imgBlock">
-									<img src="/images/img59.jpg" alt="image description" class="img-fluid">
+								<div class="imgBlock" onclick="changeMainImage('sharpimages/<%=data.images.image1%>')">
+									<img src="sharpimages/<%=data.images.image1%>" alt="image description" class="img-fluid">
 								</div>
 							</div>
 							<div>
-								<div class="imgBlock">
-									<img src="/images/img60.jpg" alt="image description" class="img-fluid">
+								<div class="imgBlock" onclick="changeMainImage('sharpimages/<%=data.images.image2%>')">
+									<img src="sharpimages/<%=data.images.image2%>" alt="image description" class="img-fluid">
 								</div>
 							</div>
 							<div>
-								<div class="imgBlock">
-									<img src="/images/img61.jpg" alt="image description" class="img-fluid">
+								<div class="imgBlock" onclick="changeMainImage('sharpimages/<%=data.images.image3%>')">
+									<img src="sharpimages/<%=data.images.image3%>" alt="image description" class="img-fluid">
 								</div>
 							</div>
 							<div>
-								<div class="imgBlock">
-									<img src="/images/img62.jpg" alt="image description" class="img-fluid">
+								<div class="imgBlock" onclick="changeMainImage('sharpimages/<%=data.images.image4%>')">
+									<img src="sharpimages/<%=data.images.image4%>" alt="image description" class="img-fluid">
 								</div>
 							</div>
-							<div>
-								<div class="imgBlock">
-									<img src="/images/img63.jpg" alt="image description" class="img-fluid">
-								</div>
-							</div>
-							<div>
-								<div class="imgBlock">
-									<img src="/images/img64.jpg" alt="image description" class="img-fluid">
-								</div>
-							</div>
-							<div>
-								<div class="imgBlock">
-									<img src="/images/img62.jpg" alt="image description" class="img-fluid">
-								</div>
-							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -345,6 +324,13 @@
 			</div>
 		</footer>
 	</div>
+
+	<script>
+		function changeMainImage(newSrc) {
+			$('.mainImage').attr('src', newSrc);
+		}
+	</script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<!-- include jQuery library -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<!-- include bootstrap popper JavaScript -->
@@ -353,6 +339,40 @@
 	<script src="js/bootstrap.min.js"></script>
 	<!-- include custom JavaScript -->
 	<script src="js/jqueryCustome.js"></script>
+	<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+<script>
+const zoomContainer = document.getElementById('zoom-container');
+const zoomImage = document.getElementById('zoom-image');
+
+zoomContainer.addEventListener('mouseenter', () => {
+  zoomImage.classList.add('zoomed');
+});
+
+zoomContainer.addEventListener('mouseleave', () => {
+  zoomImage.classList.remove('zoomed');
+});
+
+zoomContainer.addEventListener('mousemove', (e) => {
+  const rect = zoomContainer.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const xPercent = (x / rect.width) * 100;
+  const yPercent = (y / rect.height) * 100;
+
+  zoomImage.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+});
+
+</script>
+
+
+
+
+
 </body>
 
 <!-- Mirrored from htmlbeans.com/html/botanical/shop-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 25 Nov 2023 19:42:21 GMT -->
