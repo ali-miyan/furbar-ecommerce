@@ -47,8 +47,9 @@ const loadSignup=async(req,res)=>{
 const loadProfile=async(req,res)=>{
     try {
         if(req.session.user_id){
-            console.log("profile session"+req.session.user_id);
-            res.render('profile')
+            console.log("profile session"+req.session.user_id)
+            data=await User.findOne({_id:req.session.user_id})
+            res.render('profile',{data:data})
         }else{
             res.redirect('/signup')
             }

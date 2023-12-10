@@ -1,5 +1,4 @@
 const express = require("express");
-const routeAdmin = express();
 const config = require("../config/config");
 const User = require("../models/userModel");
 const categoryModel = require('../models/categoryModel');
@@ -13,6 +12,7 @@ const multer=require('../middleware/multer')
 const productController=require("../controller/productController")
 const session = require("express-session");
 const userController = require("../controller/userController");
+const cartModel=require('../models/cartModel')
 
 const routeUser = express();
 
@@ -62,6 +62,42 @@ routeUser.get('/detailshop',async(req,res)=>{
       console.log(error.message);
   }
 
+})
+
+routeUser.patch('/getcart',async(req,res)=>{
+  try {
+    if(req.session.user_id){
+    const product_id=req.body.id
+    const userid=req.session.user_id
+    const productData = await Product.findById(product_id)
+    const cartProduct = await cartModel.findOne({ user: userid ,'product.productId':product_id})
+    let productPrice= productData.price
+    console.log("productssssss"+productPrice);
+
+    if(productData.quantity>0){
+      if(cartProduct){
+        res.json({failed:true})
+      }else{
+        const data={
+          productId:product_id,
+          price:productPrice,
+          totalPrice:productPrice,
+        }
+        console.log(data);
+      
+      await cartModel.findOneAndUpdate({user:userid},{$set:{user:userid},$push:{product:data}},{upsert:true,new:true})
+      res.json({failed:false})
+      }
+    }else{
+      res.json({failed:false})
+    }
+    }else{
+      res.redirect('/signup')
+    }
+
+  } catch (error) {
+    console.log(error.message);
+  }
 })
 
 module.exports = routeUser;

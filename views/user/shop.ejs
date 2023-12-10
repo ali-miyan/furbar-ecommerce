@@ -59,31 +59,31 @@
 							</header>
 							<div class="row">
 								<!-- Loop through each product in the products array -->
-<% product.forEach(product => { %>
-	<% if (!product.is_blocked) { %>
-    <div class="col-12 col-sm-6 col-lg-4 featureCol mb-7">
-        <div class="border">
-            <div class="imgHolder position-relative w-100 overflow-hidden">
-                <!-- Use the product's image source -->
-                <a href="/detailshop?id=<%=product._id%>"><img src="sharpimages/<%=product.images.image1 %>" alt="" class="img-fluid w-100"></a>
-                <ul class="list-unstyled postHoverLinskList d-flex justify-content-center m-0">
-                    <li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-heart d-block"></a></li>
-                    <li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-cart d-block"></a></li>
-                    <li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-eye d-block"></a></li>
-                    <li class="overflow-hidden"><a href="javascript:void(0);" class="icon-arrow d-block"></a></li>
-                </ul>	
-            </div>
-            <div class="text-center py-5 px-4">
-                <!-- Use the product's name and price -->
-                <span class="title d-block mb-2"><a href=""><%= product.name %></a></span>
-				<span class="price d-block fwEbold"><del>80.50 $</del><%=product.price%></span>
-				<span class="hotOffer fwEbold text-uppercase text-white position-absolute d-block">HOT</span>
-				<span class="hotOffer green fwEbold text-uppercase text-white position-absolute d-block ml-8">Sale</span>
-            </div>
-        </div>
-    </div>
-	<%}%>
-<% }); %>			
+					<% product.forEach(product => { %>
+						<% if (!product.is_blocked) { %>
+						<div class="col-12 col-sm-6 col-lg-4 featureCol mb-7">
+							<div class="border">
+								<div class="imgHolder position-relative w-100 overflow-hidden">
+									<!-- Use the product's image source -->
+									<a href="/detailshop?id=<%=product._id%>"><img src="sharpimages/<%=product.images.image1 %>" alt="" class="img-fluid w-100"></a>
+									<ul class="list-unstyled postHoverLinskList d-flex justify-content-center m-0">
+										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-heart d-block"></a></li>
+										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-cart d-block"></a></li>
+										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-eye d-block"></a></li>
+										<li class="overflow-hidden"><a href="javascript:void(0);" class="icon-arrow d-block"></a></li>
+									</ul>	
+								</div>
+								<div class="text-center py-5 px-4">
+									<!-- Use the product's name and price -->
+									<span class="title d-block mb-2"><a href=""><%= product.name %></a></span>
+									<span class="price d-block fwEbold"><del>80.50 $</del><%=product.price%></span>
+									<span class="hotOffer fwEbold text-uppercase text-white position-absolute d-block">HOT</span>
+									<span class="hotOffer green fwEbold text-uppercase text-white position-absolute d-block ml-8">Sale</span>
+								</div>
+							</div>
+						</div>
+						<%}%>
+					<% }); %>			
 								<div class="col-12 pt-3 mb-lg-0 mb-md-6 mb-3">
 									<!-- pagination -->
 									<ul class="list-unstyled pagination d-flex justify-content-center align-items-end">

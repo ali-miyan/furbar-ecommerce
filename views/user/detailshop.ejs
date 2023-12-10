@@ -96,7 +96,7 @@
 							</ul>
 							<div class="holder overflow-hidden d-flex flex-wrap mb-6">
 								<input type="number" placeholder="1">
-								<a href="javascript:void(0);" class="btn btnTheme btnShop fwEbold text-white md-round py-3 px-4 py-md-3 px-md-4">Add To Cart <i class="fas fa-arrow-right ml-2"></i></a>
+								<a onclick="addToCart('<%= data._id%>')"	class="btn btnTheme btnShop fwEbold text-white md-round py-3 px-4 py-md-3 px-md-4">Add To Cart <i class="fas fa-arrow-right ml-2"></i></a>
 							</div>
 
 							<ul class="list-unstyled productInfoDetail mb-0">
@@ -326,6 +326,38 @@
 	</div>
 
 	<script>
+	 function addToCart(id){
+		$.ajax({
+			url:'/getcart',
+			method:'patch',
+			data:{id:id},
+			success:function(response){
+				if(response.failed){
+				Swal.fire(
+					'Out of Stock',
+					'This product is currently out of stock.',
+					'warning'
+				);
+				}else{
+				  Swal.fire(
+					'Saved to cart!',
+					'You clicked the button!',
+					'success'
+				  );
+				}
+		}
+	})	
+}
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	</script>
+	
+	<script>
 		function changeMainImage(newSrc) {
 			$('.mainImage').attr('src', newSrc);
 		}
@@ -339,11 +371,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<!-- include custom JavaScript -->
 	<script src="js/jqueryCustome.js"></script>
-	<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
-<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
-<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
-<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
-<!-- Include this script in your HTML file, either in the head or before the closing body tag -->
+
 <script>
 const zoomContainer = document.getElementById('zoom-container');
 const zoomImage = document.getElementById('zoom-image');
@@ -375,5 +403,4 @@ zoomContainer.addEventListener('mousemove', (e) => {
 
 </body>
 
-<!-- Mirrored from htmlbeans.com/html/botanical/shop-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 25 Nov 2023 19:42:21 GMT -->
-</html>
+\</html>

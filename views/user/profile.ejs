@@ -2,41 +2,86 @@
 <%- include('../layouts/usernav.ejs') -%>
 
 
-<div class="my-23">
+<!-- jQuery and Bootstrap JS -->
 
-    <%
-                            if(typeof message !== 'undefined'){
-                                %>
-                                <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                                    <i class="bi-exclamation-octagon-fill"></i>
-                                    <strong class="mx-auto" >  <%- message %></strong>  
-                                   
-                                </div>
-                                <%
-                            } 
-     %>
+<div class="my-30">
 
-<h1>wellcomeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</h1>
-<%
-if(typeof message !== 'undefined'){
-    %>
-    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-        <i class="bi-exclamation-octagon-fill"></i>
-        <strong class="mx-auto" >  <%- message %></strong>  
-       
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <!-- side buttons start -->
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="true">My Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Wallet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Coupon</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout" id="signOutLink">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside>
+    
+                    <!-- Tab content -->
+                    <div class="col-md-8 col-lg-9">
+                        <div class="tab-content">
+                            <!-- My Profile Tab Content -->
+                            <div class="tab-pane fade show active" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                <h2>My Profile</h2>
+                                <p>This is your profile information. You can edit it here.
+                                    <%=data.name%>
+                                </p>
+                            </div>
+    
+                            <!-- Orders Tab Content -->
+                            <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                <h2>Orders</h2>
+                                <p>View your order history and track your recent purchases.</p>
+                            </div>
+    
+                            <!-- Wallet Tab Content -->
+                            <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
+                                <h2>Wallet</h2>
+                                <p>Your wallet balance and transaction history will be displayed here.</p>
+                            </div>
+    
+                            <!-- Addresses Tab Content -->
+                            <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                <h2>Addresses</h2>
+                                <p>Manage and view your saved addresses for shipping.</p>
+                            </div>
+    
+                            <!-- Coupon Tab Content -->
+                            <div class="tab-pane fade" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                <h2>Coupon</h2>
+                                <p>Apply and manage your coupons and discounts here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <%
-} 
-%>
-
-<a href="/logout"><button type="submit" class="btn btn-success mx-20" >Logout</button></a>
-
 
 
 </div>
 
 
-
+<!-- Bootstrap JS (Bootstrap 4) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 
 <%- include('../layouts/userfoot.ejs') -%>
