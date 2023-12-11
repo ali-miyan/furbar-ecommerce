@@ -324,6 +324,7 @@
 			</div>
 		</footer>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 	<script>
 	 function addToCart(id){
@@ -338,23 +339,41 @@
 					'This product is currently out of stock.',
 					'warning'
 				);
-				}else{
-				  Swal.fire(
+				}else if(response.success==="signup"){    
+                Swal.fire({
+                  icon: "warning",
+                  title: "Please Login",
+                  confirmButtonColor: "#3085d6",
+                  confirmButtonText: "Login",
+                  showCancelButton: true,
+                  cancelButtonColor: "#d33",
+                })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/signup";
+                  }
+                });
+                }
+				else{
+					Swal.fire(
 					'Saved to cart!',
 					'You clicked the button!',
 					'success'
 				  );
 				}
-		}
+				  
+				}
+		
 	})	
 }
 </script>
 
 
+
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	</script>
 	
 	<script>

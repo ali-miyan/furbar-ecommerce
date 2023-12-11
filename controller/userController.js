@@ -113,7 +113,7 @@ const signupPost = async (req, res) => {
 //rendering otp page
 const verifyOTP=async (req, res) => {
     try {
-        req.session.userId = req.query.id; 
+        req.session.user_id = req.query.id; 
         console.log("Session ID set:", req.session.user_id);   
         console.log("Session ID set:", req.query.id);
         res.render('otp');
@@ -126,7 +126,7 @@ const verifyOTP=async (req, res) => {
 const verifyPost=async(req,res)=>{
     try {
       const otp= req.body.otp
-      const userId=req.session.userId
+      const userId=req.session.user_id
       console.log("Session ID:", userId);
         
             const userOTPVerificationrecord=await userVerification.find({user_id:userId})

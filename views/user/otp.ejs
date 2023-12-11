@@ -2,6 +2,10 @@
 <%- include('../layouts/usernav.ejs') -%>
 
 
+
+<div class="otp-container">
+
+
 <form action="/verifyOTP" method="post" class="py-27 px-27 ">
 
 
@@ -18,11 +22,13 @@
     %>
 
     <label for="otp">Enter OTP:</label><br>
-    <input type="text" id="otp" name="otp" maxlength="4" pattern="\d{4}" required><br>
+    <input type="text" id="otp" name="otp" maxlength="4" pattern="\d{4}" ><br>
     <button type="submit">Verify OTP</button>
 
 </form>
 
+</div>
+</div>
 
 <%- include('../layouts/userfoot.ejs') -%>
 <%- include('../layouts/footer.ejs') -%>

@@ -21,13 +21,11 @@
         </div>
     </section>
     <!-- cartHolder -->
+    <% if (data) { %>
     <div class="cartHolder container pt-xl-21 pb-xl-24 py-lg-20 py-md-16 py-10">
         <div class="row">
             <!-- table-responsive -->
             <div class="col-12 table-responsive mb-lg-20 mb-md-16 mb-10">
-                <!-- cartTable -->
-                <%console.log(products)%>
-                <% if (products.length>0) { %>
 
                 <table class="table cartTable mb-xl-22">
                     <thead>
@@ -39,56 +37,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        <% for (let i = 0; i < products.length; i++) { %>
-                            <% if (products[i].is_blocked == false) { %>
+                        <% data.product.forEach(function(product, index) { %>
                         <tr class="align-items-center">
                             <td class="d-flex align-items-center border-top-0 border-bottom px-0 py-6">
                                 <div class="imgHolder">
-                                    <img src="" alt="image description" class="img-fluid">
+                                    <img src="sharpimages/<%=product.productId.images.image1%>" alt="image description" class="img-fluid">
                                 </div>
-                                <span class="title pl-2"><a href="shop-detail.html">Pellentesque aliquet</a></span>
+                                <span class="title pl-2"><a href=""><%=product.productId.name%></a></span>
                             </td>
-                            <td class="fwEbold border-top-0 border-bottom px-0 py-6">180.00 $</td>
-                            <td class="border-top-0 border-bottom px-0 py-6"><input type="number" placeholder="1"></td>
-                            <td class="fwEbold border-top-0 border-bottom px-0 py-6">180.00 $ <a href="javascript:void(0);" class="fas fa-times float-right"></a></td>
+                            <td class="fwEbold border-top-0 border-bottom px-0 py-6"><%=product.price%></td>
+                            <td class="border-top-0 border-bottom px-0 py-6">  <input type="number" placeholder="1" min="1" max="6" oninput="validity.valid||(value='');">
+                            </td>
+                            <td class="fwEbold border-top-0 border-bottom px-0 py-6"><%=product.totalPrice%><a href="javascript:void(0);" class="fas fa-times float-right"></a></td>
                         </tr>
-                       
+                       <% }); %>
                       
                     </tbody>
                 </table>
             </div>
-        
-
-                      <% } %>
-                <% } %>
-            <% } else { %>
-                <p>No products found in the database.</p>
-            <% } %>
+            
+            <% }else { %>
+                <div class="container">
+                    <h1 class="error-title">Empty Cart</h1>
+                    <!-- End .error-title -->
+                    <p>Your cart is empty.</p>
+                    <a
+                      href="/shop"
+                      class="btn btn-outline-primary-2 btn-minwidth-lg">
+                      <span>FILL YOUR CART</span>
+                      <i class="icon-long-arrow-right"></i>
+                    </a>
+                  </div> 
+           <% } %> 
         </div>
     </div>
         
-    
+    <div class="container">
         <div class="row">
-            <div class="col-12">
-                <form action="javascript:void(0);" class="cartForm mb-5">
-                    <div class="form-group mb-0">
-                        <label for="note" class="fwEbold text-uppercase d-block mb-1">add note</label>
-                        <textarea id="note" class="form-control"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="col-12 col-md-6">
-                <form action="javascript:void(0);" class="couponForm mb-md-0 mb-5">
-                    <fieldset>
-                        <div class="mt-holder d-inline-block align-bottom mr-lg-5 mr-0 mb-lg-0 mb-2">
-                            <label for="code" class="fwEbold text-uppercase d-block mb-1">promo code</label>
-                            <input type="text" id="code" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btnTheme btnCart fwEbold text-center text-white md-round py-3 px-4 py-md-3 px-md-4">Apply</button>
-                    </fieldset>
-                </form>
-            </div>
             <div class="col-12 col-md-6">
                 <div class="d-flex justify-content-between">
                     <strong class="txt fwEbold text-uppercase mb-1">subtotal</strong>
@@ -98,6 +83,7 @@
             </div>
         </div>
     </div>
+</div>
     <div class="container mb-lg-24 mb-md-16 mb-10">
         <!-- subscribeSecBlock -->
         <section class="subscribeSecBlock bgCover col-12 pt-lg-24 pb-lg-12 pt-md-16 pb-md-8 py-10" style="background-image: url(images/n-bg3.jpg)">

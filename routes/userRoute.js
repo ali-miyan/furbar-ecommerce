@@ -66,7 +66,9 @@ routeUser.get('/detailshop',async(req,res)=>{
 
 routeUser.patch('/getcart',async(req,res)=>{
   try {
-    if(req.session.user_id){
+    console.log(req.session);
+    console.log(req.session.user_id !== undefined);
+    if(req.session.user_id !==undefined){
     const product_id=req.body.id
     const userid=req.session.user_id
     const productData = await Product.findById(product_id)
@@ -76,7 +78,7 @@ routeUser.patch('/getcart',async(req,res)=>{
 
     if(productData.quantity>0){
       if(cartProduct){
-        res.json({failed:true})
+        res.json({failed:false})
       }else{
         const data={
           productId:product_id,
@@ -89,15 +91,36 @@ routeUser.patch('/getcart',async(req,res)=>{
       res.json({failed:false})
       }
     }else{
-      res.json({failed:false})
+      res.json({failed:true})
     }
-    }else{
-      res.redirect('/signup')
+    }
+    else{
+      res.json({success:"signup"})
     }
 
   } catch (error) {
     console.log(error.message);
   }
 })
+
+routeUser.get('/showcart',async(req,res)=>{
+  try {
+    const id=req.session.user_id;
+    const cartData=await cartModel.findOne({user:id}).populate('product.productId')
+    console.log(cartData)
+
+    if(cartData){
+      res.render('cart',{data:cartData})
+    }else{
+      res.render('cart')
+    }
+
+  } catch (error) {
+    console.log(error.message);
+  }
+})
+
+
+
 
 module.exports = routeUser;
