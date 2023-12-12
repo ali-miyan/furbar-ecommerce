@@ -17,9 +17,6 @@ const productController=require("../controller/productController")
 routeAdmin.set("view engine", "ejs");
 routeAdmin.set("views", "./views/admin");
 
-
-
-
 routeAdmin.get("/", adminController.adminLogin);
 
 routeAdmin.patch('/blockusers/:id',adminController.blockUser)
@@ -53,7 +50,5 @@ routeAdmin.get('/editproducts',productController.editProducts)
 routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProductsPost)
 
 routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
-
-
 
 module.exports = routeAdmin;

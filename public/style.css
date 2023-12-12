@@ -59,7 +59,7 @@ Theme URI: http://www.htmlbeans.com/html/botanical/
 41	 accordionList
 42	 teamBlock
 43	 stepCol
-44	 contactListHolder
+44	 contactListHolderdy
 45	 mapHolder
 46	 contactForm
 
@@ -68,7 +68,10 @@ html {
   background-color: #343a40;
 }
 
+
+
 body {
+  
   -ms-overlfow-style: scrollbar;
   min-width: 320px;
 }
@@ -110,7 +113,70 @@ a {
 
 .fwEbold {
   font-weight: bold;
+  
 }
+
+/*................checkout styles...........................................*/
+
+.sub-container {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+}
+
+/* Styles for h1 */
+.sub-container h1 {
+  color: #333;
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Styles for .cart-details */
+.sub-container .cart-details {
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+}
+
+/* Styles for h2 within .cart-details */
+.sub-container .cart-details h2 {
+  color: #218b1b;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+/* Styles for .additional-details */
+.sub-container .additional-details {
+  margin-top: 20px;
+}
+
+/* Styles for p within .additional-details */
+.sub-container .additional-details p {
+  color: #555;
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+
+/* Styles for .a-btn */
+.sub-container .a-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #218b1b;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for .a-btn */
+.sub-container .a-btn:hover {
+  background-color: #0067cc;
+}
+/*................checkout styles...........................................*/
 
 .btn {
   font-size: 16px;
@@ -1962,72 +2028,9 @@ a {
   letter-spacing: 1px;
 }
 
-.cartHolder .cartTable .jcf-number {
-  overflow: hidden;
-  height: 50px;
-  margin: 0 20px 0 0;
-}
 
-.cartHolder .cartTable .jcf-number input {
-  font-size: 20px;
-  line-height: 22px;
-  color: #707070;
-  text-align: center;
-  padding: 0;
-  width: 150px;
-  border: 1px solid #e1e1e1;
-}
 
-.cartHolder .cartTable .jcf-number .jcf-btn-inc,
-.cartHolder .cartTable .jcf-number .jcf-btn-dec {
-  width: 50px;
-  height: 50px;
-  background: none;
-  top: 0;
-  font-size: 10px;
-  line-height: 12px;
-  text-indent: -9999px;
-}
 
-.cartHolder .cartTable .jcf-number .jcf-btn-inc:before,
-.cartHolder .cartTable .jcf-number .jcf-btn-dec:before {
-  top: 18px;
-  left: 19px;
-  background: none;
-  border: none;
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  margin: 0;
-  text-indent: 0;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-dec {
-  left: 0;
-  border-right: 1px solid #e1e1e1;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-dec:before {
-  content: "\f068";
-  display: block;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-dec:hover:before {
-  color: #fff;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-inc {
-  right: 0;
-  border-left: 1px solid #e1e1e1;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-inc:before {
-  content: "\f067";
-  display: block;
-}
-
-.cartHolder .cartTable .jcf-number .jcf-btn-inc:hover:before {
-  color: #fff;
-}
 
 .cartHolder .cartTable .imgHolder {
   width: 70px;
@@ -2055,6 +2058,23 @@ a {
   -webkit-box-shadow: none;
   box-shadow: none;
   border-radius: 0;
+}
+
+.quantity-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px; /* Adjust the width to your preference */
+}
+
+.quantity-btn {
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 16px; /* Adjust the font size as needed */
+}
+
+.quantity-display {
+  font-size: 16px; /* Adjust the font size as needed */
 }
 
 .cartHolder .couponForm .mt-holder {

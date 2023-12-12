@@ -108,9 +108,10 @@ routeUser.get('/showcart',async(req,res)=>{
     const id=req.session.user_id;
     const cartData=await cartModel.findOne({user:id}).populate('product.productId')
     console.log(cartData)
+    const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
 
     if(cartData){
-      res.render('cart',{data:cartData})
+      res.render('cart',{data:cartData,subtotal})
     }else{
       res.render('cart')
     }
@@ -121,6 +122,25 @@ routeUser.get('/showcart',async(req,res)=>{
 })
 
 
+routeUser.post('/updatecart',async (req, res) => {
+  const product_id = req.body.productId
+  const user_id = req.session.user_id
+  const count = req.body.count
+  console.log(product_id,user_id,count);
+  const cartD = await cartModel.findOne({ user: user_id })
+  console.log(cartD);
+  const updatedCart = await cartModel.findOneAndUpdate(
+    { user: user_id, 'product.productId': product_id },
+    {
+      $inc: {
+        'product.$.quantity': count,
+        'product.$.totalPrice': count * cartD.product.find(p => p.productId.equals(product_id)).price,
+      },
+    },
+    { new: true }
+  );
+  res.json({success:true})
+});
 
 
 module.exports = routeUser;

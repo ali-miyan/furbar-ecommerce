@@ -1,6 +1,6 @@
 <%- include('../layouts/header.ejs') -%>
 <%- include('../layouts/usernav.ejs') -%>
-
+   
 <div class="my-23">
 <main>
     <!-- introBannerHolder -->
@@ -19,15 +19,15 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section >
     <!-- cartHolder -->
     <% if (data) { %>
-    <div class="cartHolder container pt-xl-21 pb-xl-24 py-lg-20 py-md-16 py-10">
-        <div class="row">
+    <div  class="cartHolder  container pt-xl-21 ">
+        <div style="height: auto;" class="row" >
             <!-- table-responsive -->
-            <div class="col-12 table-responsive mb-lg-20 mb-md-16 mb-10">
-
-                <table class="table cartTable mb-xl-22">
+            <div class="col-12 table-responsive mb-lg-20 mb-md-16 mb-10" >
+                
+                <table class="table cartTable" >
                     <thead>
                         <tr>
                             <th scope="col" class="text-uppercase fwEbold border-top-0">product</th>
@@ -38,23 +38,34 @@
                     </thead>
                     <tbody>
                         <% data.product.forEach(function(product, index) { %>
-                        <tr class="align-items-center">
-                            <td class="d-flex align-items-center border-top-0 border-bottom px-0 py-6">
-                                <div class="imgHolder">
-                                    <img src="sharpimages/<%=product.productId.images.image1%>" alt="image description" class="img-fluid">
-                                </div>
-                                <span class="title pl-2"><a href=""><%=product.productId.name%></a></span>
-                            </td>
-                            <td class="fwEbold border-top-0 border-bottom px-0 py-6"><%=product.price%></td>
-                            <td class="border-top-0 border-bottom px-0 py-6">  <input type="number" placeholder="1" min="1" max="6" oninput="validity.valid||(value='');">
-                            </td>
-                            <td class="fwEbold border-top-0 border-bottom px-0 py-6"><%=product.totalPrice%><a href="javascript:void(0);" class="fas fa-times float-right"></a></td>
-                        </tr>
-                       <% }); %>
+                            <tr class="align-items-center">
+                                <td class="d-flex align-items-center border-top-0 border-bottom px-0 py-6">
+                                    <div class="imgHolder">
+                                        <img src="sharpimages/<%= product.productId.images.image1 %>" alt="image description" class="img-fluid">
+                                    </div>
+                                    <span class="title pl-2"><a href=""><%= product.productId.name %></a></span>
+                                </td>
+                                <td class="fwEbold border-top-0 border-bottom px-0 py-6"><%= product.price %></td>
+                                <td class="border-top-0 border-bottom px-0 py-6">
+                                    <div class="quantity-container">
+                                        <button class="quantity-btn" onclick="updateQuantity('<%= product.productId._id %>', -1)">-</button>
+                                        <span  class="quantity-display"><%= product.quantity %></span>
+                                        <button class="quantity-btn" onclick="updateQuantity('<%= product.productId._id %>', 1)">+</button>
+                                    </div>
+                                </td>
+                                <td class="fwEbold border-top-0 border-bottom px-0 py-6">
+                                    <span class="totalPriceCell"><%= product.totalPrice %></span>
+                                </td>
+                            
+                            </div>
+                            </tr>
+                        <% }); %>
+                        
+                          
                       
                     </tbody>
                 </table>
-            </div>
+            
             
             <% }else { %>
                 <div class="container">
@@ -69,21 +80,25 @@
                     </a>
                   </div> 
            <% } %> 
+           
         </div>
     </div>
-        
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="d-flex justify-content-between">
-                    <strong class="txt fwEbold text-uppercase mb-1">subtotal</strong>
-                    <strong class="price fwEbold text-uppercase mb-1">900.00 $</strong>
+    <div class="card  sub-container">
+            <h1>Checkout</h1>
+            <div class="cart-details">
+                <h2>Shipping Information</h2>
+                
+                <div class="additional-details">
+                    <h2>Order Summary</h2>
+                    <p>Subtotal: <%=subtotal%></p>
+                    <p>Shipping: Free Shipping</p>
+                    <p>Total: $1645.00</p>
+                    <a href="#" class="a-btn">Proceed to Payment</a>
                 </div>
-                <a href="javascript:void(0);" class="btn btnTheme w-100 fwEbold text-center text-white md-round py-3 px-4 py-md-3 px-md-4">Proceed to checkout</a>
             </div>
         </div>
-    </div>
-</div>
+
+
     <div class="container mb-lg-24 mb-md-16 mb-10">
         <!-- subscribeSecBlock -->
         <section class="subscribeSecBlock bgCover col-12 pt-lg-24 pb-lg-12 pt-md-16 pb-md-8 py-10" style="background-image: url(images/n-bg3.jpg)">
@@ -99,6 +114,35 @@
         </section>
     </div>
     </div>
+
+    <script>
+        function updateQuantity(productId, count) {
+            const data = { productId, count };
+            $.ajax({
+                method: 'POST',
+                url: '/updatecart',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (response) => {
+                    if (response.success) {
+                        $("#reloadDiv").load("/showcart #reloadDiv");
+                    } else {
+                        // Handle other cases or errors here
+                        swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "An error occurred",
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error('Error updating cart:', error);
+                    // Handle the error
+                }
+            });
+        }
+
+    </script>  
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<!-- include jQuery library -->
