@@ -57,7 +57,7 @@
 									</div>
 								</div>
 							</header>
-							<div class="row">
+							<div class="row" id="productContainer">
 								<!-- Loop through each product in the products array -->
 					<% product.forEach(product => { %>
 						<% if (!product.is_blocked) { %>
@@ -104,8 +104,7 @@
 							<section class="widget overflow-hidden mb-9">
 								<form action="javascript:void(0);" class="searchForm position-relative border">
 									<fieldset>
-										<input type="search" class="form-control" placeholder="Search product...">
-										<button class="position-absolute"><i class="icon-search"></i></button>
+										<input type="search" id="searchInput" class="form-control" placeholder="Search product...">
 									</fieldset>
 								</form>
 							</section>
@@ -168,6 +167,31 @@
 				</section>
 			</div>
         </div>
+
+		<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var searchInput = document.getElementById('searchInput');
+    var productContainer = document.getElementById('productContainer');
+    var products = productContainer.getElementsByClassName('col-12');
+
+    searchInput.addEventListener('input', function () {
+        var searchQuery = searchInput.value.trim().toLowerCase();
+
+        for (var i = 0; i < products.length; i++) {
+            var product = products[i];
+            var productName = product.textContent.toLowerCase();
+
+            // Check if the product name contains the search query
+            if (productName.includes(searchQuery)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        }
+    });
+});
+
+</script>
 
 
 <%- include('../layouts/userfoot.ejs') -%>

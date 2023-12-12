@@ -105,6 +105,7 @@ routeUser.patch('/getcart',async(req,res)=>{
 
 routeUser.get('/showcart',async(req,res)=>{
   try {
+    if (req.session.user_id) { 
     const id=req.session.user_id;
     const cartData=await cartModel.findOne({user:id}).populate('product.productId')
     console.log(cartData)
@@ -115,6 +116,9 @@ routeUser.get('/showcart',async(req,res)=>{
     }else{
       res.render('cart')
     }
+  }else{
+    res.redirect('/login')
+  }
 
   } catch (error) {
     console.log(error.message);
