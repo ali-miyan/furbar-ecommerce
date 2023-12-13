@@ -34,6 +34,7 @@
 					<div class="col-12 col-lg-9 order-lg-3">
 						<!-- content -->
 						<article id="content">
+							<input class="searchForm position-relative border" type="search" id="searchInput" class="form-control" placeholder="Search product...">
 							<!-- show-head -->
 							<header class="show-head d-flex flex-wrap justify-content-between mb-7">
 								<ul class="list-unstyled viewFilterLinks d-flex flex-nowrap align-items-center">
@@ -76,7 +77,7 @@
 								<div class="text-center py-5 px-4">
 									<!-- Use the product's name and price -->
 									<span class="title d-block mb-2"><a href=""><%= product.name %></a></span>
-									<span class="price d-block fwEbold"><del>80.50 $</del><%=product.price%></span>
+									<span class="price d-block fwEbold"><del>₹80.50</del>₹<%=product.price%></span>
 									<span class="hotOffer fwEbold text-uppercase text-white position-absolute d-block">HOT</span>
 									<span class="hotOffer green fwEbold text-uppercase text-white position-absolute d-block ml-8">Sale</span>
 								</div>
@@ -84,33 +85,23 @@
 						</div>
 						<%}%>
 					<% }); %>			
-								<div class="col-12 pt-3 mb-lg-0 mb-md-6 mb-3">
-									<!-- pagination -->
-									<ul class="list-unstyled pagination d-flex justify-content-center align-items-end">
-										<li><a href="javascript:void(0);"><i class="fas fa-chevron-left"></i></a></li>
-										<li class="active"><a href="javascript:void(0);">1</a></li>
-										<li><a href="javascript:void(0);">2</a></li>
-										<li>...</li>
-										<li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i></a></li>
-									</ul>
-								</div>
-							</div>
+					<div class="col-12 pt-3 mb-lg-0 mb-md-6 mb-3">
+						<!-- pagination -->
+						<ul class="list-unstyled pagination d-flex justify-content-center align-items-end" id="pagination">
+							<li class="disabled" id="prevButton"><a href="javascript:void(0);" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></a></li>
+							<li id="nextButton"><a href="javascript:void(0);" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></a></li>
+						</ul>
+					</div>
 						</article>
 					</div>
 					<div class="col-12 col-lg-3 order-lg-1">
 						<!-- sidebar -->
 						<aside id="sidebar">
 							<!-- widget -->
-							<section class="widget overflow-hidden mb-9">
-								<form action="javascript:void(0);" class="searchForm position-relative border">
-									<fieldset>
-										<input type="search" id="searchInput" class="form-control" placeholder="Search product...">
-									</fieldset>
-								</form>
-							</section>
+							<h6 class="headingVIII fwEbold text-uppercase mb-5">FILTERS</h6>
 							<!-- widget -->
 							<section class="widget overflow-hidden mb-9">
-								<h3 class="headingVII fwEbold text-uppercase mb-5">PRODUCT CATEGORIES</h3>
+								<h3 style="text-align: center;" class="headingVII fwEbold text-uppercase mb-5">PRODUCT CATEGORIES</h3>
 								<ul class="list-unstyled categoryList mb-0">
 									<li class="mb-5 overflow-hidden"><a href="javascript:void(0);">Dried <span class="num border float-right">6</span></a></li>
 									<li class="mb-5 overflow-hidden"><a href="javascript:void(0);">Vegetables <span class="num border float-right">8</span></a></li>
@@ -192,6 +183,60 @@
 });
 
 </script>
+
+<!-- Add this script at the end of your HTML file, just before the closing </body> tag -->
+<script>
+	// Get product elements and define products per page
+	const products = document.querySelectorAll('.featureCol');
+	const productsPerPage = 6;
+  
+	// Calculate the total number of pages
+	const totalPages = Math.ceil(products.length / productsPerPage);
+  
+	// Initialize the current page
+	let currentPage = 1;
+  
+	// Function to show products for the current page
+	function showProducts() {
+	  const startIndex = (currentPage - 1) * productsPerPage;
+	  const endIndex = startIndex + productsPerPage;
+  
+	  products.forEach((product, index) => {
+		if (index >= startIndex && index < endIndex) {
+		  product.style.display = 'block';
+		} else {
+		  product.style.display = 'none';
+		}
+	  });
+	}
+  
+	// Function to change the current page
+	function changePage(direction) {
+	  if (direction === 'next' && currentPage < totalPages) {
+		currentPage += 1;
+	  } else if (direction === 'prev' && currentPage > 1) {
+		currentPage -= 1;
+	  }
+  
+	  showProducts();
+	}
+  
+	// Add event listeners to the arrow buttons to change the page
+	document.getElementById('nextButton').addEventListener('click', function() {
+	  changePage('next');
+	});
+  
+	document.getElementById('prevButton').addEventListener('click', function() {
+	  changePage('prev');
+	});
+  
+	// Initial setup
+	showProducts();
+  </script>
+  
+  
+  
+  
 
 
 <%- include('../layouts/userfoot.ejs') -%>

@@ -13,6 +13,7 @@ const productController=require("../controller/productController")
 const session = require("express-session");
 const userController = require("../controller/userController");
 const cartModel=require('../models/cartModel')
+const addressModel=require('../models/addressModel')
 
 const routeUser = express();
 
@@ -112,7 +113,7 @@ routeUser.get('/showcart',async(req,res)=>{
     const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
 
     if(cartData){
-      res.render('cart',{data:cartData,subtotal})
+      res.render('cart',{data:cartData,subtotal,id})
     }else{
       res.render('cart')
     }
@@ -146,5 +147,48 @@ routeUser.post('/updatecart',async (req, res) => {
   res.json({success:true})
 });
 
+
+routeUser.post('/removecart', async (req, res) => {
+  try {
+    const { productId, userId } = req.body;
+    const updatedCart = await cartModel.findOneAndUpdate({ 'user': userId},{ $pull: { 'product': { 'productId': productId } } },{ new: true });
+    if (updatedCart) {
+      res.json({success:true});
+    } else {
+      res.status(404).json({ error: 'Product not found in the cart' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+routeUser.get('/checkout',async(req,res)=>{
+  try {
+    const id=req.session.user_id
+    res.render('checkout',{id})
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+routeUser.post('/checkout',async(req,res)=>{
+  try {
+    const userId=req.query.id
+    const {name,address,landmark,state,city,pincode,phone,email}=req.body
+    const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
+
+      const data = await addressModel.findOneAndUpdate(
+      { user: userId },
+      { $push: { address: newAddress } },
+      { upsert: true, new: true }
+    )
+
+        res.render('successpage')
+
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 module.exports = routeUser;

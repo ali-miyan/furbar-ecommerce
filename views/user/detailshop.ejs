@@ -43,7 +43,7 @@
 								<li class="mr-2"><a href="javascript:void(0);"><i class="far fa-star"></i></a></li>
 								<li>( 5 customer reviews )</li>
 							</ul>
-							<strong class="price d-block mb-5 text-green"><%=data.price%></strong>
+							<strong class="price d-block mb-5 text-green">₹<%=data.price%></strong>
 							<p class="mb-5"><%=data.description%></p>
 							<ul class="list-unstyled productInfoDetail mb-5 overflow-hidden">
 								<li class="mb-2">Product Code: <span>FA008</span></li>
@@ -355,11 +355,18 @@
                 });
                 }
 				else{
-					Swal.fire(
-					'Saved to cart!',
-					'You clicked the button!',
-					'success'
-				  );
+					Swal.fire({
+					title: 'Item Added to Cart',
+					text: 'Do you want to see cart?',
+					icon: 'success',
+					confirmButtonText: 'Show Cart',
+					confirmButtonColor: '#1e6e2c',
+					timer: 2000,
+				}).then((result)=>{
+					if (result.isConfirmed) {
+						window.location.href = '/showcart';
+					}
+				})
 				}
 				  
 				}
@@ -422,4 +429,4 @@ zoomContainer.addEventListener('mousemove', (e) => {
 
 </body>
 
-\</html>
+</html>

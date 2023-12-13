@@ -68,6 +68,38 @@ html {
   background-color: #343a40;
 }
 
+/*checkout style*/
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  padding-bottom: 20px;
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group label {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.input-group input,
+.input-group select {
+  flex: 2;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
 
 
 body {
@@ -122,7 +154,7 @@ a {
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  padding: 20px;
+  padding: 50px;
   margin: 20px;
 }
 
@@ -174,7 +206,7 @@ a {
 
 /* Hover effect for .a-btn */
 .sub-container .a-btn:hover {
-  background-color: #0067cc;
+  background-color: #2e752a;
 }
 /*................checkout styles...........................................*/
 
@@ -1428,10 +1460,12 @@ a {
 /* ---------------------------------------------------------
 30	 widget
 ---------------------------------------------------------*/
-.widget .searchForm {
+.searchForm {
   width: 100%;
   height: 40px;
+  margin-bottom: 25px;
 }
+
 
 .widget .searchForm .form-control {
   font-size: 14px;
@@ -1444,6 +1478,10 @@ a {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: 1px solid #ebebeb;
+}
+
+.headingVIII{
+  text-align: center; border: 1px solid; height: 40px; justify-content: center; display: flex; align-items: center;
 }
 
 .widget .searchForm .form-control::-webkit-input-placeholder {
@@ -3158,3 +3196,158 @@ body{
     }
 }
 
+
+
+/*-------------------------------------------------------------*/
+
+.custom-container {
+  margin: 20px auto;
+  max-width: 1200px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Page Content Styles */
+.custom-page-content {
+  padding: 20px;
+}
+
+/* Checkout Container Styles */
+.custom-checkout {
+  padding: 20px;
+}
+
+/* Form Row Styles */
+.custom-row {
+  margin: 0 -10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Form Column Styles */
+.custom-col-lg-8,
+.custom-col-lg-4,
+.custom-col-sm-6 {
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* Billing Details Section Styles */
+.custom-billing-details {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Occupy remaining space */
+  margin-bottom: 20px;
+}
+
+/* Checkout Title Styles */
+.custom-checkout-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Form Group Styles */
+.custom-form-group {
+  margin-bottom: 20px;
+}
+
+/* Form Control Styles */
+.custom-form-control {
+  width: calc(100% - 20px); /* Adjusted width */
+  padding: 10px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Form Control Focus Styles */
+.custom-form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Order Summary Styles */
+.custom-summary {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Order Summary Title Styles */
+.custom-summary-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Table Styles */
+.custom-table,
+.custom-table-summary {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.custom-table th,
+.custom-table td,
+.custom-table-summary th,
+.custom-table-summary td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Button Styles */
+.custom-btn,
+.custom-btn-outline-primary-2,
+.custom-btn-order,
+.custom-btn-block {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.custom-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+.custom-btn-outline-primary-2 {
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.custom-btn:hover,
+.custom-btn-outline-primary-2:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+
+
+/* Button Text Styles */
+.custom-btn-text,
+.custom-btn-hover-text {
+  display: block;
+  line-height: 20px;
+}
+
+/*sucesssssssssssssssssssssssss*/

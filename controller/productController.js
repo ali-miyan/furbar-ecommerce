@@ -33,11 +33,12 @@ const addProductsPost=async(req,res)=>{
         console.log(details);
         const files=await req.files;
         console.log(files);
+        
         const img = [
-          files?.image1 ? files.image1[0].filename : null,
-          files?.image2 ? files.image2[0].filename : null,
-          files?.image3 ? files.image3[0].filename : null,
-          files?.image4 ? files.image4[0].filename : null,
+          files && files.image1 ? files.image1[0].filename : null,
+          files && files.image2 ? files.image2[0].filename : null,
+          files && files.image3 ? files.image3[0].filename : null,
+          files && files.image4 ? files.image4[0].filename : null,
       ];
           for (let i = 0; i < img.length; i++) {
             if (img[i]) {
