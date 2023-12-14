@@ -1,3 +1,4 @@
+
 const isLogin = (req, res, next) => {
     try {
         if (req.session.user_id) {
@@ -5,8 +6,20 @@ const isLogin = (req, res, next) => {
             console.log("middle:"+req.session.user_id);
             next();
         } else {
-            // User is not logged in, redirect to the login page or another appropriate route
-            res.redirect('/');
+            Swal.fire({
+                title: 'sorry!',
+                text: 'you need to login first!',
+                icon: 'info',
+                reverseButtons: true,
+                confirmButtonText: 'Login',
+                showCancelButton: true,
+                confirmButtonColor: '#1e6e2c',
+                cancelButtonColor: '#97a399',
+              }).then((result) => {
+                // If the user clicks "Yes"
+                if (result.isConfirmed) { 
+                res.redirect('/login');
+              }})
         }
     } catch (error) {
         console.log(error.message);
@@ -37,7 +50,7 @@ const isAdminLogin = async(req,res,next)=>{
         if(req.session.admin_id){
             next()
         }else{
-            res.redirect('/')
+            res.redirect('/admin')
         }
     } catch (error) {
         console.log(error.message);
@@ -54,6 +67,7 @@ const isAdminLogout = async(req,res,next)=>{
         console.log(error.message);
     }
 }
+
 
 module.exports = {
     isLogin,

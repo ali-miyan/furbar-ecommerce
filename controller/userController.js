@@ -261,6 +261,18 @@ const userLogout = async (req, res) => {
     }
 }
 
+const detailShop=async(req,res)=>{
+    try {
+        const id=req.query.id;
+        const data=await Product.findOne({_id:id})
+        console.log(data);
+        res.render('detailshop',{data:data})
+    } catch (error) {
+        console.log(error.message);
+    }
+  
+  }
+
 
 module.exports={
     verifyOTP,
@@ -272,5 +284,6 @@ module.exports={
     loadSignup,
     loadProfile,
     loadLogin,
-    loadShop
+    loadShop,
+    detailShop
 }
