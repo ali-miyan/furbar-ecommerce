@@ -1,27 +1,20 @@
 
+
 const isLogin = (req, res, next) => {
     try {
+        console.log("Executing isLogin middleware");
+
         if (req.session.user_id) {
             // User is logged in, continue to the next middleware or route handler
-            console.log("middle:"+req.session.user_id);
+            console.log("middle:" + req.session.user_id);
             next();
         } else {
-            Swal.fire({
-                title: 'sorry!',
-                text: 'you need to login first!',
-                icon: 'info',
-                reverseButtons: true,
-                confirmButtonText: 'Login',
-                showCancelButton: true,
-                confirmButtonColor: '#1e6e2c',
-                cancelButtonColor: '#97a399',
-              }).then((result) => {
-                // If the user clicks "Yes"
-                if (result.isConfirmed) { 
-                res.redirect('/login');
-              }})
+            console.log('GHJN');
+            const message="you have to login first!"
+            res.redirect(`/login?loginmessage=${message}`);
         }
-    } catch (error) {
+    }
+    catch (error) {
         console.log(error.message);
     }
 }
@@ -30,7 +23,7 @@ const isLogout = (req, res, next) => {
     try {
         if (req.session.user_id) {
             // User is logged in, redirect to the home page or another appropriate route
-            console.log("middle:"+req.session.user_id);
+            console.log("middle:" + req.session.user_id);
             res.redirect('/');
         } else {
             // User is not logged in, continue to the next middleware or route handler
@@ -45,22 +38,22 @@ const isLogout = (req, res, next) => {
 
 //admin middleware
 
-const isAdminLogin = async(req,res,next)=>{
+const isAdminLogin = async (req, res, next) => {
     try {
-        if(req.session.admin_id){
+        if (req.session.admin_id) {
             next()
-        }else{
+        } else {
             res.redirect('/admin')
         }
     } catch (error) {
         console.log(error.message);
     }
 }
-const isAdminLogout = async(req,res,next)=>{
+const isAdminLogout = async (req, res, next) => {
     try {
-        if(req.session.admin_id){
+        if (req.session.admin_id) {
             res.redirect('/admin/dashboard')
-        }else{
+        } else {
             next()
         }
     } catch (error) {
@@ -74,5 +67,5 @@ module.exports = {
     isLogout,
     isAdminLogin,
     isAdminLogout
-    
+
 }

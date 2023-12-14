@@ -96,7 +96,7 @@
 							</ul>
 							<div class="holder overflow-hidden d-flex flex-wrap mb-6">
 								<input type="number" placeholder="1">
-								<a onclick="addToCart('<%= data._id%>')"	class="btn btnTheme btnShop fwEbold text-white md-round py-3 px-4 py-md-3 px-md-4">Add To Cart <i class="fas fa-arrow-right ml-2"></i></a>
+								<a onclick="addToCart('<%= data._id%>')" 	class="btn btnTheme btnShop fwEbold text-black md-round py-3 px-4 py-md-3 px-md-4">Add To Cart <i class="fas fa-arrow-right ml-2"></i></a>
 							</div>
 
 							<ul class="list-unstyled productInfoDetail mb-0">
@@ -330,7 +330,7 @@
 	 function addToCart(id){
 		$.ajax({
 			url:'/getcart',
-			method:'patch',
+			method:'PATCH',
 			data:{id:id},
 			success:function(response){
 				if(response.failed){

@@ -1,79 +1,96 @@
 <%- include('../layouts/header.ejs') -%>
-<%- include('../layouts/usernav.ejs') -%>
+    <%- include('../layouts/usernav.ejs') -%>
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Nest Dashboard</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="" />
-        <meta property="og:type" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:image" content="" />
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
-        <!-- Template CSS -->
-        <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
-    </head>
+        <!DOCTYPE html>
+        <html lang="en">
 
-    <body>
-		<!-- main -->
-        <div class="col-12 pt-lg-23 pt-md-15 pt-sm-10 pt-6 text-center">
-            <section class="content-main mt-80 mb-80">
-                <div class="card mx-auto card-login">
-                    <div class="card-body">
-                        <h4 class="card-title mb-4 mx-24">Sign in</h4>
-                        <form action="/login" method="post">
+        <head>
+            <meta charset="utf-8" />
+            <title>Nest Dashboard</title>
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <meta name="description" content="" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta property="og:title" content="" />
+            <meta property="og:type" content="" />
+            <meta property="og:url" content="" />
+            <meta property="og:image" content="" />
+            <!-- Favicon -->
+            <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
+            <!-- Template CSS -->
+            <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        </head>
 
-                            <%
-                            if(typeof message !== 'undefined'){
-                                %>
-                                <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                                    <i class="bi-exclamation-octagon-fill"></i>
-                                    <strong class="mx-auto" >  <%- message %></strong>  
-                                   
-                                </div>
-                                <%
-                            } 
-                            %>
+        <body>
+            <!-- main -->
+            <div class="col-12 pt-lg-23 pt-md-15 pt-sm-10 pt-6 text-center">
+                <section class="content-main mt-80 mb-80">
+                    <div class="card mx-auto card-login">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4 mx-24">Sign in</h4>
+                            <form action="/login" method="post">
 
-                            <div class="mb-3">
-                                <input class="form-control" placeholder="email" type="email" name="email" />
-                            </div>
-                            <!-- form-group// -->
-                             <div class="mb-3">
-                                <input class="form-control" placeholder="Password" type="password" name="password" />
-                            </div>
-                            
-                            <!-- form-group form-check .// -->
-                            <div class="mb-4">
-                                <button type="submit" class="btn btn-primary w-100">Login</button>
-                            </div>
-                            <!-- form-group// -->
-                            <div class="mb-3">
-                                <a href="#" class="font-sm text-muted">Forgot password?</a>
-                                <!-- <label class="form-check">
+                                <% if(typeof message !=='undefined' ){ %>
+                                    <div
+                                        class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                                        <i class="bi-exclamation-octagon-fill"></i>
+                                        <strong class="mx-auto"> <%- message %></strong>
+
+                                    </div>
+                                    <% } %>
+
+                                    <% if (typeof loginerror !=='undefined' ) { %>
+                                        <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
+                                            <i class="bi-exclamation-octagon-fill"></i>
+                                            <strong class="mx-auto"><%- loginerror %></strong>
+                                        </div>
+                                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                                        <script>
+                                            // Add a script to hide the alert after 5 seconds
+                                            $(document).ready(function () {
+                                                setTimeout(function () {
+                                                    $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
+                                                }, 1500); // 3000 milliseconds = 3 seconds
+                                            });
+                                        </script>
+                                        <% } %>
+
+                                    
+
+                                        <div class="mb-3">
+                                            <input class="form-control" placeholder="email" type="email" name="email" />
+                                        </div>
+                                        <!-- form-group// -->
+                                        <div class="mb-3">
+                                            <input class="form-control" placeholder="Password" type="password"
+                                                name="password" />
+                                        </div>
+
+                                        <!-- form-group form-check .// -->
+                                        <div class="mb-4">
+                                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                                        </div>
+                                        <!-- form-group// -->
+                                        <div class="mb-3">
+                                            <a href="#" class="font-sm text-muted">Forgot password?</a>
+                                            <!-- <label class="form-check">
                                     <input type="checkbox" class="form-check-input" checked="" />
                                     <span class="form-check-label">Remember</span>
                                 </label> -->
-                            </div>
-                        </form>
-                        
+                                        </div>
+                            </form>
 
-                        <p class="text-center mb-4">Don't have account? <a href="/signup">Sign up</a></p>
+
+                            <p class="text-center mb-4">Don't have account? <a href="/signup">Sign up</a></p>
+                        </div>
                     </div>
-                </div>
-            </section>
-    
-    </div>
+                </section>
 
-
-    
+            </div>
 
 
 
-<%- include('../layouts/userfoot.ejs') -%>
-<%- include('../layouts/footer.ejs') -%>
+
+
+
+            <%- include('../layouts/userfoot.ejs') -%>
+                <%- include('../layouts/footer.ejs') -%>

@@ -68,4 +68,12 @@ routeUser.get('/checkout',auth.isLogin,cartController.checkout)
 
 routeUser.post('/checkout',auth.isLogin,cartController.checkoutPost)
 
+routeUser.get('/newhome',async(req,res)=>{
+  try {
+    res.render('newhome')
+  } catch (error) {
+    
+  }
+})
+
 module.exports = routeUser;

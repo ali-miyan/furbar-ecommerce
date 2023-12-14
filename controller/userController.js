@@ -62,7 +62,8 @@ const loadProfile=async(req,res)=>{
 //login page
 const loadLogin=async(req,res)=>{
     try {
-        res.render('login')
+        const loginerror=req.query.loginmessage
+        res.render('login',{loginerror})
     } catch (error) {
         console.log(error);
     }
