@@ -1,270 +1,315 @@
 <%- include('../layouts/header.ejs') -%>
-  <%- include('../layouts/usernav.ejs') -%>
-    <div class="my-30">
 
-      <div class="custom-container">
-        <% if(address.address.length < 0) { %>
-          <form action="/checkout?id=<%=id%>" method="post" class="custom-row">
-            <div class="custom-col-lg-8 custom-billing-details">
-              <h2 class="custom-checkout-title">Billing Details</h2>
 
-              <div class="custom-form-group">
-                <label for="customFullName">Full Name *</label>
-                <input type="text" class="custom-form-control" id="customFullName" name="name">
-              </div>
 
-              <div class="custom-form-group">
-                <label for="customCountry">Address *</label>
-                <input type="text" class="custom-form-control" id="customCountry" name="address">
-              </div>
+<!-- Page Banner Section Start -->
+<div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
+    <div class="container">
+        <!-- Page Banner Content End -->
+        <div class="page-banner-content">
+            <h2 class="title">Checkout</h2>
 
-              <div class="custom-form-group">
-                <label for="customStreetAddress">Landmark *</label>
-                <input type="text" class="custom-form-control" id="customStreetAddress" name="landmark"
-                  placeholder="House number and Street name">
-              </div>
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Checkout</li>
+            </ul>
+        </div>
+        <!-- Page Banner Content End -->
+    </div>
+</div>
+<!-- Page Banner Section End -->
 
-              <div class="custom-row">
-                <div class="custom-col-sm-6">
-                  <div class="custom-form-group">
-                    <label for="customStateCounty">State *</label>
-                    <input type="text" class="custom-form-control" id="customStateCounty" name="state">
-                  </div>
+<!-- Checkout Section Start -->
+<div class="section section-padding">
+    <div class="container">
+        <div class="checkout-info">
+            <p class="info-header">
+                <i class="fa fa-exclamation-circle"></i> Have a coupon?
+                <a data-bs-toggle="collapse" href="#coupon">Click here to enter your code</a>
+            </p>
+
+            <div class="collapse" id="coupon">
+                <div class="card-body">
+                    <form action="#" method="">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="single-form">
+                                    <input type="email" placeholder="Coupon code" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="single-form">
+                                    <button class="btn btn-primary btn-hover-dark">
+                                        Coupon
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
+        </div>
 
-                <div class="custom-col-sm-6">
-                  <div class="custom-form-group">
-                    <label for="customTownCity">City *</label>
-                    <input type="text" class="custom-form-control" id="customTownCity" name="city">
-                  </div>
-                </div>
-              </div>
+        <form action="/checkout?id=<%=id%>" method="post">
+            <div class="row">
+                <div class="col-lg-7">
+                    <!-- Checkout Form Start -->
+                    <div class="checkout-form">
+                        <div class="checkout-title">
+                            <h4 class="title">Billing details</h4>
+                        </div>
 
-              <div class="custom-row">
-                <div class="custom-col-sm-6">
-                  <div class="custom-form-group">
-                    <label for="customPostcode">Pincode *</label>
-                    <input type="text" class="custom-form-control" id="customPostcode" name="pincode">
-                  </div>
-                </div>
 
-                <div class="custom-col-sm-6">
-                  <div class="custom-form-group">
-                    <label for="customPhone">Phone *</label>
-                    <input type="tel" class="custom-form-control" id="customPhone" name="phone">
-                  </div>
-                </div>
-              </div>
-
-              <div class="custom-form-group">
-                <label for="customEmail">Email *</label>
-                <input type="email" class="custom-form-control" id="customEmail" name="email">
-              </div>
-
-            </div><!-- End .custom-col-lg-8 -->
-
-            <aside class="custom-col-lg-4">
-              <div class="custom-summary">
-                <h3 class="custom-summary-title">Your Order</h3>
-
-                <table class="custom-table custom-table-summary">
-                  <thead>
-                    <tr>
-                      <th>Product</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><a href="#">Beige knitted elastic runner shoes</a></td>
-                      <td>$84.00</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#">Blue utility pinafore denimdress</a></td>
-                      <td>$76.00</td>
-                    </tr>
-                    <tr class="custom-summary-subtotal">
-                      <td>Subtotal:</td>
-                      <td>$160.00</td>
-                    </tr>
-                    <tr>
-                      <td>Shipping:</td>
-                      <td>Free shipping</td>
-                    </tr>
-                    <tr class="custom-summary-total">
-                      <td>Total:</td>
-                      <td>$160.00</td>
-                    </tr>
-                  </tbody>
-                </table><!-- End .custom-table custom-table-summary -->
-
-                <button type="submit" class="custom-btn custom-btn-outline-primary-2 custom-btn-order custom-btn-block">
-                  <span class="custom-btn-text">Place Order</span>
-                  <span class="custom-btn-hover-text">Proceed to Checkout</span>
-                </button>
-              </div>
-            </aside><!-- End .custom-col-lg-4 -->
-          </form>
-          <% } else { %>
-            <form action="/checkout?id=<%=id%>" method="post" class="custom-row">
-              <div class="custom-col-lg-8 custom-billing-details">
-                <% address.address.forEach(data=> { %>
-                  <div class="card ">
-                    <div class="card-body">
-                      <h5 class="card-title">Address</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">your address</h6>
-                      <p class="card-text">
-                         <%=data.name%><br>
-                          <%=data.address%><br>
-                            <%=data.name%><br>
-                              <%=data.landmark%><br>
-                                <%=data.state%><br>
-                                  <%=data.city%><br>
-                                   <%=data.pincode%><br>
-                                      <%=data.phone%><br>
-                                        <%=data.email%><br>
-                      </p>
-                      <a href="#" class="card-link">Card link</a>
-                      <a href="#" class="card-link">Another link</a>
+                        <div class="row" >
+                            <div class="col-sm-6">
+                                <div class="single-form">
+                                    <input type="text" name="firstName" placeholder="First name *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="single-form">
+                                    <input type="text" name="lastName" placeholder="Last name *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="single-form">
+                                    <label class="form-label">address *</label>
+                                    <input type="text" name="address" placeholder="Address" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="single-form">
+                                    <input type="text" name="Landmark" placeholder="Landmark *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="single-form">
+                                    <input type="text" name="state" placeholder="State *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="single-form">
+                                    <input type="text" name="city" placeholder="Town / City *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="single-form">
+                                    <input type="text" name="pincode" placeholder="Pincode *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="single-form">
+                                    <input type="text" name="phone" placeholder="Phone *" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="single-form">
+                                    <input type="text" name="email" placeholder="Email address *" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <% }) %>
-              </div><!-- End .custom-col-lg-8 -->
-              <aside class="custom-col-lg-4">
-                <div class="custom-summary">
-                  <h3 class="custom-summary-title">Your Order</h3>
-
-                  <table class="custom-table custom-table-summary">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <tr>
-                        <td><a href="#">Beige knitted elastic runner shoes</a></td>
-                        <td>$84.00</td>
-                      </tr>
-
-                      <tr>
-                        <td><a href="#">Blue utility pinafore denimdress</a></td>
-                        <td>$76.00</td>
-                      </tr>
-
-                      <tr class="custom-summary-subtotal">
-                        <td>Subtotal:</td>
-                        <td>$160.00</td>
-                      </tr><!-- End .custom-summary-subtotal -->
-
-                      <tr>
-                        <td>Shipping:</td>
-                        <td>Free shipping</td>
-                      </tr>
-
-                      <tr class="custom-summary-total">
-                        <td>Total:</td>
-                        <td>$160.00</td>
-                      </tr><!-- End .custom-summary-total -->
-                    </tbody>
-                  </table><!-- End .custom-table custom-table-summary -->
-
-                  <button type="submit" class="custom-btn custom-btn-outline-primary-2 custom-btn-order custom-btn-block">
-                    <span class="custom-btn-text">Place Order</span>
-                    <span class="custom-btn-hover-text">Proceed to Checkout</span>
-                  </button>
+                    <!-- Checkout Form End -->
                 </div>
-              </aside><!-- End .custom-col-lg-4 -->
-            </form>
-            <% } %>
-      </div>
+                <div class="col-lg-5">
+                    <div class="checkout-order">
+                        <div class="checkout-title">
+                            <h4 class="title">Your Order</h4>
+                        </div>
+
+                        <div class="checkout-order-table table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="Product-name">
+                                            Product
+                                        </th>
+                                        <th class="Product-price">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>
+                                                Bodysuit With Long
+                                                Sleeves × 1
+                                            </p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <p>$150.00</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>
+                                                Classic Polo Shirt × 1
+                                            </p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <p>$150.00</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>
+                                                Trousers With Side
+                                                Stripe × 1
+                                            </p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <p>$150.00</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>Biker Jacket × 1</p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <p>$150.00</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>Subtotal</p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <p>$150.00</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>Shipping</p>
+                                        </td>
+                                        <td class="Product-price">
+                                            <ul class="shipping-list">
+                                                <li class="radio">
+                                                    <input type="radio" name="shipping" id="radio1" checked />
+                                                    <label for="radio1"><span></span>
+                                                        Flat Rate</label>
+                                                </li>
+                                                <li class="radio">
+                                                    <input type="radio" name="shipping" id="radio2" />
+                                                    <label for="radio2"><span></span>
+                                                        Free
+                                                        Shipping</label>
+                                                </li>
+                                                <li class="radio">
+                                                    <input type="radio" name="shipping" id="radio3" />
+                                                    <label for="radio3"><span></span>
+                                                        Local
+                                                        Pickup</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Product-name">
+                                            <p>Total</p>
+                                        </td>
+                                        <td class="total-price">
+                                            <p>$600.00</p>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="checkout-payment">
+                            <ul>
+                                <li>
+                                    <div class="single-payment">
+                                        <div class="payment-radio radio">
+                                            <input type="radio" name="radio" id="bank" />
+                                            <label for="bank"><span></span> Direct
+                                                bank transfer
+                                            </label>
+
+                                            <div class="payment-details">
+                                                <p>
+                                                    Please send a Check
+                                                    to Store name with
+                                                    Store Street, Store
+                                                    Town, Store State,
+                                                    Store Postcode,
+                                                    Store Country.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="single-payment">
+                                        <div class="payment-radio radio">
+                                            <input type="radio" name="radio" id="check" />
+                                            <label for="check"><span></span> Check
+                                                payments
+                                            </label>
+
+                                            <div class="payment-details">
+                                                <p>
+                                                    Please send a check
+                                                    to Store Name, Store
+                                                    Street, Store Town,
+                                                    Store State /
+                                                    County, Store
+                                                    Postcode.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="single-payment">
+                                        <div class="payment-radio radio">
+                                            <input type="radio" name="radio" id="cash" checked="checked" />
+                                            <label for="cash"><span></span> Cash on
+                                                Delivery</label>
+
+                                            <div class="payment-details">
+                                                <p>
+                                                    Pay with cash upon
+                                                    delivery.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="single-payment">
+                                        <div class="payment-radio radio">
+                                            <input type="radio" name="radio" id="paypal" />
+                                            <label for="paypal"><span></span> Paypal
+                                                <img class="payment" src="asset/images/payment-2.html" alt="" />
+                                                <a href="#">What is PayPal?</a></label>
+
+                                            <div class="payment-details">
+                                                <p>
+                                                    Pay via PayPal; you
+                                                    can pay with your
+                                                    credit card if you
+                                                    don’t have a PayPal
+                                                    account.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="single-form">
+                                <button type="submit" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
-</div>
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const form = document.querySelector('.custom-row');
+<!-- Checkout Section End -->
 
-          form.addEventListener('submit', function (event) {
-            const showError = (input, message) => {
-              const parent = input.parentElement;
-              const errorElement = parent.querySelector('.error-message');
-              if (errorElement) {
-                errorElement.innerText = message;
-              } else {
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'error-message';
-                errorDiv.innerText = message;
-                parent.appendChild(errorDiv);
-              }
-            };
-
-            const hideError = (input) => {
-              const parent = input.parentElement;
-              const errorElement = parent.querySelector('.error-message');
-              if (errorElement) {
-                parent.removeChild(errorElement);
-              }
-            };
-
-            const validateNotEmpty = (input, fieldName) => {
-              const value = input.value.trim();
-              if (value === '') {
-                showError(input, `${fieldName} is required.`);
-                return false;
-              }
-              hideError(input);
-              return true;
-            };
-
-            const validatePincode = (input) => {
-              const value = input.value.trim();
-              if (!/^\d{6}$/.test(value)) {
-                showError(input, 'Please enter a valid 6-digit pincode.');
-                return false;
-              }
-              hideError(input);
-              return true;
-            };
-
-            const validatePhone = (input) => {
-              const value = input.value.trim();
-              if (!/^\d+$/.test(value)) {
-                showError(input, 'Please enter a valid phone number.');
-                return false;
-              }
-              hideError(input);
-              return true;
-            };
-
-            const validateEmail = (input) => {
-              const value = input.value.trim();
-              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-              if (!emailRegex.test(value)) {
-                showError(input, 'Please enter a valid email address.');
-                return false;
-              }
-              hideError(input);
-              return true;
-            };
-
-            // Validation for each input field
-            if (
-              !validateNotEmpty(document.getElementById('customFullName'), 'Full Name') ||
-              !validateNotEmpty(document.getElementById('customCountry'), 'Address') ||
-              !validateNotEmpty(document.getElementById('customStreetAddress'), 'Land mark') ||
-              !validateNotEmpty(document.getElementById('customStateCounty'), 'State') ||
-              !validateNotEmpty(document.getElementById('customTownCity'), 'City') ||
-              !validatePincode(document.getElementById('customPostcode')) ||
-              !validatePhone(document.getElementById('customPhone')) ||
-              !validateEmail(document.getElementById('customEmail'))
-            ) {
-              event.preventDefault();
-            }
-          });
-        });
-      </script>
-
-
-      <%- include('../layouts/userfoot.ejs') -%>
-        <%- include('../layouts/footer.ejs') -%>
+<%- include('../layouts/footer.ejs') -%>

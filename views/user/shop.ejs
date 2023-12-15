@@ -1,253 +1,558 @@
 <%- include('../layouts/header.ejs') -%>
-<%- include('../layouts/usernav.ejs') -%>
 
+<!-- Header Mobile Start -->
+<div class="header-mobile section d-lg-none">
+    <!-- Header Mobile top Start -->
+    <div class="header-mobile-top header-sticky">
+        <div class="container">
+            <div class="row row-cols-3 gx-2 align-items-center">
+                <div class="col">
+                    <!-- Header Toggle Start -->
+                    <div class="header-toggle">
+                        <button class="mobile-menu-open" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                    <!-- Header Toggle End -->
+                </div>
+                <div class="col">
+                    <!-- Header Logo Start -->
+                    <div class="header-logo text-center">
+                        <a href="index.html"><img src="asset/images/logo.png" width="154" height="46" alt="Logo" /></a>
+                    </div>
+                    <!-- Header Logo End -->
+                </div>
+                <div class="col">
+                    <!-- Header Action Start -->
+                    <div class="header-meta">
+                        <div class="dropdown">
+                            <a class="action" href="#" role="button" data-bs-toggle="dropdown"><i class="pe-7s-user"></i></a>
 
-		<!-- main -->
-        <div class="my-23">
-		<main>
-			<!-- introBannerHolder -->
-			<section class="introBannerHolder d-flex w-100 bgCover" style="background-image: url(images/b-bg7.jpg);">
-				<div class="container">
-					<div class="row">
-						<div class="col-12 pt-lg-23 pt-md-15 pt-sm-10 pt-6 text-center">
-							<h1 class="headingIV fwEbold playfair mb-4">Shop</h1>
-							<ul class="list-unstyled breadCrumbs d-flex justify-content-center">
-								<li class="mr-2"><a href="home.html">Home</a></li>
-								<li class="mr-2">/</li>
-								<li class="active">Shop</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</section>
-			<style>
-				.custom-gap {
-					padding-left:45px; /* Adjust as needed */
-					padding-right: 45px; /* Adjust as needed */
-					margin-left: auto;
-					margin-right: auto;
-				}
-			</style>
-			<!-- twoColumns -->
-			<div class="twoColumns custom-gap pt-lg-23 pb-lg-20 pt-md-16 pb-md-4 pt-10 pb-4">
-				<div class="row">
-					<div class="col-12 col-lg-9 order-lg-3">
-						<!-- content -->
-						<article id="content">
-							<input class="searchForm position-relative border" type="search" id="searchInput" class="form-control" placeholder="Search product...">
-							<!-- show-head -->
-							<header class="show-head d-flex flex-wrap justify-content-between mb-7">
-								<ul class="list-unstyled viewFilterLinks d-flex flex-nowrap align-items-center">
-									<li class="mr-2"><a href="javascript:void(0);" class="active"><i class="fas fa-th-large"></i></a></li>
-									<li class="mr-2"><a href="javascript:void(0);"><i class="fas fa-list"></i></a></li>
-									<li class="mr-2">Showing 1–9 of 24 results</li>
-								</ul>
-								<!-- sortGroup -->
-								<div class="sortGroup">
-									<div class="d-flex flex-nowrap align-items-center">
-										<strong class="groupTitle mr-2">Sort by:</strong>
-										<div class="dropdown">
-											<button class="dropdown-toggle buttonReset" type="button" id="sortGroup" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Default sorting</button>
-											<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="sortGroup">
-												<li><a href="javascript:void(0);">Default Order</a></li>
-												<li><a href="javascript:void(0);">Default Order</a></li>
-												<li><a href="javascript:void(0);">Default Order</a></li>
-												<li><a href="javascript:void(0);">Default Order</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</header>
-							<div class="row" id="productContainer">
-								<!-- Loop through each product in the products array -->
-					<% product.forEach(product => { %>
-						<% if (!product.is_blocked) { %>
-						<div class="col-12 col-sm-6 col-lg-4 featureCol mb-7">
-							<div class="border">
-								<div class="imgHolder position-relative w-100 overflow-hidden">
-									<!-- Use the product's image source -->
-									<a href="/detailshop?id=<%=product._id%>"><img src="sharpimages/<%=product.images.image1 %>" alt="" class="img-fluid w-100"></a>
-									<ul class="list-unstyled postHoverLinskList d-flex justify-content-center m-0">
-										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-heart d-block"></a></li>
-										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-cart d-block"></a></li>
-										<li class="mr-2 overflow-hidden"><a href="javascript:void(0);" class="icon-eye d-block"></a></li>
-										<li class="overflow-hidden"><a href="javascript:void(0);" class="icon-arrow d-block"></a></li>
-									</ul>	
-								</div>
-								<div class="text-center py-5 px-4">
-									<!-- Use the product's name and price -->
-									<span class="title d-block mb-2"><a href=""><%= product.name %></a></span>
-									<span class="price d-block fwEbold"><del>₹80.50</del>₹<%=product.price%></span>
-									<span class="hotOffer fwEbold text-uppercase text-white position-absolute d-block">HOT</span>
-									<span class="hotOffer green fwEbold text-uppercase text-white position-absolute d-block ml-8">Sale</span>
-								</div>
-							</div>
-						</div>
-						<%}%>
-					<% }); %>			
-					<div class="col-12 pt-3 mb-lg-0 mb-md-6 mb-3">
-						<!-- pagination -->
-						<ul class="list-unstyled pagination d-flex justify-content-center align-items-end" id="pagination">
-							<li class="disabled" id="prevButton"><a href="javascript:void(0);" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></a></li>
-							<li id="nextButton"><a href="javascript:void(0);" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></a></li>
-						</ul>
-					</div>
-						</article>
-					</div>
-					<div class="col-12 col-lg-3 order-lg-1">
-						<!-- sidebar -->
-						<aside id="sidebar">
-							<!-- widget -->
-							<h6 class="headingVIII fwEbold text-uppercase mb-5">FILTERS</h6>
-							<!-- widget -->
-							<section class="widget overflow-hidden mb-9">
-								<h3 style="text-align: center;" class="headingVII fwEbold text-uppercase mb-5">PRODUCT CATEGORIES</h3>
-								<ul class="list-unstyled categoryList mb-0">
-									<li class="mb-5 overflow-hidden"><a href="javascript:void(0);">Dried <span class="num border float-right">6</span></a></li>
-									<li class="mb-5 overflow-hidden"><a href="javascript:void(0);">Vegetables <span class="num border float-right">8</span></a></li>
-									<li class="mb-4 overflow-hidden"><a href="javascript:void(0);">Fruits <span class="num border float-right">9</span></a></li>
-									<li class="mb-5 overflow-hidden"><a href="javascript:void(0);">Juice <span class="num border float-right">6</span></a></li>
-									<li class="overflow-hidden"><a href="javascript:void(0);">Uncategorized <span class="num border float-right">1</span></a></li>
-								</ul>
-							</section>
-							<!-- widget -->
-							<section class="widget mb-9">
-								<h3 class="headingVII fwEbold text-uppercase mb-6">Filter by price</h3>
-								<!-- filter ranger form -->
-								<form action="javascript:void(0);" class="filter-ranger-form">
-									<div id="slider-range"></div>
-									<input type="hidden" id="amount1" name="amount1">
-									<input type="hidden" id="amount2" name="amount2">
-									<div class="get-results-wrap d-flex align-items-center justify-content-between">
-										<button type="button" class="btn btnTheme btn-shop fwEbold md-round px-3 pt-1 pb-2 text-uppercase">Filter</button>
-										<p id="amount" class="mb-0"></p>
-									</div>
-								</form>
-							</section>
-							
-							<!-- widget -->
-							<section class="widget mb-9">
-								<h3 class="headingVII fwEbold text-uppercase mb-5">product tags</h3>
-								<ul class="list-unstyled tagNavList d-flex flex-wrap mb-0">
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Plant</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Floor</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Indoor</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Green</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Healthy</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Cactus</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">House plant</a></li>
-									<li class="text-center"><a href="javascript:void(0);" class="md-round d-block">Office tree</a></li>
-								</ul>
-							</section>
-						</aside>
-					</div>
-				</div>
-			</div>
-			<div class="container mb-lg-24 mb-md-16 mb-10">
-				<!-- subscribeSecBlock -->
-				<section class="subscribeSecBlock bgCover col-12 pt-lg-24 pb-lg-12 pt-md-16 pb-md-8 py-10" style="background-image: url(images/n-bg3.jpg)">
-					<header class="col-12 mainHeader mb-9 text-center">
-						<h1 class="headingIV playfair fwEblod mb-4">Subscribe Our Newsletter</h1>
-						<span class="headerBorder d-block mb-5"><img src="images/hbdr.png" alt="Header Border" class="img-fluid img-bdr"></span>
-						<p class="mb-6">Enter Your email address to join our mailing list and keep yourself update</p>
-					</header>
-					<form class="emailForm1 mx-auto overflow-hidden d-flex flex-wrap">
-						<input type="email" class="form-control px-4 border-0" placeholder="Enter your mail...">
-						<button type="submit" class="btn btnTheme btnShop fwEbold text-white py-3 px-4 py-md-3 px-md-4">Shop Now <i class="fas fa-arrow-right ml-2"></i></button>
-					</form>
-				</section>
-			</div>
+                            <ul class="dropdown-menu dropdown-profile">
+                                <li>
+                                    <a href="my-account.html">My Account</a>
+                                </li>
+                                <li><a href="checkout.html">Checkout</a></li>
+                                <li><a href="login.html">Sign In</a></li>
+                            </ul>
+                        </div>
+                        <a class="action" href="cart.html">
+                            <i class="pe-7s-shopbag"></i>
+                            <span class="number">3</span>
+                        </a>
+                    </div>
+                    <!-- Header Action End -->
+                </div>
+            </div>
         </div>
+    </div>
+    <!-- Header Mobile top End -->
 
-		<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    var searchInput = document.getElementById('searchInput');
-    var productContainer = document.getElementById('productContainer');
-    var products = productContainer.getElementsByClassName('col-12');
+    <!-- Header Mobile Bottom End -->
+    <div class="header-mobile-bottom">
+        <div class="container">
+            <!-- Header Search Start -->
+            <div class="header-search">
+                <form action="#">
+                    <input type="text" placeholder="Enter your search key ... " />
+                    <button><i class="pe-7s-search"></i></button>
+                </form>
+            </div>
+            <!-- Header Search End -->
+        </div>
+    </div>
+    <!-- Header Mobile Bottom End -->
+</div>
+<!-- Header Mobile End -->
 
-    searchInput.addEventListener('input', function () {
-        var searchQuery = searchInput.value.trim().toLowerCase();
+<!-- off Canvas Start -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu">
+    <div class="offcanvas-header">
+        <!-- Canvas Action Start -->
+        <div class="canvas-action">
+            <a class="action" href="compare.html"><i class="icon-sliders"></i> Compare
+                <span class="action-num">(3)</span></a>
+            <a class="action" href="wishlist.html"><i class="icon-heart"></i> Wishlist
+                <span class="action-num">(3)</span></a>
+        </div>
+        <!-- Canvas Action end -->
 
-        for (var i = 0; i < products.length; i++) {
-            var product = products[i];
-            var productName = product.textContent.toLowerCase();
+        <!-- Canvas Close bar Start -->
+        <div class="canvas-close-bar">
+            <span>Menu</span>
+            <button class="menu-close" data-bs-dismiss="offcanvas">
+                <i class="pe-7s-angle-left"></i>
+            </button>
+        </div>
+        <!-- Canvas Close bar End -->
+    </div>
 
-            // Check if the product name contains the search query
-            if (productName.includes(searchQuery)) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        }
-    });
-});
+    <div class="offcanvas-body">
+        <!-- Canvas Menu Start -->
+        <div class="canvas-menu">
+            <nav>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#">Home</a>
+                        <ul class="sub-menu">
+                            <li><a href="index.html">Home 01</a></li>
+                            <li><a href="index-2.html">Home 02</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="about.html">About</a></li>
+                    <li>
+                        <a href="#">Shop</a>
+                        <ul class="mega-sub-menu">
+                            <li>
+                                <a href="#" class="menu-title">Shop Grid</a>
 
-</script>
+                                <ul class="menu-item">
+                                    <li>
+                                        <a href="shop-grid-3-column.html">Shop Grid 3 Column</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-grid-4-column.html">Shop Grid 4 Column</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-grid-left-sidebar.html">Shop Grid Left Sidebar</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-grid-right-sidebar.html">Shop Grid Right Sidebar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="menu-title">Shop List</a>
 
-<!-- Add this script at the end of your HTML file, just before the closing </body> tag -->
-<script>
-	// Get product elements and define products per page
-	const products = document.querySelectorAll('.featureCol');
-	const productsPerPage = 6;
-  
-	// Calculate the total number of pages
-	const totalPages = Math.ceil(products.length / productsPerPage);
-  
-	// Initialize the current page
-	let currentPage = 1;
-  
-	// Function to show products for the current page
-	function showProducts() {
-	  const startIndex = (currentPage - 1) * productsPerPage;
-	  const endIndex = startIndex + productsPerPage;
-  
-	  products.forEach((product, index) => {
-		if (index >= startIndex && index < endIndex) {
-		  product.style.display = 'block';
-		} else {
-		  product.style.display = 'none';
-		}
-	  });
-	}
-  
-	// Function to change the current page
-	function changePage(direction) {
-	  if (direction === 'next' && currentPage < totalPages) {
-		currentPage += 1;
-	  } else if (direction === 'prev' && currentPage > 1) {
-		currentPage -= 1;
-	  }
-  
-	  showProducts();
-	}
-  
-	// Add event listeners to the arrow buttons to change the page
-	document.getElementById('nextButton').addEventListener('click', function() {
-	  changePage('next');
-	});
-  
-	document.getElementById('prevButton').addEventListener('click', function() {
-	  changePage('prev');
-	});
-  
-	// Initial setup
-	showProducts();
-  </script>
-  
-  
-  
-  
+                                <ul class="menu-item">
+                                    <li><a href="shop-list.html">Shop List</a></li>
+                                    <li>
+                                        <a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-list-right-sidebar.html">Shop List Right Sidebar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="menu-title">Shop Single</a>
+
+                                <ul class="menu-item">
+                                    <li><a href="product-details.html">Product Details</a></li>
+                                    <li>
+                                        <a href="product-details-affiliate.html">Product Details Affiliate</a>
+                                    </li>
+                                    <li>
+                                        <a href="product-details-gallery.html">Product Details Gallery</a>
+                                    </li>
+                                    <li>
+                                        <a href="product-details-group.html">Product Details Group</a>
+                                    </li>
+                                    <li>
+                                        <a href="product-details-sticky.html">Product Details Sticky</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="menu-title">Page</a>
+
+                                <ul class="menu-item">
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li><a href="cart.html">Cart</a></li>
+                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                    <li><a href="checkout.html">Checkout</a></li>
+                                    <li><a href="my-account.html">My Account</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="manu-banner">
+                                <a href="#"><img src="asset/images/banner-menu-01.jpg" width="465" height="170" alt="Banner" /></a>
+                            </li>
+                            <li class="manu-banner">
+                                <a href="#"><img src="asset/images/banner-menu-02.jpg" width="465" height="170" alt="Banner" /></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Pages </a>
+                        <ul class="sub-menu">
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="cart.html">Cart</a></li>
+                            <li><a href="compare.html">Compare</a></li>
+                            <li><a href="wishlist.html">Wishlist</a></li>
+                            <li><a href="empty-cart.html">Empty Cart</a></li>
+                            <li><a href="checkout.html">Checkout</a></li>
+                            <li><a href="my-account.html">My Account</a></li>
+                            <li><a href="login.html">Login</a></li>
+                            <li><a href="register.html">Register</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Blog</a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="#">Blog Grid</a>
+                                <ul class="sub-menu">
+                                    <li><a href="blog-grid.html">Blog Grid</a></li>
+                                    <li>
+                                        <a href="blog-grid-left-sidebar.html">Blog Grid Left Sidebar</a>
+                                    </li>
+                                    <li>
+                                        <a href="blog-grid-right-sidebar.html">Blog Grid Right Sidebar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Blog List</a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="blog-list-left-sidebar.html">Blog List Left Sidebar</a>
+                                    </li>
+                                    <li>
+                                        <a href="blog-list-right-sidebar.html">Blog List Right Sidebar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Blog Details</a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="blog-details-left-sidebar.html">Blog details Left Sidebar</a>
+                                    </li>
+                                    <li>
+                                        <a href="blog-details-right-sidebar.html">Blog details Right Sidebar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Canvas Menu End -->
+    </div>
+</div>
+<!-- off Canvas End -->
 
 
-<%- include('../layouts/userfoot.ejs') -%>
+<!-- Page Banner Section Start -->
+<div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
+    <div class="container">
+        <!-- Page Banner Content End -->
+        <div class="page-banner-content">
+            <h2 class="title">Shop Page</h2>
 
-<!-- include jQuery library -->
-<script src="js/jquery-3.4.1.min.js"></script>
-<!-- include bootstrap popper JavaScript -->
-<script src="js/popper.min.js"></script>
-<!-- include bootstrap JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-<!-- include custom JavaScript -->
-<script src="js/jqueryCustome.js"></script>
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Shop Page</li>
+            </ul>
+        </div>
+        <!-- Page Banner Content End -->
+    </div>
+</div>
+<!-- Page Banner Section End -->
+
+<!-- Shop Section Start -->
+<div class="section section-padding">
+    <div class="container">
+        <!-- Product Section Wrapper Start -->
+        <div class="product-section-wrapper">
+            <div class="row flex-row-reverse">
+                <div class="col-lg-9">
+                    <!-- Shop top Bar Start -->
+                    <div class="shop-top-bar">
+                        <div class="shop-text">
+                            <p>
+                                <span>12</span> Product Found of
+                                <span>30</span>
+                            </p>
+                        </div>
+                        <div class="shop-tabs">
+                            <ul class="nav">
+                                <li>
+                                    <button class="active" data-bs-toggle="tab" data-bs-target="#grid">
+                                        <i class="fa fa-th"></i>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button data-bs-toggle="tab" data-bs-target="#list">
+                                        <i class="fa fa-list"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="shop-sort">
+                            <span class="title">Sort By :</span>
+                            <select class="select2-2">
+                                <option value="featured">
+                                    Featured
+                                </option>
+                                <option value="rating">Rating</option>
+                                <option value="price">Price</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Shop top Bar End -->
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="grid">
+                            <!-- Shop Product Wrapper Start -->
+                            <div class="shop-product-wrapper">
+                                <div class="row">
+                                    <% product.forEach(product => { %>
+                                        <% if (!product.is_blocked) { %>
+                                    <div class="col-lg-4 col-sm-6">
+                                        <!-- Single Product Start -->
+                                        <div class="single-product">
+                                            <a href="/detailshop?id=<%=product._id%>"><img src="sharpimages/<%=product.images.image1 %>" width="270" height="303" alt="product" /></a>
+                                            <div class="product-content">
+                                                <h4 class="title">
+                                                    <a href="product-details.html"><%= product.name %></a>
+                                                </h4>
+                                                <div class="price">
+                                                    <span class="sale-price">₹<%=product.price%></span>
+                                                </div>
+                                            </div>
+                                            <ul class="product-meta">
+                                                <li>
+                                                    <a class="action" data-bs-toggle="modal" data-bs-target="#quickView" href="#"><i class="pe-7s-search"></i></a>
+                                                </li>
+                                                <li>
+                                                    <a class="action" href="#"><i class="pe-7s-shopbag"></i></a>
+                                                </li>
+                                                <li>
+                                                    <a class="action" href="#"><i class="pe-7s-like"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        	
+                                        <!-- Single Product End -->
+                                    </div>
+                                    <%}%>
+				                <% }); %>
+                                </div>
+                            </div>
+                            <!-- Shop Product Wrapper End -->
+                        </div>
+                        <div class="tab-pane fade" id="list">
+                            <!-- Shop Product Wrapper Start -->
+                            <% product.forEach(product => { %>
+                                <% if (!product.is_blocked) { %>
+                            <div class="shop-product-wrapper">
+                                <!-- Single Product Start -->
+                                
+                                <div class="single-product-02 product-list">
+                                    
+                                    <div class="product-images">
+                                        <a href="/detailshop?id=<%=product._id%>"><img src="sharpimages/<%=product.images.image1 %>" width="270" height="303" alt="product" /></a>
+
+                                        <ul class="product-meta">
+                                            <li>
+                                                <a class="action" data-bs-toggle="modal" data-bs-target="#quickView" href="#"><i class="pe-7s-search"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="action" href="#"><i class="pe-7s-shopbag"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="action" href="#"><i class="pe-7s-like"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product-content">
+                                        <h4 class="title">
+                                            <a href=""><%= product.name %></a>
+                                        </h4>
+                                        <div class="price">
+                                            <span class="sale-price"><%= product.price %></span>
+                                        </div>
+                                        <p>
+                                            Block out the haters with the fresh adidas® Originals Kaval
+                                            Windbreaker Jacket. Part of the Kaval Collection. Regular fit is
+                                            eased, but not sloppy, and perfect for any activity. Plain-woven
+                                            jacket specifically constructed for freedom of movement.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Single Product End -->       
+                            </div>
+                            <%}%>
+				        <% }); %>
+                            <!-- Shop Product Wrapper End -->
+
+                        </div>
+                    </div>
+
+                    <!-- Page pagination Start -->
+                    <div class="page-pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link active" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- Page pagination End -->
+                </div>
+                <div class="col-lg-3">
+                    <!-- Sidebar Start -->
+                    <div class="sidebar">
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+                            <div class="widget-search">
+                                <form action="#">
+                                    <input type="text" placeholder="Search">
+                                    <button><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+
+                            <h4 class="widget-title">Filter By Categories</h4>
+
+                            <div class="widget-checkbox widget-categories">
+                                <ul class="checkbox-items">
+                                    <li>
+                                        <input type="checkbox" id="checkbox1">
+                                        <label for="checkbox1"> <span></span>Office Chair</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox2">
+                                        <label for="checkbox2"> <span></span>Dining Chair</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox3">
+                                        <label for="checkbox3"> <span></span>Office Table</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox4">
+                                        <label for="checkbox4"> <span></span>Dining Table</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox5">
+                                        <label for="checkbox5"> <span></span>Bed Light</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox6">
+                                        <label for="checkbox6"> <span></span>Sofa Set</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox7">
+                                        <label for="checkbox7"> <span></span>Office Chair</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+
+                            <h4 class="widget-title">Refine By</h4>
+
+                            <div class="widget-checkbox">
+                                <ul class="checkbox-items">
+                                    <li>
+                                        <input type="checkbox" id="checkbox8">
+                                        <label for="checkbox8"> <span></span>On Sale</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox9">
+                                        <label for="checkbox9"> <span></span>New</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox10">
+                                        <label for="checkbox10"> <span></span>In Stock</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+
+                            <h4 class="widget-title">Filter By Price</h4>
+
+                            <div class="widget-price">
+                                <input id="price-range" type="text">
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+
+                            <h4 class="widget-title">Filter By Color</h4>
+
+                            <div class="widget-checkbox">
+                                <ul class="checkbox-items">
+                                    <li>
+                                        <input type="checkbox" id="checkbox11">
+                                        <label for="checkbox11"> <span class="color-blue"></span>Blue</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox12">
+                                        <label for="checkbox12"> <span class="color-dark-blue"></span>Dark Blue</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox13">
+                                        <label for="checkbox13"> <span class="color-gray"></span>Gray</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox14">
+                                        <label for="checkbox14"> <span class="color-green"></span>Green</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox15">
+                                        <label for="checkbox15"> <span class="color-gray-dark"></span>Light Black</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox16">
+                                        <label for="checkbox16"> <span class="color-lower-blue"></span>Lower Blue</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+                        <!-- Sidebar Widget Start -->
+                        <div class="sidebar-widget">
+
+                            <h4 class="widget-title">Size</h4>
+
+                            <div class="widget-checkbox">
+                                <ul class="checkbox-items">
+                                    <li>
+                                        <input type="checkbox" id="checkbox17">
+                                        <label for="checkbox17"> <span></span>S</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox18">
+                                        <label for="checkbox18"> <span></span>M</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox19">
+                                        <label for="checkbox19"> <span></span>Xl</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="checkbox20">
+                                        <label for="checkbox20"> <span></span>XXL</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Sidebar Widget End -->
+
+                    </div>
+                    <!-- Sidebar End -->
+                </div>
+            </div>
+        </div>
+        <!-- Product Section Wrapper End -->
+    </div>
+</div>
+<!-- Shop Section End -->
 
 <%- include('../layouts/footer.ejs') -%>

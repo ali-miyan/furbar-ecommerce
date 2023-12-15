@@ -51,7 +51,7 @@ const loadProfile=async(req,res)=>{
             data=await User.findOne({_id:req.session.user_id})
             res.render('profile',{data:data})
         }else{
-            res.redirect('/signup')
+            res.redirect('/login')
             }
     } catch (error) {
         console.log(error);
@@ -62,8 +62,8 @@ const loadProfile=async(req,res)=>{
 //login page
 const loadLogin=async(req,res)=>{
     try {
-        const loginerror=req.query.loginmessage
-        res.render('login',{loginerror})
+        const loginmessage=req.query.loginmessage
+        res.render('login',{loginmessage})
     } catch (error) {
         console.log(error);
     }
@@ -124,7 +124,7 @@ const verifyOTP=async (req, res) => {
 };
 
 //verifying otp
-const verifyPost=async(req,res)=>{
+const   verifyPost=async(req,res)=>{
     try {
       const otp= req.body.otp
       const userId=req.session.user_id
@@ -156,7 +156,7 @@ const verifyPost=async(req,res)=>{
                     //     status:"VERIFIED",
                     //     message:"user email verified successfully"
                     //    })
-                    res.redirect(`/login`)
+                    res.redirect(`/`)
                     }
                 }
             }

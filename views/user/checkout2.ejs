@@ -1,0 +1,270 @@
+<%- include('../layouts/header.ejs') -%>
+  <%- include('../layouts/usernav.ejs') -%>
+    <div class="my-30">
+
+      <div class="custom-container">
+        <% if(address.address.length < 0) { %>
+          <form action="/checkout?id=<%=id%>" method="post" class="custom-row">
+            <div class="custom-col-lg-8 custom-billing-details">
+              <h2 class="custom-checkout-title">Billing Details</h2>
+
+              <div class="custom-form-group">
+                <label for="customFullName">Full Name *</label>
+                <input type="text" class="custom-form-control" id="customFullName" name="name">
+              </div>
+
+              <div class="custom-form-group">
+                <label for="customCountry">Address *</label>
+                <input type="text" class="custom-form-control" id="customCountry" name="address">
+              </div>
+
+              <div class="custom-form-group">
+                <label for="customStreetAddress">Landmark *</label>
+                <input type="text" class="custom-form-control" id="customStreetAddress" name="landmark"
+                  placeholder="House number and Street name">
+              </div>
+
+              <div class="custom-row">
+                <div class="custom-col-sm-6">
+                  <div class="custom-form-group">
+                    <label for="customStateCounty">State *</label>
+                    <input type="text" class="custom-form-control" id="customStateCounty" name="state">
+                  </div>
+                </div>
+
+                <div class="custom-col-sm-6">
+                  <div class="custom-form-group">
+                    <label for="customTownCity">City *</label>
+                    <input type="text" class="custom-form-control" id="customTownCity" name="city">
+                  </div>
+                </div>
+              </div>
+
+              <div class="custom-row">
+                <div class="custom-col-sm-6">
+                  <div class="custom-form-group">
+                    <label for="customPostcode">Pincode *</label>
+                    <input type="text" class="custom-form-control" id="customPostcode" name="pincode">
+                  </div>
+                </div>
+
+                <div class="custom-col-sm-6">
+                  <div class="custom-form-group">
+                    <label for="customPhone">Phone *</label>
+                    <input type="tel" class="custom-form-control" id="customPhone" name="phone">
+                  </div>
+                </div>
+              </div>
+
+              <div class="custom-form-group">
+                <label for="customEmail">Email *</label>
+                <input type="email" class="custom-form-control" id="customEmail" name="email">
+              </div>
+
+            </div><!-- End .custom-col-lg-8 -->
+
+            <aside class="custom-col-lg-4">
+              <div class="custom-summary">
+                <h3 class="custom-summary-title">Your Order</h3>
+
+                <table class="custom-table custom-table-summary">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><a href="#">Beige knitted elastic runner shoes</a></td>
+                      <td>$84.00</td>
+                    </tr>
+                    <tr>
+                      <td><a href="#">Blue utility pinafore denimdress</a></td>
+                      <td>$76.00</td>
+                    </tr>
+                    <tr class="custom-summary-subtotal">
+                      <td>Subtotal:</td>
+                      <td>$160.00</td>
+                    </tr>
+                    <tr>
+                      <td>Shipping:</td>
+                      <td>Free shipping</td>
+                    </tr>
+                    <tr class="custom-summary-total">
+                      <td>Total:</td>
+                      <td>$160.00</td>
+                    </tr>
+                  </tbody>
+                </table><!-- End .custom-table custom-table-summary -->
+
+                <button type="submit" class="custom-btn custom-btn-outline-primary-2 custom-btn-order custom-btn-block">
+                  <span class="custom-btn-text">Place Order</span>
+                  <span class="custom-btn-hover-text">Proceed to Checkout</span>
+                </button>
+              </div>
+            </aside><!-- End .custom-col-lg-4 -->
+          </form>
+          <% } else { %>
+            <form action="/checkout?id=<%=id%>" method="post" class="custom-row">
+              <div class="custom-col-lg-8 custom-billing-details">
+                <% address.address.forEach(data=> { %>
+                  <div class="card ">
+                    <div class="card-body">
+                      <h5 class="card-title">Address</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">your address</h6>
+                      <p class="card-text">
+                         <%=data.name%><br>
+                          <%=data.address%><br>
+                            <%=data.name%><br>
+                              <%=data.landmark%><br>
+                                <%=data.state%><br>
+                                  <%=data.city%><br>
+                                   <%=data.pincode%><br>
+                                      <%=data.phone%><br>
+                                        <%=data.email%><br>
+                      </p>
+                      <a href="#" class="card-link">Card link</a>
+                      <a href="#" class="card-link">Another link</a>
+                    </div>
+                  </div>
+                  <% }) %>
+              </div><!-- End .custom-col-lg-8 -->
+              <aside class="custom-col-lg-4">
+                <div class="custom-summary">
+                  <h3 class="custom-summary-title">Your Order</h3>
+
+                  <table class="custom-table custom-table-summary">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td><a href="#">Beige knitted elastic runner shoes</a></td>
+                        <td>$84.00</td>
+                      </tr>
+
+                      <tr>
+                        <td><a href="#">Blue utility pinafore denimdress</a></td>
+                        <td>$76.00</td>
+                      </tr>
+
+                      <tr class="custom-summary-subtotal">
+                        <td>Subtotal:</td>
+                        <td>$160.00</td>
+                      </tr><!-- End .custom-summary-subtotal -->
+
+                      <tr>
+                        <td>Shipping:</td>
+                        <td>Free shipping</td>
+                      </tr>
+
+                      <tr class="custom-summary-total">
+                        <td>Total:</td>
+                        <td>$160.00</td>
+                      </tr><!-- End .custom-summary-total -->
+                    </tbody>
+                  </table><!-- End .custom-table custom-table-summary -->
+
+                  <button type="submit" class="custom-btn custom-btn-outline-primary-2 custom-btn-order custom-btn-block">
+                    <span class="custom-btn-text">Place Order</span>
+                    <span class="custom-btn-hover-text">Proceed to Checkout</span>
+                  </button>
+                </div>
+              </aside><!-- End .custom-col-lg-4 -->
+            </form>
+            <% } %>
+      </div>
+</div>
+</div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.querySelector('.custom-row');
+
+          form.addEventListener('submit', function (event) {
+            const showError = (input, message) => {
+              const parent = input.parentElement;
+              const errorElement = parent.querySelector('.error-message');
+              if (errorElement) {
+                errorElement.innerText = message;
+              } else {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerText = message;
+                parent.appendChild(errorDiv);
+              }
+            };
+
+            const hideError = (input) => {
+              const parent = input.parentElement;
+              const errorElement = parent.querySelector('.error-message');
+              if (errorElement) {
+                parent.removeChild(errorElement);
+              }
+            };
+
+            const validateNotEmpty = (input, fieldName) => {
+              const value = input.value.trim();
+              if (value === '') {
+                showError(input, `${fieldName} is required.`);
+                return false;
+              }
+              hideError(input);
+              return true;
+            };
+
+            const validatePincode = (input) => {
+              const value = input.value.trim();
+              if (!/^\d{6}$/.test(value)) {
+                showError(input, 'Please enter a valid 6-digit pincode.');
+                return false;
+              }
+              hideError(input);
+              return true;
+            };
+
+            const validatePhone = (input) => {
+              const value = input.value.trim();
+              if (!/^\d+$/.test(value)) {
+                showError(input, 'Please enter a valid phone number.');
+                return false;
+              }
+              hideError(input);
+              return true;
+            };
+
+            const validateEmail = (input) => {
+              const value = input.value.trim();
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(value)) {
+                showError(input, 'Please enter a valid email address.');
+                return false;
+              }
+              hideError(input);
+              return true;
+            };
+
+            // Validation for each input field
+            if (
+              !validateNotEmpty(document.getElementById('customFullName'), 'Full Name') ||
+              !validateNotEmpty(document.getElementById('customCountry'), 'Address') ||
+              !validateNotEmpty(document.getElementById('customStreetAddress'), 'Land mark') ||
+              !validateNotEmpty(document.getElementById('customStateCounty'), 'State') ||
+              !validateNotEmpty(document.getElementById('customTownCity'), 'City') ||
+              !validatePincode(document.getElementById('customPostcode')) ||
+              !validatePhone(document.getElementById('customPhone')) ||
+              !validateEmail(document.getElementById('customEmail'))
+            ) {
+              event.preventDefault();
+            }
+          });
+        });
+      </script>
+
+
+      <%- include('../layouts/userfoot.ejs') -%>
+        <%- include('../layouts/footer.ejs') -%>

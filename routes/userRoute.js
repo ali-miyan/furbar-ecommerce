@@ -26,6 +26,8 @@ routeUser.use(
   })
 );
 
+
+
 routeUser.use(express.urlencoded({ extended: true }));
 routeUser.use(express.json());
 
