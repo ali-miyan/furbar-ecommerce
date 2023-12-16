@@ -17,35 +17,35 @@ const productController=require("../controller/productController")
 routeAdmin.set("view engine", "ejs");
 routeAdmin.set("views", "./views/admin");
 
-routeAdmin.get("/", adminController.adminLogin);
+routeAdmin.get("/",auth.isAdminLogout,adminController.adminLogin);
 
 routeAdmin.patch('/blockusers/:id',adminController.blockUser)
 
-routeAdmin.get("/users", adminController.loadUser);
+routeAdmin.get("/users",auth.isAdminLogin,adminController.loadUser);
 
-routeAdmin.get("/dashboard",adminController.loadDashboard);
+routeAdmin.get("/dashboard",auth.isAdminLogin,adminController.loadDashboard);
 
-routeAdmin.post("/signin", adminController.loadSignin);
+routeAdmin.post("/",auth.isAdminLogout,adminController.loadSignin);
 
-routeAdmin.get('/category',adminController.loadCategory);
+routeAdmin.get('/category',auth.isAdminLogin,adminController.loadCategory);
 
-routeAdmin.get('/addcategory',adminController.addCategory)
+routeAdmin.get('/addcategory',auth.isAdminLogin,adminController.addCategory)
 
-routeAdmin.post('/addcategory',adminController.addCategoryPost)
+routeAdmin.post('/addcategory',auth.isAdminLogin,adminController.addCategoryPost)
 
-routeAdmin.get('/editcategory',adminController.editCategory)
+routeAdmin.get('/editcategory',auth.isAdminLogin,adminController.editCategory)
 
-routeAdmin.post('/editcategory',adminController.editCategoryPost)
+routeAdmin.post('/editcategory',auth.isAdminLogin,adminController.editCategoryPost)
 
 routeAdmin.patch('/blockcategory/:id',adminController.blockCategory)
 
-routeAdmin.get('/products',productController.getProduct)
+routeAdmin.get('/products',auth.isAdminLogin,productController.getProduct)
 
-routeAdmin.get('/addproducts',productController.addProducts)
+routeAdmin.get('/addproducts',auth.isAdminLogin,productController.addProducts)
 
 routeAdmin.post('/addproducts',multer.uploadproduct,productController.addProductsPost)
 
-routeAdmin.get('/editproducts',productController.editProducts)
+routeAdmin.get('/editproducts',auth.isAdminLogin,productController.editProducts)
 
 routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProductsPost)
 

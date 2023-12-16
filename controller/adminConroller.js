@@ -43,7 +43,7 @@ const loadSignin = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, validAdmin.password);
       console.log(passwordMatch);
       if (passwordMatch) {
-        // req.session.admin_id=validAdmin._id;
+        req.session.admin_id=validAdmin._id;
         res.redirect("/admin/dashboard");
       } else {
         res.render("adminlogin", { message: "incorrect password" });

@@ -56,7 +56,7 @@
             <!-- Header Search Start -->
             <div class="header-search">
                 <form action="#">
-                    <input type="text" placeholder="Enter your search key ... " />
+                    <input type="text"  placeholder="Enter your search key ... " />
                     <button><i class="pe-7s-search"></i></button>
                 </form>
             </div>
@@ -554,5 +554,30 @@
     </div>
 </div>
 <!-- Shop Section End -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var searchInput = document.getElementById('searchInput');
+    var productContainer = document.getElementById('productContainer');
+    var products = productContainer.getElementsByClassName('col-12');
+
+    searchInput.addEventListener('input', function () {
+        var searchQuery = searchInput.value.trim().toLowerCase();
+
+        for (var i = 0; i < products.length; i++) {
+            var product = products[i];
+            var productName = product.textContent.toLowerCase();
+
+            // Check if the product name contains the search query
+            if (productName.includes(searchQuery)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        }
+    });
+});
+
+</script>
 
 <%- include('../layouts/footer.ejs') -%>
