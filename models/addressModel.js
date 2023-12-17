@@ -9,11 +9,7 @@ const addressSchema = new mongoose.Schema({
         required:true,
     },
     address:[{
-        fisrtName:{
-            type: String,
-            required: true
-        },
-        lastName:{
+        name:{
             type: String,
             required: true
         },

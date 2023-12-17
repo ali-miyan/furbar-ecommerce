@@ -46,9 +46,9 @@ routeUser.get("/signup", auth.isLogout, userController.loadSignup);
 
 routeUser.post("/signup", auth.isLogout, userController.signupPost);
 
-routeUser.get("/verifyOTP", auth.isLogout, userController.verifyOTP);
+routeUser.get("/verifyOTP", userController.verifyOTP);
 
-routeUser.post("/verifyOTP",auth.isLogout,userController.verifyPost);
+routeUser.post("/verifyOTP",userController.verifyPost);
 
 routeUser.get("/login", auth.isLogout, userController.loadLogin);
 
@@ -58,7 +58,7 @@ routeUser.get("/logout",auth.isLogin,userController.userLogout);
 
 routeUser.get('/detailshop',userController.detailShop)
 
-routeUser.patch('/getcart',auth.isLogin,cartController.getCart)
+routeUser.post('/getcart',auth.isLogin,cartController.getCart)
 
 routeUser.get('/showcart',auth.isLogin,cartController.showCart)
 
@@ -70,12 +70,22 @@ routeUser.get('/checkout',auth.isLogin,cartController.checkout)
 
 routeUser.post('/checkout',auth.isLogin,cartController.checkoutPost)
 
-routeUser.get('/newhome',async(req,res)=>{
+routeUser.post('/adressform',async(req,res)=>{
   try {
-    res.render('newhome')
+    const userId=req.query.id
+    const {name,address,landmark,state,city,pincode,phone,email}=req.body
+    const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
+
+      const data = await addressModel.findOneAndUpdate(
+      { user: userId },
+      { $push: { address: newAddress } },
+      { upsert: true, new: true }
+    )
+      res.redirect('/profile')
   } catch (error) {
-    
+    console.log(error);
   }
+
 })
 
 module.exports = routeUser;

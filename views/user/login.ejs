@@ -24,6 +24,21 @@
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <!-- Login & Register Start -->
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" style="text-align: center;">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <b class="text-center"><%- message %></b>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script>
+                        // Add a script to hide the alert after 5 seconds
+                        $(document).ready(function () {
+                            setTimeout(function () {
+                                $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
+                            }, 3000); // 3000 milliseconds = 3 seconds
+                        });
+                    </script>
+                <% } %>
                 <div class="login-register-wrapper">
                     <h4 class="title">Login to Your Account</h4>
                     <form action="" method="post" onsubmit="return validateForm()">

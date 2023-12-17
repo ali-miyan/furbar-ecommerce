@@ -6,12 +6,9 @@ const isLogin = (req, res, next) => {
 
         if (req.session.user_id) {
             // User is logged in, continue to the next middleware or route handler
-            console.log("middle:" + req.session.user_id);
             next();
         } else {
-            console.log('GHJN');
-            const message="you have to login first!"
-            res.redirect(`/login?loginmessage=${message}`);
+            res.redirect('/login');
         }
     }
     catch (error) {

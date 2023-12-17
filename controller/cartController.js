@@ -17,7 +17,7 @@ const cartController=require('../controller/cartController')
 
 const getCart=async(req,res)=>{
     try {
-      if(req.session.user_id !==undefined){
+      if(req.session.user_id){
       const product_id=req.body.id
       const userid=req.session.user_id
       const productData = await Product.findById(product_id)
@@ -38,12 +38,13 @@ const getCart=async(req,res)=>{
         await cartModel.findOneAndUpdate({user:userid},{$set:{user:userid},$push:{product:data}},{upsert:true,new:true})
         res.json({failed:false})
         }
-      }else{
-        res.json({failed:true})
       }
+      // else{
+      //   res.json({failed:true})
+      // }
       }
       else{
-        res.json({success:"signup"})
+        res.json({failed:true})
       }
   
     } catch (error) {

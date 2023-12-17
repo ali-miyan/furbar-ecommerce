@@ -12,7 +12,8 @@ const userOTP = require('../models/userOTP');
 const dotenv = require('dotenv')
 dotenv.config()
 config.connectDB();
-const Product=require("../models/productModel")
+const Product=require("../models/productModel");
+const addressModel = require('../models/addressModel');
 
 
 //route to home page
@@ -48,8 +49,10 @@ const loadProfile=async(req,res)=>{
     try {
         if(req.session.user_id){
             console.log("profile session"+req.session.user_id)
-            data=await User.findOne({_id:req.session.user_id})
-            res.render('profile',{data:data})
+            const user=await User.findOne({_id:req.session.user_id})
+            const address=await addressModel.findOne({user:req.session.user_id})
+            console.log(address);
+            res.render('profile',{user,address})
         }else{
             res.redirect('/login')
             }
@@ -73,16 +76,6 @@ const loadLogin=async(req,res)=>{
 const signupPost = async (req, res) => {
     try {
         let { name, email,mobile,password } = req.body;
-
-        if (name === "" || email === "" || mobile === ""||password === "") {
-            res.render('signup', { message: 'Empty input fields' });
-        } else if (!/^[a-zA-Z]+$/.test(name)) {
-            res.render('signup', { message: 'Invalid name entered' });
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            res.render('signup', { message: 'Invalid email entered' });
-        } else if (password.length < 8) {
-            res.render('signup', { message: 'Password is too short' });
-        } else {
             const userExists = await User.findOne({ email });
 
             if (userExists) {
@@ -103,7 +96,6 @@ const signupPost = async (req, res) => {
                 console.log(result);
                 sendOTPverification(result, res);
             }
-        }
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -124,7 +116,7 @@ const verifyOTP=async (req, res) => {
 };
 
 //verifying otp
-const   verifyPost=async(req,res)=>{
+const verifyPost=async(req,res)=>{
     try {
       const otp= req.body.otp
       const userId=req.session.user_id
@@ -135,7 +127,6 @@ const   verifyPost=async(req,res)=>{
 
             if (userOTPVerificationrecord.length==0) {
                 res.render('otp',{message:"record doesn't exist or has been verified already"})
-                // throw Error("record doesn't exist or has been verified already")       
             }else{
                 const {expiresAt}=userOTPVerificationrecord[0];
                 const hashedOTP=userOTPVerificationrecord[0].otp;
@@ -143,11 +134,9 @@ const   verifyPost=async(req,res)=>{
                 if(expiresAt<Date.now()){
                     await userOTPVerificationrecord.deleteMany({userId});
                     res.render('otp',{message:"your otp has been expired"})                    
-                    // throw new Error("your otp has been expired")
                 }else{
                     const validOTP=await bcrypt.compare(otp,hashedOTP);
                     if(!validOTP){
-                        // throw new ("Invalid code")
                         res.render('otp',{message:"Invalid code"})
                     }else{
                        await User.updateOne({_id:userId},{verfied:true});

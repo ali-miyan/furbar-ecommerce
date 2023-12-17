@@ -1,13 +1,19 @@
 <%- include('../layouts/header.ejs') -%>
 
+    <style>
+        .otp {
+            margin: 30% 5% 10% 5%;
+        }
+    
+        @media only screen and (min-width: 600px) {
+            .otp {
+                margin: 10% auto;
+                max-width: 400px;
+            }
+        }
+    </style>
 
-
-<div class="otp-container">
-
-
-<form action="/verifyOTP" method="post" class="py-27 px-27 ">
-
-
+    <div class="otp">
     <%
     if(typeof message !== 'undefined'){
         %>
@@ -20,13 +26,12 @@
     } 
     %>
 
-    <label for="otp">Enter OTP:</label><br>
-    <input type="text" id="otp" name="otp" maxlength="4" pattern="\d{4}" ><br>
-    <button type="submit">Verify OTP</button>
+        <form action="" method="post">
+            <label for="otp">Enter OTP:</label><br>
+            <input type="text" id="otp" name="otp" maxlength="4" pattern="\d{4}" ><br>
+            <button type="submit">Verify OTP</button>
+        </form>
+    </div>
 
-</form>
-
-</div>
-</div>
 
 <%- include('../layouts/footer.ejs') -%>
