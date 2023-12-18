@@ -19,7 +19,7 @@
 
     <!-- My Account Section Start -->
     <div class="section section-padding">
-        <div class="container">
+        <div class="container"  id="addrassArea">
             <div class="row gy-4">
                 <div class="col-xl-3 col-md-4">
                     <!-- My Account Menu Start -->
@@ -192,6 +192,7 @@
                             </div>
                         </div>
 
+                        
                         <div class="tab-pane fade" id="pills-payment">
                             <div class="my-account-payment account-wrapper">
                                 <h4 class="account-title">
@@ -202,97 +203,153 @@
                                 </p>
                             </div>
                         </div>
-
-                        <% if(!address) { %>
-                            
+                        <% if (!address || address.address.length === 0) { %>
                             <div class="tab-pane fade" id="pills-address">
                                 <h4 class="account-title">
                                     Add Address
                                 </h4>
-                                <form action="/adressform?id=<%=user._id%>" method="post">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="single-form">
-                                            <input type="text" name="name" placeholder="Name" />
+                                <form action="/addressform?id=<%= user._id %>" method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="name" placeholder="Name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="address" placeholder="Address" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="landmark" placeholder="Landmark" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="state" placeholder="State" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="city" placeholder="City" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="pincode" placeholder="Pincode" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="phone" placeholder="Phone" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="email" placeholder="Email address" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary btn-hover-dark">
+                                                Save Change
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="single-form">
-                                            <input type="text" name="address" placeholder="Address" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="landmark" placeholder="Landmark" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="state" placeholder="State" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="city" placeholder="City" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="pincode" placeholder="Pincode" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="phone" placeholder="Phone" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="email" placeholder="Email address" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-hover-dark">
-                                    Save Change
-                                </button>
-                            </div>    
-                        </form>                        
-                       
-                            <% } else { %>
-                    <% address.address.forEach(data=> { %>
-                        <div class="tab-pane fade" id="pills-address">
-                            <div class="my-account-address account-wrapper">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="account-address">
-                                            <h4 class="account-title">
-                                                Billing address
-                                            </h4>
-                                            <h6 class="name">
-                                                Name:<%=user.name%>
-                                            </h6>
-                                            <p>
-                                                Addreass:<%=data.address%><br>
-                                                Landmark:<%=data.landmark%><br>
-                                                State:<%=data.state%><br>
-                                                City:<%=data.city%><br>
-                                                Pincode:<%=data.pincode%><br>
-                                                Phone:<%=data.phone%><br>
-                                                Email:<%=data.email%><br>
-                                            </p>
-                                            <a class="btn btn-primary btn-hover-dark" href="#"><i class="fa fa-edit"></i>
-                                                Edit Address</a>
-                                        </div>
+                                </form>
+                            </div>
+                        <% } else { %>
+                            <div class="tab-pane fade" id="pills-address">
+                                <div class="my-account-address account-wrapper">
+                                    <div class="row">
+                                        <button class="btn btn-primary btn-hover-dark" onclick="openForm()">Open Form</button>
+                                        <% address.address.forEach((data, index) => { %>
+                                            <div class="col-md-6">
+                                                <div class="account-address" id="address<%= index %>">
+                                                    <h4 class="account-title">
+                                                        Your Address 
+                                                    </h4>
+                                                    <h6 class="name">
+                                                        Name: <%= user.name %>
+                                                    </h6>
+                                                    <p>
+                                                        Address: <%= data.address %><br>
+                                                        Landmark: <%= data.landmark %><br>
+                                                        State: <%= data.state %><br>
+                                                        City: <%= data.city %><br>
+                                                        Pincode: <%= data.pincode %><br>
+                                                        Phone: <%= data.phone %><br>
+                                                        Email: <%= data.email %><br>
+                                                    </p>
+                                                    <a class="btn btn-primary btn-hover-dark" href="#"><i class="fa fa-edit"></i>
+                                                        Edit Address
+                                                    </a>
+                                                    <a class="btn btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-edit"></i>
+                                                        Delete Address
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        <% }) %>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    
-
-
-                        <% }) %>
-
                         <% } %>
+
+
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeModal">&times;</span>
+                                <!-- Your form goes here -->
+                                <form id="myForm" action="/adressform?id=<%=user._id%>" method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="name" placeholder="Name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="address" placeholder="Address" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="landmark" placeholder="Landmark" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="state" placeholder="State" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="city" placeholder="City" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="pincode" placeholder="Pincode" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="phone" placeholder="Phone" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="email" placeholder="Email address" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-hover-dark">
+                                        Save Change
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
 
                         <div class="tab-pane fade" id="pills-account">
                             <div class="my-account-details account-wrapper">
@@ -363,6 +420,45 @@
     </div>
     <!-- My Account Section End -->
 
+
+    <script>
+        function deleteAddress(addressId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This product will be removed',
+                icon: 'question',
+                reverseButtons: true,
+                confirmButtonText: 'Yes',
+                showCancelButton: true,
+                confirmButtonColor: '#1e6e2c',
+                cancelButtonColor: '#97a399',
+            }).then((result) => {
+                // If the user clicks "Yes"
+                if (result.isConfirmed) {
+                    // Make the fetch request
+                fetch('/deleteaddress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ addressId: addressId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#addrassArea').load('/profile #addrassArea'); 
+                    } else {
+                        alert('Error deleting address. Please try again.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        })
+    }
+    </script>
+
     <script>
         function displayImage(input) {
             var file = input.files[0];
@@ -379,4 +475,38 @@
             document.getElementById('profileImageInput').click();
         }
     </script>
+
+
+<!-- Place this script outside the loop -->
+<!-- Place this script outside the loop -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const showModalButton = document.getElementById('showModalButton');
+        const modal = document.getElementById('myModal');
+        const closeModalButton = document.getElementById('closeModal');
+
+        showModalButton.addEventListener('click', function () {
+            modal.style.display = 'block';
+        });
+
+        closeModalButton.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        // Close the modal if the user clicks outside the modal content
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+
+    function openForm() {
+        // You can add additional logic here if needed
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block';
+    }
+</script>
+
+
 <%- include('../layouts/footer.ejs') -%>

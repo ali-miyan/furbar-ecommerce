@@ -88,4 +88,20 @@ routeUser.post('/adressform',async(req,res)=>{
 
 })
 
+routeUser.post('/deleteaddress',async(req,res)=>{
+  try {
+    console.log('helooooooooooooooo');
+    const user_id=req.session.user_id
+    const addressId = req.body.addressId
+
+    await addressModel.updateOne({user:user_id},{$pull:{address:{_id:addressId}}})
+
+   res.json({success:true})
+
+ } catch (error) {
+     console.log(error.message);
+     res.render('500Error')
+ }
+})
+
 module.exports = routeUser;

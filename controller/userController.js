@@ -141,10 +141,7 @@ const verifyPost=async(req,res)=>{
                     }else{
                        await User.updateOne({_id:userId},{verfied:true});
                        await userVerification.deleteMany({userId});
-                    //    res.json({
-                    //     status:"VERIFIED",
-                    //     message:"user email verified successfully"
-                    //    })
+
                     res.redirect(`/`)
                     }
                 }
@@ -263,6 +260,8 @@ const detailShop=async(req,res)=>{
   
   }
 
+
+  
 
 module.exports={
     verifyOTP,
