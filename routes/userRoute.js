@@ -72,7 +72,7 @@ routeUser.post('/checkout',auth.isLogin,cartController.checkoutPost)
 
 routeUser.post('/adressform',async(req,res)=>{
   try {
-    const userId=req.query.id
+    const userId=req.session.user_id
     const {name,address,landmark,state,city,pincode,phone,email}=req.body
     const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
 
@@ -81,6 +81,7 @@ routeUser.post('/adressform',async(req,res)=>{
       { $push: { address: newAddress } },
       { upsert: true, new: true }
     )
+
       res.redirect('/profile')
   } catch (error) {
     console.log(error);

@@ -115,7 +115,7 @@ const getCart=async(req,res)=>{
       const id=req.session.user_id
       console.log(id);
       const address=await addressModel.findOne({user:id})
-      console.log(address);
+      console.log("adressssssssss",address);
       res.render('checkout',{id,address})
     } catch (error) {
       console.log(error);
@@ -124,7 +124,7 @@ const getCart=async(req,res)=>{
 
   const checkoutPost=async(req,res)=>{
     try {
-      const userId=req.query.id
+      const userId=req.session.user_id
       const {name,address,landmark,state,city,pincode,phone,email}=req.body
       const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
   

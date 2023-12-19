@@ -48,3 +48,32 @@
     font-size: 20px;
     cursor: pointer;
 }
+
+
+
+.profile-image {
+    width: 100px; /* Adjust the size as needed */
+    height: 100px;
+    object-fit: cover; /* Ensure the image covers the square */
+    border-radius: 50%; /* Create a circular shape */
+    margin-bottom: 15px; /* Add spacing between the image and text */
+    cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+}
+
+#profileImageInput {
+    display: none; /* Hide the file input initially */
+}   
+
+/* Button Text Styles */
+.custom-btn-text,
+.custom-btn-hover-text {
+  display: block;
+  line-height: 20px;
+}
+
+.custom-radio{
+    position: relative;
+    padding-left: 30px; /* Adjust this value to control the space between the radio button and text */
+    cursor: pointer;
+    accent-color: #000;
+}

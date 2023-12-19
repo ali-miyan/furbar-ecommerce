@@ -49,108 +49,104 @@
                 </div>
             </div>
         </div>
+
         <style>
             .custom-half-width {
-    width: calc(50% - 10px); /* Adjust the width as needed, considering any margins or paddings */
-    margin-right: 20px; /* Add margin to create space between cards */
-    margin-bottom: 20px; /* Add margin to create space between cards */
-    float: left; /* Float left to make cards align horizontally */
-}
+                width: calc(50% - 10px);
+                margin-right: 20px;
+                margin-bottom: 20px;
+                float: left;
+            }
 
-/* Clear the float to prevent layout issues */
-.custom-row::after {
-    content: "";
-    display: table;
-    clear: both;
-}
+            /* Clear the float to prevent layout issues */
+            .custom-row::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
         </style>
-        <% if(!address) { %>
-        <form action="/checkout?id=<%=id%>" method="post">
-            <div class="row">
-                <div class="col-lg-7">
-                    <!-- Checkout Form Start -->
-                    <div class="checkout-form">
-                        <div class="checkout-title">
-                            <h4 class="title">Billing details</h4>
-                        </div>
-
-
-                        <div class="row" >
-                            <div class="col-sm-6">
-                                <div class="single-form">
-                                    <input type="text" name="name" placeholder="Name *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="single-form">
-                                    <label class="form-label">address *</label>
-                                    <input type="text" name="address" placeholder="Address" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="single-form">
-                                    <input type="text" name="Landmark" placeholder="Landmark *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="single-form">
-                                    <input type="text" name="state" placeholder="State *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="single-form">
-                                    <input type="text" name="city" placeholder="Town / City *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="single-form">
-                                    <input type="text" name="pincode" placeholder="Pincode *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="single-form">
-                                    <input type="text" name="phone" placeholder="Phone *" />
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="single-form">
-                                    <input type="text" name="email" placeholder="Email address *" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Checkout Form End -->
-                </div>
-            </div>
-        </form>
-                <% } else { %>
-
-                    <form action="/checkout?id=<%=id%>" method="post" class="custom-row">
-                        <div class="custom-col-lg-8 custom-billing-details">
-                            <% address.address.forEach(data=> { %>
-                                <div class="card custom-half-width"> <!-- Add the custom-half-width class -->
-                                    <div class="card-body">
-                                        <h5 class="card-title">Address</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">your address</h6>
-                                        <p class="card-text">
-                                            <%=data.name%><br>
-                                            <%=data.address%><br>
-                                            <%=data.name%><br>
-                                            <%=data.landmark%><br>
-                                            <%=data.state%><br>
-                                            <%=data.city%><br>
-                                            <%=data.pincode%><br>
-                                            <%=data.phone%><br>
-                                            <%=data.email%><br>
-                                        </p>
-                                        <a href="#" class="card-link">Card link</a>
-                                        <a href="#" class="card-link">Another link</a>
+            <form  id="form" method="post">
+                <div class="row">
+                    <div class="col-lg-7">
+                    <% if (address && address.address && address.address.length > 0) { %>
+                        <div class="row">
+                            <% address.address.forEach(function(address, index) { %>
+                                <div class="col-lg-6"><br><br>
+                                    <div class="card card-dashboard">
+                                        <div class="card-body">
+                                            <input type="radio" name="address" value="<%= index %>" >
+                                            <h3 class="card-title">Address <%= index + 1 %></h3>
+                                            <p>Name: <%= address.fullName %><br>
+                                            Email: <%= address.email %><br>
+                                            Mobile: <%= address.mobile %><br>
+                                            State: <%= address.state %><br>
+                                            City: <%= address.city %><br>
+                                            House Name: <%= address.houseName %><br>
+                                            Pincode: <%= address.pin %><br>
+                                            <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                        </div>
                                     </div>
                                 </div>
+                                <% }); %>
                             </div>
-                        </form>
-                    <% }) %>
-                <% } %>
+                            </div>
+                        <% } else { %>
+                                <div class="col-lg-7">
+                                                    <!-- Checkout Form Start -->
+                                                    <div class="checkout-form">
+                                                        <div class="checkout-title">
+                                                            <h4 class="title">Add Address</h4>
+                                                        </div>
+                                
+                                
+                                                        <div class="row" >
+                                                            <div class="col-sm-6">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="name" placeholder="Name *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="single-form">
+                                                                    <label class="form-label">address *</label>
+                                                                    <input type="text" name="address" placeholder="Address" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="Landmark" placeholder="Landmark *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="state" placeholder="State *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="city" placeholder="Town / City *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="pincode" placeholder="Pincode *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="phone" placeholder="Phone *" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="single-form">
+                                                                    <input type="text" name="email" placeholder="Email address *" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Checkout Form End -->
+                                                </div>
+                                    </div><!-- End .row -->                                   
+                    <% } %>
                 <div class="col-lg-5">
                     <div class="checkout-order">
                         <div class="checkout-title">
@@ -161,55 +157,11 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="Product-name">
-                                            Product
-                                        </th>
-                                        <th class="Product-price">
-                                            Total
-                                        </th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>
-                                                Bodysuit With Long
-                                                Sleeves × 1
-                                            </p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <p>$150.00</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>
-                                                Classic Polo Shirt × 1
-                                            </p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <p>$150.00</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>
-                                                Trousers With Side
-                                                Stripe × 1
-                                            </p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <p>$150.00</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>Biker Jacket × 1</p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <p>$150.00</p>
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -259,86 +211,6 @@
                         </div>
 
                         <div class="checkout-payment">
-                            <ul>
-                                <li>
-                                    <div class="single-payment">
-                                        <div class="payment-radio radio">
-                                            <input type="radio" name="radio" id="bank" />
-                                            <label for="bank"><span></span> Direct
-                                                bank transfer
-                                            </label>
-
-                                            <div class="payment-details">
-                                                <p>
-                                                    Please send a Check
-                                                    to Store name with
-                                                    Store Street, Store
-                                                    Town, Store State,
-                                                    Store Postcode,
-                                                    Store Country.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="single-payment">
-                                        <div class="payment-radio radio">
-                                            <input type="radio" name="radio" id="check" />
-                                            <label for="check"><span></span> Check
-                                                payments
-                                            </label>
-
-                                            <div class="payment-details">
-                                                <p>
-                                                    Please send a check
-                                                    to Store Name, Store
-                                                    Street, Store Town,
-                                                    Store State /
-                                                    County, Store
-                                                    Postcode.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="single-payment">
-                                        <div class="payment-radio radio">
-                                            <input type="radio" name="radio" id="cash" checked="checked" />
-                                            <label for="cash"><span></span> Cash on
-                                                Delivery</label>
-
-                                            <div class="payment-details">
-                                                <p>
-                                                    Pay with cash upon
-                                                    delivery.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="single-payment">
-                                        <div class="payment-radio radio">
-                                            <input type="radio" name="radio" id="paypal" />
-                                            <label for="paypal"><span></span> Paypal
-                                                <img class="payment" src="asset/images/payment-2.html" alt="" />
-                                                <a href="#">What is PayPal?</a></label>
-
-                                            <div class="payment-details">
-                                                <p>
-                                                    Pay via PayPal; you
-                                                    can pay with your
-                                                    credit card if you
-                                                    don’t have a PayPal
-                                                    account.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
 
                             <div class="single-form">
                                 <button type="submit" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
@@ -347,8 +219,10 @@
                     </div>
                 </div>
             </div>
-
+        </form>
     </div>
+                
+    </div><br><br>
 <!-- Checkout Section End -->
 
 <%- include('../layouts/footer.ejs') -%>

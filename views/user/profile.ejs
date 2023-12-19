@@ -19,7 +19,7 @@
 
     <!-- My Account Section Start -->
     <div class="section section-padding">
-        <div class="container"  id="addrassArea">
+        <div class="container"  >
             <div class="row gy-4">
                 <div class="col-xl-3 col-md-4">
                     <!-- My Account Menu Start -->
@@ -57,22 +57,6 @@
                     </div>
                     <!-- My Account Menu End -->
                 </div>
-
-                <style>
-        .profile-image {
-            width: 100px; /* Adjust the size as needed */
-            height: 100px;
-            object-fit: cover; /* Ensure the image covers the square */
-            border-radius: 50%; /* Create a circular shape */
-            margin-bottom: 15px; /* Add spacing between the image and text */
-            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
-        }
-
-        #profileImageInput {
-            display: none; /* Hide the file input initially */
-        }
-                </style>
-
                 <div class="col-xl-9 col-md-8">
                     <!-- Tab content start -->
                     <div class="tab-content my-account-tab">
@@ -203,149 +187,99 @@
                                 </p>
                             </div>
                         </div>
-                        <% if (!address || address.address.length === 0) { %>
-                            <div class="tab-pane fade" id="pills-address">
-                                <h4 class="account-title">
-                                    Add Address
-                                </h4>
-                                <form action="/addressform?id=<%= user._id %>" method="post">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="single-form">
-                                                <input type="text" name="name" placeholder="Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="single-form">
-                                                <input type="text" name="address" placeholder="Address" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="landmark" placeholder="Landmark" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="state" placeholder="State" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="city" placeholder="City" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="pincode" placeholder="Pincode" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="phone" placeholder="Phone" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" name="email" placeholder="Email address" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-primary btn-hover-dark">
-                                                Save Change
-                                            </button>
-                                        </div>
+                        <div class="tab-pane fade" id="pills-address">
+                            <button class="btn btn-primary btn-hover-dark" onclick="openForm()">ADD +</button><br><br>
+                            <div class="row" id="addrassArea">
+                                <% if (!address || address.address.length === 0) { %>
+                                    <div class="my-account-address account-wrapper">
+                                        <p>No Addresses found</p>
                                     </div>
-                                </form>
-                            </div>
-                        <% } else { %>
-                            <div class="tab-pane fade" id="pills-address">
-                                <div class="my-account-address account-wrapper">
-                                    <div class="row">
-                                        <button class="btn btn-primary btn-hover-dark" onclick="openForm()">Open Form</button>
-                                        <% address.address.forEach((data, index) => { %>
-                                            <div class="col-md-6">
-                                                <div class="account-address" id="address<%= index %>">
-                                                    <h4 class="account-title">
-                                                        Your Address 
-                                                    </h4>
-                                                    <h6 class="name">
-                                                        Name: <%= user.name %>
-                                                    </h6>
-                                                    <p>
-                                                        Address: <%= data.address %><br>
-                                                        Landmark: <%= data.landmark %><br>
-                                                        State: <%= data.state %><br>
-                                                        City: <%= data.city %><br>
-                                                        Pincode: <%= data.pincode %><br>
-                                                        Phone: <%= data.phone %><br>
-                                                        Email: <%= data.email %><br>
-                                                    </p>
-                                                    <a class="btn btn-primary btn-hover-dark" href="#"><i class="fa fa-edit"></i>
-                                                        Edit Address
-                                                    </a>
-                                                    <a class="btn btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-edit"></i>
-                                                        Delete Address
-                                                    </a>
-                                                </div>
+                                <% } else { %>
+                                    <% address.address.forEach((data, index) => { %>
+                                        <div class="col-md-6">
+                                            <div class="account-address" id="address<%= index %>">
+                                                <h4 class="account-title">
+                                                    Address <%= index + 1 %>
+                                                </h4>
+                                                <h6 class="name">
+                                                    Name: <%= user.name %>
+                                                </h6>
+                                                <p>
+                                                    Address: <%= data.address %><br>
+                                                    Landmark: <%= data.landmark %><br>
+                                                    State: <%= data.state %><br>
+                                                    City: <%= data.city %><br>
+                                                    Pincode: <%= data.pincode %><br>
+                                                    Phone: <%= data.phone %><br>
+                                                    Email: <%= data.email %><br>
+                                                </p>
+                                                <a class="btn btn-primary btn-hover-dark" href="#"><i class="fa fa-edit"></i></a>
+                                                <a class="btn btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-trash"></i></a>
                                             </div>
-                                        <% }) %>
-                                    </div>
-                                </div>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
                             </div>
-                        <% } %>
-
+                        </div>
+                                
 
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeModal">&times;</span>
+                                <h4 class="account-title">Add Adress</h4>
                                 <!-- Your form goes here -->
-                                <form id="myForm" action="/adressform?id=<%=user._id%>" method="post">
+                                <form id="myForm" action='/adressform?id=<%=user._id%>' method="post" onsubmit="return validateForm()">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="single-form">
                                                 <input type="text" name="name" placeholder="Name" />
+                                                <p id="nameError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="single-form">
                                                 <input type="text" name="address" placeholder="Address" />
+                                                <p id="addressError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="landmark" placeholder="Landmark" />
+                                                <p id="landmarkError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="state" placeholder="State" />
+                                                <p id="stateError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="city" placeholder="City" />
+                                                <p id="cityError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="pincode" placeholder="Pincode" />
+                                                <p id="pincodeError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="phone" placeholder="Phone" />
+                                                <p id="phoneError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="email" placeholder="Email address" />
+                                                <p id="emailError" class="error-message"></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-hover-dark">
-                                        Save Change
-                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-hover-dark">Save Change</button>
                                 </form>
                             </div>
                         </div>
@@ -446,7 +380,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        $('#addrassArea').load('/profile #addrassArea'); 
+                        $('#addrassArea').load('/profile #addrassArea');
                     } else {
                         alert('Error deleting address. Please try again.');
                     }
@@ -499,6 +433,7 @@
                 modal.style.display = 'none';
             }
         });
+
     });
 
     function openForm() {
@@ -506,7 +441,124 @@
         const modal = document.getElementById('myModal');
         modal.style.display = 'block';
     }
-</script>
 
+    myForm.addEventListener('submit', function (event) {
+            if (!validateForm()) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+    function validateForm() {
+        const name = validateField('name', 'Name must contain only letters');
+        const address = validateField('address', 'Address is required');
+        const landmark = validateField('landmark', 'Landmark must contain only letters and numbers');
+        const state = validateField('state', 'State is required');
+        const city = validateField('city', 'City is required');
+        const pincode = validatePincode();
+        const phone = validatePhone();
+        const email = validateEmail();
+
+        return name && address && landmark && state && city && pincode && phone && email;
+    }
+
+    function validateField(fieldName, errorMessage) {
+        const field = document.querySelector(`[name="${fieldName}"]`);
+        const value = field.value.trim();
+        const errorTag = document.getElementById(`${fieldName}Error`);
+
+        if (!value) {
+            showError(errorTag, errorMessage);
+            return false;
+        }
+
+        if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
+            showError(errorTag, 'Name must contain only letters');
+            return false;
+        }
+
+        if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
+            showError(errorTag, 'Landmark must contain only letters and numbers');
+            return false;
+        }
+
+        hideError(errorTag);
+        return true;
+    }
+
+    function validatePincode() {
+        const pincodeField = document.querySelector('[name="pincode"]');
+        const pincode = pincodeField.value.trim();
+        const errorTag = document.getElementById('pincodeError');
+
+        if (!pincode) {
+            showError(errorTag, 'Pincode is required');
+            return false;
+        }
+
+        if (!/^\d{6}$/.test(pincode)) {
+            showError(errorTag, 'Pincode must be a 6-digit number');
+            return false;
+        }
+
+        hideError(errorTag);
+        return true;
+    }
+
+    function validatePhone() {
+        const phoneField = document.querySelector('[name="phone"]');
+        const phone = phoneField.value.trim();
+        const errorTag = document.getElementById('phoneError');
+
+        if (!phone) {
+            showError(errorTag, 'Phone is required');
+            return false;
+        }
+
+        if (!/^\d{10}$/.test(phone)) {
+            showError(errorTag, 'Phone must be a 10-digit number');
+            return false;
+        }
+
+        hideError(errorTag);
+        return true;
+    }
+
+    function validateEmail() {
+        const emailField = document.querySelector('[name="email"]');
+        const email = emailField.value.trim();
+        const errorTag = document.getElementById('emailError');
+
+        if (!email) {
+            showError(errorTag, 'Email is required');
+            return false;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+            showError(errorTag, 'Invalid email address');
+            return false;
+        }
+
+        hideError(errorTag);
+        return true;
+    }
+
+    function showError(errorTag, errorMessage) {
+        if (!errorTag) {
+            const fieldName = errorTag.id.replace('Error', '');
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            const errorTag = document.createElement('p');
+            errorTag.id = `${fieldName}Error`;
+            errorTag.classList.add('error-message');
+            field.parentNode.appendChild(errorTag);
+        }
+
+        errorTag.innerText = errorMessage;
+    }
+
+    function hideError(errorTag) {
+        if (errorTag) {
+            errorTag.innerText = '';
+        }
+    }
+</script>
 
 <%- include('../layouts/footer.ejs') -%>

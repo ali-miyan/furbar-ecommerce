@@ -51,10 +51,9 @@ const loadProfile=async(req,res)=>{
             console.log("profile session"+req.session.user_id)
             const user=await User.findOne({_id:req.session.user_id})
             const address=await addressModel.findOne({user:req.session.user_id})
-            console.log(address);
             res.render('profile',{user,address})
         }else{
-            res.redirect('/login')
+            res.redirect('/login')  
             }
     } catch (error) {
         console.log(error);
