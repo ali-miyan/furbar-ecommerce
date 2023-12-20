@@ -50,22 +50,8 @@
             </div>
         </div>
 
-        <style>
-            .custom-half-width {
-                width: calc(50% - 10px);
-                margin-right: 20px;
-                margin-bottom: 20px;
-                float: left;
-            }
-
-            /* Clear the float to prevent layout issues */
-            .custom-row::after {
-                content: "";
-                display: table;
-                clear: both;
-            }
-        </style>
-            <form  id="form" method="post">
+        
+            <form  id="form" action="/checkoutform" method="post">
                 <div class="row">
                     <div class="col-lg-7">
                     <% if (address && address.address && address.address.length > 0) { %>
@@ -91,7 +77,7 @@
                             </div>
                             </div>
                         <% } else { %>
-                                <div class="col-lg-7">
+                                <div class="col-lg-6">
                                                     <!-- Checkout Form Start -->
                                                     <div class="checkout-form">
                                                         <div class="checkout-title">
@@ -100,7 +86,7 @@
                                 
                                 
                                                         <div class="row" >
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-12">
                                                                 <div class="single-form">
                                                                     <input type="text" name="name" placeholder="Name *" />
                                                                 </div>
@@ -145,8 +131,8 @@
                                                     </div>
                                                     <!-- Checkout Form End -->
                                                 </div>
-                                    </div><!-- End .row -->                                   
-                    <% } %>
+                                            </div><!-- End .row -->                                   
+                                            <% } %>
                 <div class="col-lg-5">
                     <div class="checkout-order">
                         <div class="checkout-title">

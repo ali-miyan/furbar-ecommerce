@@ -70,7 +70,36 @@ routeUser.get('/checkout',auth.isLogin,cartController.checkout)
 
 routeUser.post('/checkout',auth.isLogin,cartController.checkoutPost)
 
-routeUser.post('/adressform',async(req,res)=>{
+routeUser.post('/addressform',async (req, res) => {
+  try {
+    const userId=req.session.user_id;
+    const data = {
+      name: req.body.name,
+      address: req.body.address,
+      landmark: req.body.landmark,
+      state: req.body.state,
+      city: req.body.city,
+      pincode: req.body.pincode,
+      phone: req.body.phone,
+      email: req.body.email
+  };
+  console.log(data);
+
+      const findAddress = await addressModel.findOneAndUpdate(
+      { user: userId },
+      { $push: { address: data } },
+      { upsert: true, new: true }
+    )
+      res.json({ add: true});
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ add: false, error: "Internal Server Error" });
+  }
+});
+
+
+routeUser.post('/checkoutform',async(req,res)=>{
   try {
     const userId=req.session.user_id
     const {name,address,landmark,state,city,pincode,phone,email}=req.body
@@ -81,6 +110,35 @@ routeUser.post('/adressform',async(req,res)=>{
       { $push: { address: newAddress } },
       { upsert: true, new: true }
     )
+    res.redirect('/successpage')
+
+  } catch (error) {
+    console.log(error);
+  }
+
+})
+
+
+routeUser.post('/editaddress',async(req,res)=>{
+  try {
+    const userId=req.session.user_id
+    const {name,address,landmark,state,city,pincode,phone,email}=req.body
+    const updatedAddress = {
+      name,
+      address,
+      landmark,
+      state,
+      city,
+      pincode,
+      phone,
+      email,
+    };
+
+    const data = await addressModel.findOneAndUpdate(
+      { user: userId }, 
+      { $set: { 'address.$': updatedAddress } },
+      { new: true }
+    );
 
       res.redirect('/profile')
   } catch (error) {

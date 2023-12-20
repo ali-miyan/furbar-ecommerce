@@ -189,46 +189,53 @@
                         </div>
                         <div class="tab-pane fade" id="pills-address">
                             <button class="btn btn-primary btn-hover-dark" onclick="openForm()">ADD +</button><br><br>
+                        
                             <div class="row" id="addrassArea">
-                                <% if (!address || address.address.length === 0) { %>
-                                    <div class="my-account-address account-wrapper">
-                                        <p>No Addresses found</p>
-                                    </div>
-                                <% } else { %>
+                                <% if (address && address.address && address.address.length > 0) { %>
                                     <% address.address.forEach((data, index) => { %>
                                         <div class="col-md-6">
-                                            <div class="account-address" id="address<%= index %>">
-                                                <h4 class="account-title">
-                                                    Address <%= index + 1 %>
-                                                </h4>
-                                                <h6 class="name">
-                                                    Name: <%= user.name %>
-                                                </h6>
-                                                <p>
-                                                    Address: <%= data.address %><br>
-                                                    Landmark: <%= data.landmark %><br>
-                                                    State: <%= data.state %><br>
-                                                    City: <%= data.city %><br>
-                                                    Pincode: <%= data.pincode %><br>
-                                                    Phone: <%= data.phone %><br>
-                                                    Email: <%= data.email %><br>
-                                                </p>
-                                                <a class="btn btn-primary btn-hover-dark" href="#"><i class="fa fa-edit"></i></a>
-                                                <a class="btn btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-trash"></i></a>
+                                            <br>
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <!-- <div class="account-address" id="address<%= index %>"> -->
+                                                    <h4 class="account-title">
+                                                        Address <%= index + 1 %>
+                                                    </h4>
+                                                    <h6 class="name">
+                                                        Name: <%= data.name %>
+                                                    </h6>
+                                                    <p>
+                                                        Address: <%= data.address %><br>
+                                                        Landmark: <%= data.landmark %><br>
+                                                        State: <%= data.state %><br>
+                                                        City: <%= data.city %><br>
+                                                        Pincode: <%= data.pincode %><br>
+                                                        Phone: <%= data.phone %><br>
+                                                        Email: <%= data.email %><br>
+                                                    </p>
+                                                    <a class="btn-primary btn-hover-dark" onclick="openEditModal('<%= data._id %>', '<%= data.name %>', '<%= data.address %>', '<%= data.landmark %>', '<%= data.state %>', '<%= data.city %>', '<%= data.pincode %>', '<%= data.phone %>', '<%= data.email %>')"><i class="fa fa-edit"></i></a>
+                                                    <a class="btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-trash"></i></a>
+                                                </div>
                                             </div>
                                         </div>
                                     <% }) %>
+                                <% } else { %>  
+                                    <div class="col-md-12 my-account-address account-wrapper">
+                                        <p>No Addresses found</p>
+                                    </div>
                                 <% } %>
                             </div>
                         </div>
-                                
+                        
+
+                    <!-- user modal  -->  
 
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeModal">&times;</span>
-                                <h4 class="account-title">Add Adress</h4>
+                                <h4 class="account-title">Add Address</h4>
                                 <!-- Your form goes here -->
-                                <form id="myForm" action='/adressform?id=<%=user._id%>' method="post" onsubmit="return validateForm()">
+                                <form id="myForm" action='/addressform' method="post" onsubmit="return validateForm()">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="single-form">
@@ -283,7 +290,80 @@
                                 </form>
                             </div>
                         </div>
+                        <!-- usermodal end -->
+
+                        <!-- edit modal -->
+                        <div id="editAddressModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeEditModal">&times;</span>
+                                <h4 class="account-title">Edit Address</h4>
+                                <!-- Your form goes here -->
+                                <form id="editForm" action='/editaddress' method="post" onsubmit="return validateEditForm()">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="editName" placeholder="Name" />
+                                                <p id="editNameError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="single-form">
+                                                <input type="text" name="editAddress" placeholder="Address" />
+                                                <p id="editAddressError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editLandmark" placeholder="Landmark" />
+                                                <p id="editLandmarkError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editState" placeholder="State" />
+                                                <p id="editStateError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editCity" placeholder="City" />
+                                                <p id="editCityError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editPincode" placeholder="Pincode" />
+                                                <p id="editPincodeError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editPhone" placeholder="Phone" />
+                                                <p id="editPhoneError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="editEmail" placeholder="Email address" />
+                                                <p id="editEmailError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <!-- Add other fields as needed for editing -->
                         
+                                        <!-- Add hidden input for address ID -->
+                                        <input type="hidden" name="editAddressId" id="editAddressId" value="" />
+                        
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <button type="submit" class="btn btn-primary btn-hover-dark">Save Changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- editmodal end -->
 
                         <div class="tab-pane fade" id="pills-account">
                             <div class="my-account-details account-wrapper">
@@ -346,6 +426,8 @@
                                 </div>
                             </div>
                         </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- Tab content End -->
                 </div>
@@ -392,28 +474,71 @@
         })
     }
     </script>
-
-    <script>
-        function displayImage(input) {
-            var file = input.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('uploadedImage').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function triggerFileInput() {
-            document.getElementById('profileImageInput').click();
-        }
-    </script>
-
-
 <!-- Place this script outside the loop -->
+
+<!-- <script>
+    function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
+        document.getElementById("editName").value = name;
+        document.getElementById("editAddress").value = address;
+        document.getElementById("editLandmark").value = landmark;
+        document.getElementById("editState").value = state;
+        document.getElementById("editCity").value = city;
+        document.getElementById("editPincode").value = pincode;
+        document.getElementById("editPhone").value = phone;
+        document.getElementById("editEmail").value = email;
+        document.getElementById("editAddressIdInput").value = addressId;
+
+        var editModal = document.getElementById("editModal");
+        editModal.style.display = "block";
+    }
+
+    document.getElementById("closeEditModal").addEventListener("click", function() {
+        var editModal = document.getElementById("editModal");
+        editModal.style.display = "none";
+    });
+</script> -->
+
+
 <!-- Place this script outside the loop -->
 <script>
+    function updateAddress() {
+        const formData = $('#myForm').serialize();
+        console.log("gggggggggggggggggggggg",formData);
+
+        $.ajax({
+        url: '/addressform',
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            if (data.add === true) {
+                $('#addrassArea').load('/profile #addrassArea', function () {
+                    $('#addAddressModal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Address Added Successfully',
+                        text: 'Your address has been added successfully.',
+                    });
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'There was a problem adding your address!',
+                });
+            }
+
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        },
+        error: function (error) {
+            // Handle errors
+            console.error('Error:', error);
+        }
+    });
+}
+
+
     document.addEventListener('DOMContentLoaded', function () {
         const showModalButton = document.getElementById('showModalButton');
         const modal = document.getElementById('myModal');
@@ -427,7 +552,6 @@
             modal.style.display = 'none';
         });
 
-        // Close the modal if the user clicks outside the modal content
         window.addEventListener('click', function (event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
@@ -437,16 +561,18 @@
     });
 
     function openForm() {
-        // You can add additional logic here if needed
         const modal = document.getElementById('myModal');
         modal.style.display = 'block';
     }
 
+    const myForm = document.getElementById('myForm');
     myForm.addEventListener('submit', function (event) {
-            if (!validateForm()) {
-                event.preventDefault(); // Prevent form submission if validation fails
-            }
-        });
+        event.preventDefault();
+        if (validateForm()) {
+            updateAddress();
+        }
+    });
+
     function validateForm() {
         const name = validateField('name', 'Name must contain only letters');
         const address = validateField('address', 'Address is required');
@@ -559,6 +685,9 @@
             errorTag.innerText = '';
         }
     }
+
+    
 </script>
+
 
 <%- include('../layouts/footer.ejs') -%>
