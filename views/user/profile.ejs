@@ -188,7 +188,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-address">
-                            <button class="btn btn-primary btn-hover-dark" onclick="openForm()">ADD +</button><br><br>
+                            <button class="btn btn-primary btn-hover-dark" id="showModalButton">ADD +</button><br><br>
                         
                             <div class="row" id="addrassArea">
                                 <% if (address && address.address && address.address.length > 0) { %>
@@ -230,7 +230,7 @@
 
                     <!-- user modal  -->  
 
-                        <div id="myModal" class="modal">
+                        <div id="addAddressModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeModal">&times;</span>
                                 <h4 class="account-title">Add Address</h4>
@@ -298,61 +298,60 @@
                                 <span class="close" id="closeEditModal">&times;</span>
                                 <h4 class="account-title">Edit Address</h4>
                                 <!-- Your form goes here -->
-                                <form id="editForm" action='/editaddress' method="post" onsubmit="return validateEditForm()">
+                                <form id="editForm">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="single-form">
-                                                <input type="text" name="editName" placeholder="Name" />
+                                                <input type="text" name="editName"/>
                                                 <p id="editNameError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="single-form">
-                                                <input type="text" name="editAddress" placeholder="Address" />
+                                                <input type="text" name="editAddress" />
                                                 <p id="editAddressError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editLandmark" placeholder="Landmark" />
+                                                <input type="text" name="editLandmark"/>
                                                 <p id="editLandmarkError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editState" placeholder="State" />
+                                                <input type="text" name="editState" />
                                                 <p id="editStateError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editCity" placeholder="City" />
+                                                <input type="text" name="editCity"  />
                                                 <p id="editCityError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editPincode" placeholder="Pincode" />
+                                                <input type="text" name="editPincode"/>
                                                 <p id="editPincodeError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editPhone" placeholder="Phone" />
+                                                <input type="text" name="editPhone"  />
                                                 <p id="editPhoneError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editEmail" placeholder="Email address" />
+                                                <input type="text" name="editEmail" />
                                                 <p id="editEmailError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <!-- Add other fields as needed for editing -->
                         
                                         <!-- Add hidden input for address ID -->
-                                        <input type="hidden" name="editAddressId" id="editAddressId" value="" />
-                        
+                                        <input type="hidden" name="editAddressId" id="editAddressId" value="<%= address.address._id %>" />                        
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <button type="submit" class="btn btn-primary btn-hover-dark">Save Changes</button>
@@ -436,6 +435,7 @@
     </div>
     <!-- My Account Section End -->
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
         function deleteAddress(addressId) {
@@ -476,27 +476,69 @@
     </script>
 <!-- Place this script outside the loop -->
 
-<!-- <script>
-    function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
-        document.getElementById("editName").value = name;
-        document.getElementById("editAddress").value = address;
-        document.getElementById("editLandmark").value = landmark;
-        document.getElementById("editState").value = state;
-        document.getElementById("editCity").value = city;
-        document.getElementById("editPincode").value = pincode;
-        document.getElementById("editPhone").value = phone;
-        document.getElementById("editEmail").value = email;
-        document.getElementById("editAddressIdInput").value = addressId;
+<script>
+        const editAddressModal = document.getElementById('editAddressModal');
+        const closeEditModalButton = document.getElementById('closeEditModal');
+        
+        
+        function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
+            document.querySelector('[name="editName"]').value = name;
+            document.querySelector('[name="editAddress"]').value = address;
+            document.querySelector('[name="editLandmark"]').value = landmark;
+            document.querySelector('[name="editState"]').value = state;
+            document.querySelector('[name="editCity"]').value = city;
+            document.querySelector('[name="editPincode"]').value = pincode;
+            document.querySelector('[name="editPhone"]').value = phone;
+            document.querySelector('[name="editEmail"]').value = email;
 
-        var editModal = document.getElementById("editModal");
-        editModal.style.display = "block";
-    }
+            document.getElementById('editAddressId').value = addressId;
 
-    document.getElementById("closeEditModal").addEventListener("click", function() {
-        var editModal = document.getElementById("editModal");
-        editModal.style.display = "none";
-    });
-</script> -->
+            editAddressModal.style.display = 'block';
+        }
+
+        closeEditModalButton.addEventListener('click', function () {
+            editAddressModal.style.display = 'none';
+        });
+
+        // Event listener to submit the Edit Address form via Ajax
+        $('#editForm').submit(function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            console.log("hiiiii");
+
+            const formData = $(this).serialize();
+            console.log("nnnnnnnnnnnnnnnnnnnn",formData);
+
+            // Send the Ajax request
+            $.ajax({
+                type: 'POST',
+                url: '/editaddress', // Update with your server endpoint
+                data: formData,
+                success: function (data) {
+                    if (data.success==true) {
+                        console.log(data);
+                    $('#addrassArea').load('/profile #addrassArea')
+                    editAddressModal.style.display = 'none';
+                    $('.modal-backdrop').remove();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Address Added Successfully',
+                        text: 'Your address has been added successfully.',
+                    });
+                
+                    } else {
+                        // Handle failure, display an error message, etc.
+                        console.error('Error updating address');
+                        // You may want to display an error message to the user
+                    }
+                },
+                error: function (error) {
+                    // Handle Ajax error, display an error message, etc.
+                    console.error('Ajax error:', error);
+                    // You may want to display an error message to the user
+                }
+            });
+        });
+</script>
 
 
 <!-- Place this script outside the loop -->
@@ -528,7 +570,7 @@
                 });
             }
 
-            const modal = document.getElementById('myModal');
+            const modal = document.getElementById('addAddressModal');
             modal.style.display = 'none';
         },
         error: function (error) {
@@ -541,7 +583,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         const showModalButton = document.getElementById('showModalButton');
-        const modal = document.getElementById('myModal');
+        const modal = document.getElementById('addAddressModal');
         const closeModalButton = document.getElementById('closeModal');
 
         showModalButton.addEventListener('click', function () {
@@ -560,10 +602,10 @@
 
     });
 
-    function openForm() {
-        const modal = document.getElementById('myModal');
-        modal.style.display = 'block';
-    }
+    // function openForm() {
+    //     const modal = document.getElementById('addAddressModal');
+    //     modal.style.display = 'block';
+    // }
 
     const myForm = document.getElementById('myForm');
     myForm.addEventListener('submit', function (event) {

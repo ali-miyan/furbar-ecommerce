@@ -51,162 +51,164 @@
         </div>
 
         
-            <form  id="form" action="/checkoutform" method="post">
-                <div class="row">
-                    <div class="col-lg-7">
-                    <% if (address && address.address && address.address.length > 0) { %>
-                        <div class="row">
-                            <% address.address.forEach(function(address, index) { %>
-                                <div class="col-lg-6"><br><br>
-                                    <div class="card card-dashboard">
-                                        <div class="card-body">
-                                            <input type="radio" name="address" value="<%= index %>" >
-                                            <h3 class="card-title">Address <%= index + 1 %></h3>
-                                            <p>Name: <%= address.fullName %><br>
-                                            Email: <%= address.email %><br>
-                                            Mobile: <%= address.mobile %><br>
-                                            State: <%= address.state %><br>
-                                            City: <%= address.city %><br>
-                                            House Name: <%= address.houseName %><br>
-                                            Pincode: <%= address.pin %><br>
-                                            <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% }); %>
-                            </div>
-                            </div>
-                        <% } else { %>
-                                <div class="col-lg-6">
-                                                    <!-- Checkout Form Start -->
-                                                    <div class="checkout-form">
-                                                        <div class="checkout-title">
-                                                            <h4 class="title">Add Address</h4>
-                                                        </div>
-                                
-                                
-                                                        <div class="row" >
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="name" placeholder="Name *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <label class="form-label">address *</label>
-                                                                    <input type="text" name="address" placeholder="Address" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="Landmark" placeholder="Landmark *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="state" placeholder="State *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="city" placeholder="Town / City *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="pincode" placeholder="Pincode *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="phone" placeholder="Phone *" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <div class="single-form">
-                                                                    <input type="text" name="email" placeholder="Email address *" />
-                                                                </div>
+                                <form  id="form" action="/checkoutform" method="post">
+                                    <div class="row">
+                                        <div class="col-lg-7">
+                                        <% if (address && address.address && address.address.length > 0) { %>
+                                            <div class="row">
+                                                <% address.address.forEach(function(address, index) { %>
+                                                    <div class="col-lg-6"><br><br>
+                                                        <div class="card card-dashboard">
+                                                            <div class="card-body">
+                                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" required >
+                                                                <h3 class="card-title">Address <%= index + 1 %></h3>
+                                                                <p>Name: <%= address.name %><br>
+                                                                Address: <%= address.address %><br>
+                                                                Landmark: <%= address.landmark %><br>
+                                                                State: <%= address.state %><br>
+                                                                City: <%= address.city %><br>
+                                                                Pincode: <%= address.pincode %><br>
+                                                                Phone: <%= address.phone %><br>
+                                                                Email: <%= address.email %><br>
+                                                                <a href="/editAddress?ind=<%= index %>" > <i class="fa fa-edit"></i></a>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- Checkout Form End -->
+                                                    <% }); %>
                                                 </div>
-                                            </div><!-- End .row -->                                   
-                                            <% } %>
-                <div class="col-lg-5">
-                    <div class="checkout-order">
-                        <div class="checkout-title">
-                            <h4 class="title">Your Order</h4>
+                                                </div>
+                                            <% } else { %>
+                                                    <div class="col-lg-6">
+                                                                        <!-- Checkout Form Start -->
+                                                                        <div class="checkout-form">
+                                                                            <div class="checkout-title">
+                                                                                <h4 class="title">Add Address</h4>
+                                                                            </div>
+                                                    
+                                                    
+                                                                            <div class="row" >
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="name" placeholder="Name *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <label class="form-label">address *</label>
+                                                                                        <input type="text" name="address" placeholder="Address" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="Landmark" placeholder="Landmark *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="state" placeholder="State *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="city" placeholder="Town / City *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="pincode" placeholder="Pincode *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="phone" placeholder="Phone *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <div class="single-form">
+                                                                                        <input type="text" name="email" placeholder="Email address *" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- Checkout Form End -->
+                                                                    </div>
+                                                                </div><!-- End .row -->                                   
+                                                                <% } %>
+                                    <div class="col-lg-5">
+                                        <div class="checkout-order">
+                                            <div class="checkout-title">
+                                                <h4 class="title">Your Order</h4>
+                                            </div>
+
+                                            <div class="checkout-order-table table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            
+                                                            <td class="Product-name">
+                                                                <p>Subtotal</p>
+                                                            </td>
+                                                            <td class="Product-price">
+                                                                <p>₹<%=subtotal%></p>                
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Product-name">
+                                                                <p>Shipping</p>
+                                                            </td>
+                                                            <td class="Product-price">
+                                                                <ul class="shipping-list">
+                                                                    <li class="radio">
+                                                                        <input type="radio" name="shipping" id="radio1" checked />
+                                                                        <label for="radio1"><span></span>
+                                                                            Flat Rate</label>
+                                                                    </li>
+                                                                    <li class="radio">
+                                                                        <input type="radio" name="shipping" id="radio2" />
+                                                                        <label for="radio2"><span></span>
+                                                                            Free
+                                                                            Shipping</label>
+                                                                    </li>
+                                                                    <li class="radio">
+                                                                        <input type="radio" name="shipping" id="radio3" />
+                                                                        <label for="radio3"><span></span>
+                                                                            Local
+                                                                            Pickup</label>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Product-name">
+                                                                <p>Total</p>
+                                                            </td>
+                                                            <td class="total-price">
+                                                                <p>₹<%=subtotal%></p>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+
+                                            <div class="checkout-payment">
+
+                                                <div class="single-form">
+                                                    <button type="submit" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-
-                        <div class="checkout-order-table table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>Subtotal</p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <p>$150.00</p>                
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>Shipping</p>
-                                        </td>
-                                        <td class="Product-price">
-                                            <ul class="shipping-list">
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio1" checked />
-                                                    <label for="radio1"><span></span>
-                                                        Flat Rate</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio2" />
-                                                    <label for="radio2"><span></span>
-                                                        Free
-                                                        Shipping</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio3" />
-                                                    <label for="radio3"><span></span>
-                                                        Local
-                                                        Pickup</label>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="Product-name">
-                                            <p>Total</p>
-                                        </td>
-                                        <td class="total-price">
-                                            <p>$600.00</p>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
-                        <div class="checkout-payment">
-
-                            <div class="single-form">
-                                <button type="submit" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
                 
     </div><br><br>
 <!-- Checkout Section End -->

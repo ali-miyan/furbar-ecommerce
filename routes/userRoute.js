@@ -68,7 +68,7 @@ routeUser.post('/removecart',auth.isLogin,cartController.removeCart);
 
 routeUser.get('/checkout',auth.isLogin,cartController.checkout)
 
-routeUser.post('/checkout',auth.isLogin,cartController.checkoutPost)
+routeUser.post('/checkoutform',auth.isLogin,cartController.checkoutPost)
 
 routeUser.post('/addressform',async (req, res) => {
   try {
@@ -99,53 +99,44 @@ routeUser.post('/addressform',async (req, res) => {
 });
 
 
-routeUser.post('/checkoutform',async(req,res)=>{
+
+
+routeUser.post('/editaddress', async (req, res) => {
+  const { editAddressId, editName, editAddress, editLandmark, editState, editCity, editPincode, editPhone, editEmail } = req.body;
+
   try {
-    const userId=req.session.user_id
-    const {name,address,landmark,state,city,pincode,phone,email}=req.body
-    const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
+    console.log(editAddressId);
+    const user = await addressModel.findOne({ 'address._id': editAddressId })
+    console.log(user);
 
-      const data = await addressModel.findOneAndUpdate(
-      { user: userId },
-      { $push: { address: newAddress } },
-      { upsert: true, new: true }
-    )
-    res.redirect('/successpage')
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+      }
 
+      const addressToUpdate = user.address.id(editAddressId);
+
+      if (!addressToUpdate) {
+          return res.status(404).json({ success: false, message: 'Address not found' });
+      }
+
+      addressToUpdate.name = editName;
+      addressToUpdate.address = editAddress;
+      addressToUpdate.landmark = editLandmark;
+      addressToUpdate.state = editState;
+      addressToUpdate.city = editCity;
+      addressToUpdate.pincode = editPincode;
+      addressToUpdate.phone = editPhone;
+      addressToUpdate.email = editEmail;
+
+      await user.save();
+
+      res.json({ success: true });
+      
   } catch (error) {
-    console.log(error);
+      console.error('Error updating address:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
   }
-
-})
-
-
-routeUser.post('/editaddress',async(req,res)=>{
-  try {
-    const userId=req.session.user_id
-    const {name,address,landmark,state,city,pincode,phone,email}=req.body
-    const updatedAddress = {
-      name,
-      address,
-      landmark,
-      state,
-      city,
-      pincode,
-      phone,
-      email,
-    };
-
-    const data = await addressModel.findOneAndUpdate(
-      { user: userId }, 
-      { $set: { 'address.$': updatedAddress } },
-      { new: true }
-    );
-
-      res.redirect('/profile')
-  } catch (error) {
-    console.log(error);
-  }
-
-})
+});
 
 routeUser.post('/deleteaddress',async(req,res)=>{
   try {

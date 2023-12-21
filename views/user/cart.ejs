@@ -19,12 +19,13 @@
     <!-- Page Banner Section End -->
 
     <!-- Shopping Cart Section Start -->
+    <div  id="reloadDiv">
     <div class="section section-padding">
         <div class="container">
             <div class="cart-wrapper">
                 <% if (data.product.length>0) { %>
                     <!-- Cart Wrapper Start -->
-                    <div class="cart-table table-responsive" id="reloadDiv">
+                    <div class="cart-table table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -66,12 +67,14 @@
                                                     onclick="updateQuantity('<%= product.productId._id %>', -1)">
                                                     -
                                                 </button>
-                                                <input type="text" value="<%= product.quantity %>" />
+                                                <input type="text" value="<%= product.quantity %>" required />
                                                 <button type="button" class="add"
                                                     onclick="updateQuantity('<%= product.productId._id %>', 1)">
                                                     +
                                                 </button>
                                             </div>
+
+
                                         </td>
                                         <td class="product-total-price">
                                             <span class="price">₹<%= product.totalPrice %></span>
@@ -139,7 +142,7 @@
                                             <p class="value">Subtotal</p>
                                         </td>
                                         <td>
-                                            <p class="price">£600.00</p>
+                                            <p class="price">₹<%=subtotal%></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -150,18 +153,15 @@
                                             <ul class="shipping-list">
                                                 <li class="radio">
                                                     <input type="radio" name="shipping" id="radio1" checked="" />
-                                                    <label for="radio1"><span></span> Flat
-                                                        Rate</label>
+                                                    <label for="radio1"><span></span>Cash on Delivery</label>
                                                 </li>
                                                 <li class="radio">
                                                     <input type="radio" name="shipping" id="radio2" />
-                                                    <label for="radio2"><span></span> Free
-                                                        Shipping</label>
+                                                    <label for="radio2"><span></span>Online Payment</label>
                                                 </li>
                                                 <li class="radio">
                                                     <input type="radio" name="shipping" id="radio3" />
-                                                    <label for="radio3"><span></span> Local
-                                                        Pickup</label>
+                                                    <label for="radio3"><span></span>Wallet</label>
                                                 </li>
                                             </ul>
                                         </td>
@@ -171,7 +171,7 @@
                                             <p class="value">Total</p>
                                         </td>
                                         <td>
-                                            <p class="price">£600.00</p>
+                                            <p class="price"><%=subtotal%></p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -216,13 +216,15 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+
 
     <script>
         function updateQuantity(productId, count) {
             const data = { productId, count };
             $.ajax({
-                method: 'POST',
                 url: '/updatecart',
+                method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: (response) => {
@@ -231,9 +233,9 @@
                     } else {
                         // Handle other cases or errors here
                         swal.fire({
-                            icon: "error",
+                            icon: "error ",
                             title: "Oops...",
-                            text: "An error occurred",
+                            text:response.message,
                         });
                     }
                 },

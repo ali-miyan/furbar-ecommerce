@@ -1,70 +1,52 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  user:{
-   type:mongoose.Types.ObjectId
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  deliveryDetails: {
-    type: Object,
+  delivery_address:{
+    type:Object,
+    required:true
+  },
+  payment: {
+    type: String,
     required: true,
+    method: ['Cash on delivery', 'Razorpay']
   },
-  products: [
-    {
+  products: {
+    item: [{
       productId: {
-        type: String,
-        required: true,
-        ref: "Product",
+        type: mongoose.Types.ObjectId,
+        required: true
       },
-      count: {
+      quantity: {
         type: Number,
-        default: 1,
+        required: true
       },
       price: {
         type: Number,
-        required: true,
+        required: true
       },
       totalPrice: {
-        type: Number,
-        required: true,
-      },
-      status: {
-        type: String,
-      }
-    },
-  ],
-  
-  cancelReason: {
-    type: String
+      type: Number,
+      default: 0
+    }
+  }]
   },
-  returnReason: {
-    type: String
-  },
-  totalAmount: {
-    type: Number,
-    required: true,
-  },
-  date: {
-    type: Date,
-  },
-  status: {
-    type: String,
-  },
-  paymentMethod: {
-    type: String,
-  },
-  orderId: {
-    type: String,
-  },
-  paymentId: {
-    type: String
-  },
-  shippingMethod: {
-    type: String,
-  },
-  shippingAmount: {
-    type: Number,
+  // status: {
+  //   type: String,
+  //   default: 'Attempted',
+  //   enum: ['Attempted', 'Success', 'Cancelled', 'Failed']
+  // },
+  isOrder: {
+    type: Boolean,
+    default: true
   }
-});
+}, {
+  timestamps: true
+})
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model('Orders', orderSchema)
 module.exports =Order

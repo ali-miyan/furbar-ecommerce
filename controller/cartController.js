@@ -14,6 +14,7 @@ const userController = require("../controller/userController");
 const cartModel=require('../models/cartModel')
 const addressModel=require('../models/addressModel')
 const cartController=require('../controller/cartController')
+const orderModel=require('../models/orderModal')
 
 const getCart=async(req,res)=>{
     try {
@@ -76,12 +77,31 @@ const getCart=async(req,res)=>{
   }
 
   const updateCart=async (req, res) => {
-    const product_id = req.body.productId
-    const user_id = req.session.user_id
-    const count = req.body.count
-    console.log(product_id,user_id,count);
+    try {
+      
+      const user_id = req.session.user_id
+      const product_id = req.body.productId
+      const count = req.body.count
+    const productCount=await Product.findOne({_id:product_id})
+    console.log("ppppppppppppppppppppp",productCount);
     const cartD = await cartModel.findOne({ user: user_id })
     console.log(cartD);
+
+    if (count === -1) {
+      const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
+      if (currentQuantity <= 1) {
+          return res.json({ success: false, message: 'Quantity cannot be decreased further.' });
+      }
+  }
+
+    if (count === 1) {
+      const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
+      if (currentQuantity + count > productCount.quantity) {
+          return res.json({ success: false, message: 'Stock limit reached' });
+      }
+  }
+
+
     const updatedCart = await cartModel.findOneAndUpdate(
       { user: user_id, 'product.productId': product_id },
       {
@@ -93,6 +113,12 @@ const getCart=async(req,res)=>{
       { new: true }
     );
     res.json({success:true})
+
+      } catch (error) {
+          console.log(error);
+      }
+      
+
   }
   
   const removeCart=async (req, res) => {
@@ -113,10 +139,17 @@ const getCart=async(req,res)=>{
   const checkout=async(req,res)=>{
     try {
       const id=req.session.user_id
-      console.log(id);
-      const address=await addressModel.findOne({user:id})
-      console.log("adressssssssss",address);
-      res.render('checkout',{id,address})
+      const cartData = await cartModel.findOne({user:id}).populate('product.productId')    
+      let address = await addressModel.findOne({user:id})
+      const subtotal = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
+        // const stock = cartData.product.filter((val,ind)=>val.productId.quantity>0)
+        // const total = (subTotal-couponDiscount)+cartData.shippingAmount
+    
+        // if(stock.length!=cartData.products.length){
+        //   res.json({stock:false})
+        // }
+
+      res.render('checkout',{id,address,cartData,subtotal})
     } catch (error) {
       console.log(error);
     }
@@ -125,16 +158,49 @@ const getCart=async(req,res)=>{
   const checkoutPost=async(req,res)=>{
     try {
       const userId=req.session.user_id
+
+      if (req.body.selectedAddress === undefined || req.body.selectedAddress === null) {
+
       const {name,address,landmark,state,city,pincode,phone,email}=req.body
       const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
-  
         const data = await addressModel.findOneAndUpdate(
         { user: userId },
         { $push: { address: newAddress } },
         { upsert: true, new: true }
       )
-  
-          res.render('successpage')
+        }else{
+          const userData = await User.findById({ _id: req.session.user_id })
+          const selectedAddress=req.body.selectedAddress
+          const userAddress = await addressModel.findOne(
+            { 'address._id': selectedAddress },
+            { 'address.$': 1 }
+          ).lean();
+            const addressArray = userAddress.address;
+          
+          const cartData=await cartModel.findOne({user:userId})
+
+          const orderItems = cartData.product.map(product => ({
+            productId: product.productId,
+            quantity: product.quantity,
+            price: product.price,
+            totalPrice: product.quantity * product.price,
+          }));
+          console.log("ddddddddd",orderItems);
+          
+
+          const order = new orderModel({
+            user: req.session.user_id,
+            delivery_address: addressArray,
+            payment:'Cash on delivery',
+            products:orderItems,
+          })
+
+          // console.log(order);
+
+          await order.save();
+
+        }
+        res.render('successpage')
     } catch (error) {
       console.log(error);
     }
