@@ -226,7 +226,7 @@
                 url: '/updatecart',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(data),
+                data: JSON.stringify(data),   
                 success: (response) => {
                     if (response.success) {
                         $("#reloadDiv").load("/showcart #reloadDiv");

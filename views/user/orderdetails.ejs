@@ -1,0 +1,121 @@
+<%- include('../layouts/header.ejs') -%>
+
+<div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
+    <div class="container">
+        <!-- Page Banner Content End -->
+        <div class="page-banner-content">
+            <h2 class="title">Detail view</h2>
+
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">My Account</li>
+            </ul>
+        </div>
+        <!-- Page Banner Content End -->
+    </div>
+</div>
+
+<div id="reloadArea">
+<div class="card card-dashboard">
+    <div class="card-body">
+        <h4 class="account-title">
+            Order summary
+        </h4>
+        <h6 class="name">
+            OrderId: <%= orderData._id %>
+        </h6>
+        <p>
+            Date: <%= orderData.orderDate %><br>
+            payment method:<%= orderData.payment %><br>
+            Total Amount: <%= orderData.subtotal %><br>
+            status: <%= orderData.status %><br>
+            <% if (orderData.status=="Cancel") { %>
+                cancel Reason:<%= orderData.cancelReason %>
+            <% } %>
+
+        </p>
+
+    </div>
+
+    <% if (orderData.status !=='Cancel') { %>
+        <button type="button" class="btn btn-danger btn-block" onclick="showCancelConfirmation('<%= orderData._id %>')">Cancel Order</button>
+    <% } %> 
+
+</div>
+
+
+
+<div class="card card-dashboard">
+    <div class="card-body">
+        <h4 class="account-title">
+            Delivery Address
+        </h4>
+        <h6 class="name">
+            Name: <%= orderData.delivery_address.name %>
+        </h6>
+        <p>
+            Address: <%= orderData.delivery_address.address %><br>
+            Landmark:<%= orderData.delivery_address.landmark %><br>
+            State: <%= orderData.delivery_address.state %><br>
+            City: <%= orderData.delivery_address.city %><br>
+            Pincode: <%= orderData.delivery_address.pincode %><br>
+            Phone:<%= orderData.delivery_address.phone %><br>
+            Email: <%= orderData.delivery_address.email %><br>
+        </p>
+
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function showCancelConfirmation(orderId) {
+        Swal.fire({
+            title: 'Cancel Order',
+            input: 'text',
+            inputLabel: 'Reason for cancellation',
+            showCancelButton: true,
+            confirmButtonText: 'Cancel Order',
+            cancelButtonText: 'Close',
+            preConfirm: (reason) => {
+                if (!reason) {
+                    Swal.showValidationMessage('Please enter a reason');
+                }
+                return reason;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const cancelReason = result.value;
+                console.log('Cancel Reason:', cancelReason); // Debugging statement
+                cancelOrder(orderId, cancelReason);
+            }
+        });
+    }
+
+    function cancelOrder(orderId, cancelReason) {
+        $.ajax({
+            type: 'POST',
+            url: '/cancelorder',
+            data: { orderId, cancelReason },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire('Order Canceled', 'Your order has been canceled.', 'success').then(() => {
+                    location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', 'Failed to cancel the order.', 'error');
+                }
+
+            },
+            error: function (error) {
+                console.error('Error canceling order', error);
+            }
+        });
+    }
+</script>
+
+
+
+
+<%- include('../layouts/footer.ejs') -%>

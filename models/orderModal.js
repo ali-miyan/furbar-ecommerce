@@ -15,10 +15,10 @@ const orderSchema = new mongoose.Schema({
     required: true,
     method: ['Cash on delivery', 'Razorpay']
   },
-  products: {
-    item: [{
+  products: [{
       productId: {
         type: mongoose.Types.ObjectId,
+        ref: 'Product',
         required: true
       },
       quantity: {
@@ -33,19 +33,28 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       default: 0
     }
-  }]
+  }],
+  subtotal: {
+    type: Number,
+    required:true
   },
-  // status: {
-  //   type: String,
-  //   default: 'Attempted',
-  //   enum: ['Attempted', 'Success', 'Cancelled', 'Failed']
-  // },
+  status: {
+    type: String,
+    default: 'Attempted',
+    status: ['Attempted', 'Success', 'Cancel', 'Failed']
+  },
   isOrder: {
     type: Boolean,
     default: true
+  },
+  orderDate: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  cancelReason: {
+    type: String
   }
-}, {
-  timestamps: true
 })
 
 const Order = mongoose.model('Orders', orderSchema)

@@ -15,6 +15,7 @@ const userController = require("../controller/userController");
 const cartModel=require('../models/cartModel')
 const addressModel=require('../models/addressModel')
 const cartController=require('../controller/cartController')
+const orderModel=require('../models/orderModal')
 
 const routeUser = express();
 
@@ -152,6 +153,41 @@ routeUser.post('/deleteaddress',async(req,res)=>{
      console.log(error.message);
      res.render('500Error')
  }
+})
+
+routeUser.get('/detailorder',async(req,res)=>{
+  try {
+    const user_id = req.session.user_id
+    const order_id = req.query.id
+    console.log(order_id);
+    const orderData = await orderModel.findOne({_id:order_id})
+
+    res.render('orderdetails',{orderData,user_id})
+  } catch (error) {
+    console.log(error.message);
+  }
+})
+
+routeUser.post('/cancelorder',async(req,res)=>{
+  try {
+        const user_id = req.session.user_id
+        const orderId = req.body.orderId;
+        const cancelReason = req.body.cancelReason;
+        const orderData = await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'Cancel',cancelReason:cancelReason}})
+    
+        for( let i=0;i<orderData.products.length;i++){
+          let productId = orderData.products[i].productId
+          let count = orderData.products[i].quantity
+          await Product.updateOne({_id:productId},{$inc:{quantity:count}})
+        }
+       
+        res.json({ success: true});
+        
+      } catch (error) {
+          console.log(error.message);
+          res.render('500Error')
+      }
+    
 })
 
 module.exports = routeUser;

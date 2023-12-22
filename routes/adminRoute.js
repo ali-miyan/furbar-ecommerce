@@ -11,6 +11,8 @@ const Product=require("../models/productModel")
 const sharp = require('sharp');
 const multer=require('../middleware/multer')
 const productController=require("../controller/productController")
+const orderModel=require('../models/orderModal')
+
 
 // const auth=require('../middleware/auth')
 
@@ -50,5 +52,15 @@ routeAdmin.get('/editproducts',auth.isAdminLogin,productController.editProducts)
 routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProductsPost)
 
 routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
+
+routeAdmin.get('/orders',async(req,res)=>{
+    try {
+        const orderData=await orderModel.find({})
+        console.log(orderData);
+        res.render('order',{orderData})
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 module.exports = routeAdmin;

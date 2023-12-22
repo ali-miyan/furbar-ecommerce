@@ -142,13 +142,6 @@ const getCart=async(req,res)=>{
       const cartData = await cartModel.findOne({user:id}).populate('product.productId')    
       let address = await addressModel.findOne({user:id})
       const subtotal = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
-        // const stock = cartData.product.filter((val,ind)=>val.productId.quantity>0)
-        // const total = (subTotal-couponDiscount)+cartData.shippingAmount
-    
-        // if(stock.length!=cartData.products.length){
-        //   res.json({stock:false})
-        // }
-
       res.render('checkout',{id,address,cartData,subtotal})
     } catch (error) {
       console.log(error);
@@ -157,53 +150,67 @@ const getCart=async(req,res)=>{
 
   const checkoutPost=async(req,res)=>{
     try {
-      const userId=req.session.user_id
-
-      if (req.body.selectedAddress === undefined || req.body.selectedAddress === null) {
-
-      const {name,address,landmark,state,city,pincode,phone,email}=req.body
-      const newAddress = {name,address,landmark,state,city,pincode,phone,email,};
+      const userId = req.session.user_id;
+      let addressObject;
+      const selectedAddress = req.body.selectedAddress;
+    
+      if (selectedAddress === undefined || selectedAddress === null) {
+        const { name, address, landmark, state, city, pincode, phone, email } = req.body;
+        const newAddress = { name, address, landmark, state, city, pincode, phone, email };
+        
         const data = await addressModel.findOneAndUpdate(
+          { user: userId },
+          { $push: { address: newAddress } },
+          { upsert: true, new: true }
+        );
+        addressObject = data.address[data.address.length - 1];
+      } else {
+        const userAddress = await addressModel.findOne(
+          { 'address._id': selectedAddress },
+          { 'address.$': 1 }
+        );
+        addressObject = userAddress.address[0]
+      }
+    
+      const cartData = await cartModel.findOne({ user: userId });
+      const subtotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
+    
+      const orderItems = cartData.product.map(product => ({
+        productId: product.productId,
+        quantity: product.quantity,
+        price: product.price,
+        totalPrice: product.quantity * product.price,
+      }));
+    
+      const order = new orderModel({
+        user: userId,
+        delivery_address: addressObject,
+        payment: 'Cash on delivery',
+        products: orderItems,
+        subtotal: subtotal,
+        status: 'Success',
+        orderDate: new Date(), // Include orderDate
+      });
+    
+      for (const item of orderItems) {
+        await Product.updateOne(
+          { _id: item.productId },
+          { $inc: { quantity: -item.quantity } }
+        );
+      }
+    
+      await cartModel.updateOne(
         { user: userId },
-        { $push: { address: newAddress } },
-        { upsert: true, new: true }
-      )
-        }else{
-          const userData = await User.findById({ _id: req.session.user_id })
-          const selectedAddress=req.body.selectedAddress
-          const userAddress = await addressModel.findOne(
-            { 'address._id': selectedAddress },
-            { 'address.$': 1 }
-          ).lean();
-            const addressArray = userAddress.address;
-          
-          const cartData=await cartModel.findOne({user:userId})
-
-          const orderItems = cartData.product.map(product => ({
-            productId: product.productId,
-            quantity: product.quantity,
-            price: product.price,
-            totalPrice: product.quantity * product.price,
-          }));
-          console.log("ddddddddd",orderItems);
-          
-
-          const order = new orderModel({
-            user: req.session.user_id,
-            delivery_address: addressArray,
-            payment:'Cash on delivery',
-            products:orderItems,
-          })
-
-          // console.log(order);
-
-          await order.save();
-
-        }
-        res.render('successpage')
+        { $set: { product: [] } } // Clear the products array in the cart
+      );
+    
+      await order.save();
+      res.render('successpage');
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
+    
   }
 
 

@@ -14,6 +14,7 @@ dotenv.config()
 config.connectDB();
 const Product=require("../models/productModel");
 const addressModel = require('../models/addressModel');
+const orderModel = require('../models/orderModal');
 
 
 //route to home page
@@ -45,21 +46,25 @@ const loadSignup=async(req,res)=>{
     }
 }
 //profile page
-const loadProfile=async(req,res)=>{
+const loadProfile = async (req, res) => {
     try {
-        if(req.session.user_id){
-            console.log("profile session"+req.session.user_id)
-            const user=await User.findOne({_id:req.session.user_id})
-            const address=await addressModel.findOne({user:req.session.user_id})
-            res.render('profile',{user,address})
-        }else{
-            res.redirect('/login')  
-            }
+        if (req.session.user_id) {
+            console.log("profile session" + req.session.user_id);
+            const user = await User.findOne({ _id: req.session.user_id });
+            const address = await addressModel.findOne({ user: req.session.user_id });
+            const order = await orderModel.find({ user: req.session.user_id })
+            .populate('products.productId')
+        
+            res.render('profile', { user, address, order });
+        } else {
+            res.redirect('/login');
+        }
     } catch (error) {
         console.log(error);
+        res.status(500).send('Internal Server Error');
     }
-    
-}
+};
+
 
 //login page
 const loadLogin=async(req,res)=>{
