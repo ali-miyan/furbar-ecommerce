@@ -264,8 +264,142 @@ const detailShop=async(req,res)=>{
   
   }
 
-
+  const addressform=async (req, res) => {
+    try {
+      const userId=req.session.user_id;
+      const data = {
+        name: req.body.name,
+        address: req.body.address,
+        landmark: req.body.landmark,
+        state: req.body.state,
+        city: req.body.city,
+        pincode: req.body.pincode,
+        phone: req.body.phone,
+        email: req.body.email
+    };
+    console.log(data);
   
+        const findAddress = await addressModel.findOneAndUpdate(
+        { user: userId },
+        { $push: { address: data } },
+        { upsert: true, new: true }
+      )
+        res.json({ add: true});
+  
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ add: false, error: "Internal Server Error" });
+    }
+  }
+
+  const editAddress= async (req, res) => {
+    const { editAddressId, editName, editAddress, editLandmark, editState, editCity, editPincode, editPhone, editEmail } = req.body;
+  
+    try {
+      console.log(editAddressId);
+      const user = await addressModel.findOne({ 'address._id': editAddressId })
+      console.log(user);
+  
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+  
+        const addressToUpdate = user.address.id(editAddressId);
+  
+        if (!addressToUpdate) {
+            return res.status(404).json({ success: false, message: 'Address not found' });
+        }
+  
+        addressToUpdate.name = editName;
+        addressToUpdate.address = editAddress;
+        addressToUpdate.landmark = editLandmark;
+        addressToUpdate.state = editState;
+        addressToUpdate.city = editCity;
+        addressToUpdate.pincode = editPincode;
+        addressToUpdate.phone = editPhone;
+        addressToUpdate.email = editEmail;
+  
+        await user.save();
+  
+        res.json({ success: true });
+        
+    } catch (error) {
+        console.error('Error updating address:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  }
+
+  const deleteAddress=async(req,res)=>{
+    try {
+      console.log('helooooooooooooooo');
+      const user_id=req.session.user_id
+      const addressId = req.body.addressId
+  
+      await addressModel.updateOne({user:user_id},{$pull:{address:{_id:addressId}}})
+  
+     res.json({success:true})
+  
+   } catch (error) {
+       console.log(error.message);
+       res.render('500Error')
+   }
+  }
+
+  const detailOrder=async(req,res)=>{
+    try {
+      const user_id = req.session.user_id
+      const order_id = req.query.id
+      console.log(order_id);
+      const orderData = await orderModel.findOne({_id:order_id})
+  
+      res.render('orderdetails',{orderData,user_id})
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  
+  const cancelOrder=async(req,res)=>{
+    try {
+          const user_id = req.session.user_id
+          const orderId = req.body.orderId;
+          const cancelReason = req.body.cancelReason;
+          const orderData = await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'Cancelled',cancelReason:cancelReason}})
+      
+          for( let i=0;i<orderData.products.length;i++){
+            let productId = orderData.products[i].productId
+            let count = orderData.products[i].quantity
+            await Product.updateOne({_id:productId},{$inc:{quantity:count}})
+          }
+         
+          res.json({ success: true});
+          
+        } catch (error) {
+            console.log(error.message);
+            res.render('500Error')
+        }
+      
+  }
+
+  const editUser=async(req,res)=>{
+    try {
+      const userData = await User.findById(req.session.user_id)
+  
+         await User.findOneAndUpdate(
+              { email: userData.email,  },
+              {
+                  $set: {
+                      name:req.body.editname,
+                      mobile:req.body.editmobile,
+                      email:req.body.editemail,
+                  },
+              },
+              { new: true }
+          );
+          res.redirect('/profile')
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
 module.exports={
     verifyOTP,
@@ -278,5 +412,11 @@ module.exports={
     loadProfile,
     loadLogin,
     loadShop,
-    detailShop
+    detailShop,
+    addressform,
+    editAddress,
+    deleteAddress,
+    detailOrder,
+    cancelOrder,
+    editUser,
 }

@@ -14,6 +14,6 @@ const mongoose = require("mongoose");
         default:false
     }
  })
-
+ 
 const categoryModel= mongoose.model("categoryModel",categorySchema);
 module.exports=categoryModel

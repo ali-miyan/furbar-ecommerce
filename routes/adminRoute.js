@@ -53,14 +53,10 @@ routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProdu
 
 routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
 
-routeAdmin.get('/orders',async(req,res)=>{
-    try {
-        const orderData=await orderModel.find({})
-        console.log(orderData);
-        res.render('order',{orderData})
-    } catch (error) {
-        console.log(error.message);
-    }
-})
+routeAdmin.get('/orders',adminController.Orders)
+
+routeAdmin.get('/editorder',adminController.editorder)
+  
+routeAdmin.post('/editorder',adminController.editOrderPost)
 
 module.exports = routeAdmin;

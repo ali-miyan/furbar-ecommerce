@@ -66,17 +66,61 @@
                                 <div class="account-card card">
                                     <div class="card-body text-center">
                                         <!-- User profile image -->
-                                        <img src="assets/imgs/icons/stars-active.svg" alt="User Profile" id="uploadedImage" class="profile-image" onclick="triggerFileInput()">
+                                        <img src="assets/imgs/icons/stars-active.svg" alt="User Profile" id="uploadedImage" class="profile-image">
                                         <h5 class="card-title">Hello, <strong><%=user.name%></strong></h5>
+                                        <h5 class="card-title"> <strong><%=user.email%></strong></h5>
+                                        <h5 class="card-title"><strong><%=user.mobile%></strong></h5>
                                         <p class="card-text">
                                             From your account dashboard, you can easily check & view your recent orders,
                                             manage your shipping and billing addresses, and edit your password and account details.
                                         </p>
-                                        <a href="login.html" class="card-link">Logout</a>
+                                        <button type="button" onclick="showusereditmodal()" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
+                                            Edit Profile
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                        function showusereditmodal() {            
+                            $('#editProfileModal').modal('show');
+                        }</script>
+
+                                                <!-- user editmodal start-->
+
+                                                <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document" style="position: relative; top: 250px;" >
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                          <form action="/edituser" method="post" id="editProfileForm">
+                                                            <div class="form-group">
+                                                              <label for="editName">Name:</label>
+                                                              <input type="text" class="form-control" value="<%= user.name %>" id="editName" name="editname" placeholder="Enter your name">
+                                                            </div>
+                                                            <div class="form-group">
+                                                              <label for="editPhone">Phone:</label>
+                                                              <input type="tel" class="form-control" value="<%= user.mobile %>" id="editPhone" name="editmobile" placeholder="Enter your phone number">
+                                                            </div>
+                                                            <div class="form-group">
+                                                              <label for="editEmail">Email:</label>
+                                                              <input type="email" class="form-control" value="<%= user.email %>" id="editEmail" name="editemail" placeholder="Enter your email">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                          </form>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                        
+                                                <!-- user editmodal end-->
+
                         <div class="tab-pane fade" id="pills-order">
                             <div class="my-account-order account-wrapper">
                                 <h4 class="account-title">Orders</h4>
@@ -116,7 +160,7 @@
                             </div>
                         </div>
                         
-                        
+
                         
 
                         <div class="tab-pane fade" id="pills-download">

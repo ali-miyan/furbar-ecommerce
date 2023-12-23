@@ -41,7 +41,7 @@ const orderSchema = new mongoose.Schema({
   status: {
     type: String,
     default: 'Attempted',
-    status: ['Attempted', 'Success', 'Cancel', 'Failed']
+    enum: ['Attempted', 'Success', 'Cancelled', 'Failed']
   },
   isOrder: {
     type: Boolean,

@@ -160,6 +160,32 @@ const editCategoryPost=async(req,res)=>{
   }
 }
 
+const Orders=async(req,res)=>{
+  try {
+      const orderData=await orderModel.find({})
+      res.render('order',{orderData})
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+const editorder=async (req, res) => {
+  try {
+    const orderData = await orderModel.findById({ _id: req.query.id })
+    res.render('updateorder', { orderData })
+  } catch (error) {
+  }
+}
+
+const editOrderPost= async (req, res) => {
+  try {
+      await orderModel.findByIdAndUpdate({ _id: req.body.id }, { $set: { status: req.body.status } })
+      res.redirect('/admin/orders')
+  } catch (error) {
+  }
+}
+
+
 module.exports = {
   loadDashboard,
   loadSignin,
@@ -171,5 +197,8 @@ module.exports = {
   editCategory,
   blockCategory,
   editCategoryPost,
-  blockUser
+  blockUser,
+  Orders,
+  editorder,
+  editOrderPost
 };

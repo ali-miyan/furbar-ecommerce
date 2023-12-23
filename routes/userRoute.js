@@ -16,6 +16,7 @@ const cartModel=require('../models/cartModel')
 const addressModel=require('../models/addressModel')
 const cartController=require('../controller/cartController')
 const orderModel=require('../models/orderModal')
+const orderController=require('../controller/orderController')
 
 const routeUser = express();
 
@@ -36,8 +37,6 @@ routeUser.set("view engine", "ejs");
 routeUser.set("views", "./views/user");
 
 routeUser.get("/", userController.loadHome);
-
-// routeUser.get('/home',userController.loadHome,auth.isLogout)
 
 routeUser.get("/shop", userController.loadShop);
 
@@ -67,127 +66,20 @@ routeUser.post('/updatecart',auth.isLogin,cartController.updateCart);
 
 routeUser.post('/removecart',auth.isLogin,cartController.removeCart);
 
-routeUser.get('/checkout',auth.isLogin,cartController.checkout)
+routeUser.get('/checkout',auth.isLogin,orderController.checkout)
 
-routeUser.post('/checkoutform',auth.isLogin,cartController.checkoutPost)
+routeUser.post('/checkoutform',auth.isLogin,orderController.checkoutPost)
 
-routeUser.post('/addressform',async (req, res) => {
-  try {
-    const userId=req.session.user_id;
-    const data = {
-      name: req.body.name,
-      address: req.body.address,
-      landmark: req.body.landmark,
-      state: req.body.state,
-      city: req.body.city,
-      pincode: req.body.pincode,
-      phone: req.body.phone,
-      email: req.body.email
-  };
-  console.log(data);
+routeUser.post('/addressform',auth.isLogin,userController.addressform);
 
-      const findAddress = await addressModel.findOneAndUpdate(
-      { user: userId },
-      { $push: { address: data } },
-      { upsert: true, new: true }
-    )
-      res.json({ add: true});
+routeUser.post('/editaddress',userController.editAddress);
 
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ add: false, error: "Internal Server Error" });
-  }
-});
+routeUser.post('/deleteaddress',userController.deleteAddress)
 
+routeUser.get('/detailorder',userController.detailOrder)
 
+routeUser.post('/cancelorder',userController.cancelOrder)
 
-
-routeUser.post('/editaddress', async (req, res) => {
-  const { editAddressId, editName, editAddress, editLandmark, editState, editCity, editPincode, editPhone, editEmail } = req.body;
-
-  try {
-    console.log(editAddressId);
-    const user = await addressModel.findOne({ 'address._id': editAddressId })
-    console.log(user);
-
-      if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-      }
-
-      const addressToUpdate = user.address.id(editAddressId);
-
-      if (!addressToUpdate) {
-          return res.status(404).json({ success: false, message: 'Address not found' });
-      }
-
-      addressToUpdate.name = editName;
-      addressToUpdate.address = editAddress;
-      addressToUpdate.landmark = editLandmark;
-      addressToUpdate.state = editState;
-      addressToUpdate.city = editCity;
-      addressToUpdate.pincode = editPincode;
-      addressToUpdate.phone = editPhone;
-      addressToUpdate.email = editEmail;
-
-      await user.save();
-
-      res.json({ success: true });
-      
-  } catch (error) {
-      console.error('Error updating address:', error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-routeUser.post('/deleteaddress',async(req,res)=>{
-  try {
-    console.log('helooooooooooooooo');
-    const user_id=req.session.user_id
-    const addressId = req.body.addressId
-
-    await addressModel.updateOne({user:user_id},{$pull:{address:{_id:addressId}}})
-
-   res.json({success:true})
-
- } catch (error) {
-     console.log(error.message);
-     res.render('500Error')
- }
-})
-
-routeUser.get('/detailorder',async(req,res)=>{
-  try {
-    const user_id = req.session.user_id
-    const order_id = req.query.id
-    console.log(order_id);
-    const orderData = await orderModel.findOne({_id:order_id})
-
-    res.render('orderdetails',{orderData,user_id})
-  } catch (error) {
-    console.log(error.message);
-  }
-})
-
-routeUser.post('/cancelorder',async(req,res)=>{
-  try {
-        const user_id = req.session.user_id
-        const orderId = req.body.orderId;
-        const cancelReason = req.body.cancelReason;
-        const orderData = await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'Cancel',cancelReason:cancelReason}})
-    
-        for( let i=0;i<orderData.products.length;i++){
-          let productId = orderData.products[i].productId
-          let count = orderData.products[i].quantity
-          await Product.updateOne({_id:productId},{$inc:{quantity:count}})
-        }
-       
-        res.json({ success: true});
-        
-      } catch (error) {
-          console.log(error.message);
-          res.render('500Error')
-      }
-    
-})
+routeUser.post('/edituser',userController.editUser)
 
 module.exports = routeUser;

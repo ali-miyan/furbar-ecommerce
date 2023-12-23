@@ -29,7 +29,7 @@
             payment method:<%= orderData.payment %><br>
             Total Amount: <%= orderData.subtotal %><br>
             status: <%= orderData.status %><br>
-            <% if (orderData.status=="Cancel") { %>
+            <% if (orderData.status=="Cancelled") { %>
                 cancel Reason:<%= orderData.cancelReason %>
             <% } %>
 
@@ -37,7 +37,7 @@
 
     </div>
 
-    <% if (orderData.status !=='Cancel') { %>
+    <% if (orderData.status !=='Cancelled') { %>
         <button type="button" class="btn btn-danger btn-block" onclick="showCancelConfirmation('<%= orderData._id %>')">Cancel Order</button>
     <% } %> 
 
@@ -87,7 +87,6 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 const cancelReason = result.value;
-                console.log('Cancel Reason:', cancelReason); // Debugging statement
                 cancelOrder(orderId, cancelReason);
             }
         });
