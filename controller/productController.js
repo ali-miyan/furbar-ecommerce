@@ -128,7 +128,6 @@ const editProductsPost=async(req,res)=>{
     }
 }
 
-
 const blockProducts=async(req,res)=>{
     try {
       const user = req.params.id; 
@@ -151,5 +150,4 @@ module.exports={
     editProducts,
     editProductsPost,
     blockProducts
-
 }

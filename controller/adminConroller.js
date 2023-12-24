@@ -96,7 +96,7 @@ const addCategory=(req,res)=>{
 //add category post
 const addCategoryPost=async(req,res)=>{
   try {
-      const name=req.body.name.trim();
+  const name=req.body.name.trim();
   const description=req.body.description.trim();
   const validData=await categoryModel.findOne({name:name})
 
@@ -150,6 +150,15 @@ const blockCategory=async (req, res) => {
 //edit category post
 const editCategoryPost=async(req,res)=>{
   try {
+
+    const existingCategory = await categoryModel.findOne({ name: req.body.name });
+    console.log(existingCategory.name);
+    console.log(req.body.name);
+
+    if (existingCategory && existingCategory.name === req.body.name) {
+       res.render('editcategory', { message: 'Category name already exists' });
+    }
+
     await categoryModel.findByIdAndUpdate(
         { _id: req.body.id },
         { $set: { name: req.body.name, description: req.body.description } }

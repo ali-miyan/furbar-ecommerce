@@ -147,20 +147,33 @@
                         <!-- Category Form -->
                         <form action="" method="post">
                             <!-- Category Name -->
-                            <% console.log("Data:", data); %>
+
+                            <% if (typeof message !=='undefined' ) { %>
+                                <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
+                                    <i class="bi-exclamation-octagon-fill"></i>
+                                    <strong class="mx-auto"><%- message %></strong>
+                                </div>
+                                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                                <script>
+                                    // Add a script to hide the alert after 5 seconds
+                                    $(document).ready(function () {
+                                        setTimeout(function () {
+                                            $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
+                                        }, 3000); // 3000 milliseconds = 3 seconds
+                                    });
+                                </script>
+                                <% } %>
 
                                 <div class="form-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" value="<%=data.name%>" class="form-control" id="categoryName"
-                                        name="name" required>
+                                    <input type="text" <% if (data.name) { %> value="<%= data.name %>" <% } %> class="form-control" id="categoryName" name="name" required>
                                 </div>
 
                                 <!-- Category Description -->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
-                                    <input class="form-control" value="<%=data.description%>" id="categoryDescription"
-                                        name="description" rows="4" required></input>
-                                    <input type="hidden" name="id" value="<%=data._id %>">
+                                    <input class="form-control" <% if (data.description) { %> value="<%= data.description %>" <% } %> id="categoryDescription" name="description" rows="4" required></input>
+                                    <input type="hidden" name="id" value="<%= data._id %>">
                                 </div>
                                 <div style="margin-top: 1.2rem;">
                                     <button type="submit" class="btn btn-primary">Add Category</button>
