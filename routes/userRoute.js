@@ -17,6 +17,11 @@ const addressModel=require('../models/addressModel')
 const cartController=require('../controller/cartController')
 const orderModel=require('../models/orderModal')
 const orderController=require('../controller/orderController')
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
+const { PassThrough } = require('stream');
+
 
 const routeUser = express();
 
@@ -81,5 +86,102 @@ routeUser.get('/detailorder',userController.detailOrder)
 routeUser.post('/cancelorder',userController.cancelOrder)
 
 routeUser.post('/edituser',userController.editUser)
+
+
+
+routeUser.get('/successpage',async(req,res)=>{
+  try {
+    const orderID=req.query.id;
+    const orderData=await orderModel.findOne({_id:orderID})
+    res.render('successpage',{orderData})
+  } catch (error) {
+    console.log(error.message);
+  }
+})
+
+function generatePDF(order,productsInOrder) {
+  const doc = new PDFDocument();
+  const stream = new PassThrough();
+  const buffers = [];
+
+  // Pipe the PDF content to the PassThrough stream
+  doc.pipe(stream);
+
+  // Collect the PDF content in the buffer
+  stream.on('data', (chunk) => {
+    buffers.push(chunk);
+  });
+
+  stream.on('end', () => {
+    const pdfBuffer = Buffer.concat(buffers);
+  });
+
+  // const dataURI = `/sharpimages/${productsInOrder[0].images.image1}`;
+
+  const productDetailsArray = Object.values(productsInOrder);
+
+const productNames = [];
+
+for (const product of productDetailsArray) {
+  productNames.push(product.name);
+}
+
+  // Add your PDF content here
+  doc.text(`Order ID: ${order._id}`);
+  doc.text(`Order Date: ${order.orderDate}`);
+  doc.text(`Delivery address: ${order.delivery_address}`);
+  doc.text(`Payment method: ${order.payment}`);
+  doc.text(`Total price: ${order.subtotal}`);
+  doc.text(`Order Date: ${order.orderDate}`);
+  doc.text(`Product details: ${productNames}`);
+  // doc.image(dataURI,{ width: 200, height: 200 });
+
+    doc.end();
+
+  return stream;
+}
+
+routeUser.get('/orderdetail/:orderId', async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await orderModel.findById(orderId);
+
+
+    const fetchProductDetails = async () => {
+      const productDetails = [];
+    
+      for (const product of order.products) {
+        const productId = product.productId;
+    
+        try {
+          const productInfo = await Product.findById(productId);
+          productDetails.push(productInfo);
+        } catch (error) {
+          console.error(`Error fetching product details for product ID ${productId}: ${error.message}`);
+        }
+      }
+    
+      return productDetails;
+    };
+    const productsInOrder = await fetchProductDetails();
+
+    if (!order || !productsInOrder) {
+      return res.status(404).send('Order not found');
+    }
+
+    // Generate PDF content
+    const pdfStream = generatePDF(order,productsInOrder);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename=order_details.pdf');
+    pdfStream.pipe(res);
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 module.exports = routeUser;

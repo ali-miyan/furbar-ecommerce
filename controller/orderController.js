@@ -84,9 +84,11 @@ const checkout=async(req,res)=>{
         { user: userId },
         { $set: { product: [] } }
       );
-    
+  
       await order.save();
-      res.render('successpage');
+      const orderId=order._id;
+
+      res.redirect(`/successpage?id=${orderId}`);
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
