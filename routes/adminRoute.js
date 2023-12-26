@@ -12,6 +12,7 @@ const sharp = require('sharp');
 const multer=require('../middleware/multer')
 const productController=require("../controller/productController")
 const orderModel=require('../models/orderModal')
+const couponModel=require('../models/couponModel')
 
 
 // const auth=require('../middleware/auth')
@@ -58,5 +59,99 @@ routeAdmin.get('/orders',adminController.Orders)
 routeAdmin.get('/editorder',adminController.editorder)
   
 routeAdmin.post('/editorder',adminController.editOrderPost)
+
+routeAdmin.get('/coupon',async(req,res)=>{
+    try {
+      const coupon = await couponModel.find({})
+      res.render('coupon',{coupon})
+      
+    } catch (error) {
+        console.log(error.message);
+    }
+})
+
+routeAdmin.get('/addcoupon',async(req,res)=>{
+    try {
+        res.render("addcoupon")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+)
+
+routeAdmin.post('/addcoupon',async (req,res)=>{
+    try {
+
+        const couponData = await couponModel.findOne({couponCode:req.body.couponcode})
+
+        if(couponData){
+            res.render("addcoupon",{message:'coupon code already exist'})
+        }else{
+            const data = new couponModel({
+                name:req.body.couponame,
+                couponCode:req.body.couponcode,
+                discountAmount:req.body.discount,
+                activationDate:req.body.activationdate,
+                expiryDate:req.body.expirydate,
+                criteriaAmount:req.body.criteriamount,
+            })
+
+            await data.save()
+            res.redirect('/admin/coupon')
+        }
+       
+    } catch (error) {
+        console.log(error.message);
+    }
+})
+
+routeAdmin.get('/editcoupon',async (req,res)=>{
+    try {
+        const couponId = req.query.id;
+        const coupon = await couponModel.findById(couponId)
+        res.render("editcoupon",{coupon})
+
+    } catch (error) {
+        console.log(error.message);
+        res.render('500Error')
+    }
+})
+routeAdmin.post('/editcoupon',async (req,res)=>{
+    try {
+        const couponId = req.query.id
+        const couponData = await couponModel.findOneAndUpdate({_id:couponId},
+            {
+                name:req.body.couponname,
+                couponCode:req.body.couponcode,
+                discountAmount:req.body.discount,
+                activationDate:req.body.activationdate,
+                expiryDate:req.body.expirydate,
+                criteriaAmount:req.body.criteriamount,
+            })
+    
+            res.redirect("/admin/coupon")
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+)
+
+
+
+routeAdmin.patch('/blockcoupon/:id',async(req,res)=>{
+    try {
+      const user = req.params.id; 
+      const userValue = await couponModel.findOne({ _id: user });
+      if (userValue.is_blocked) {
+        await couponModel.updateOne({ _id: user }, { $set: { is_blocked: false } });
+      } else {
+        await couponModel.updateOne({ _id: user }, { $set: { is_blocked: true } });
+      }
+      res.json({ block: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  })
 
 module.exports = routeAdmin;

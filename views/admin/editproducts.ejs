@@ -35,28 +35,42 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item">
-                    <a class="menu-link" href="/admin/dashboard">
+                <li class="menu-item active">
+                    <a class="menu-link" href="">
                         <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/users">
                         <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Users</span>
                     </a>
+
                 </li>
-                <li class="menu-item">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/category">
                         <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">category</span>
+                        <span class="text">Categoty</span>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/products">
                         <i class="icon material-icons md-store"></i>
                         <span class="text">products</span>
+                    </a>
+                    
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/orders">
+                        <i class="icon material-icons md-store"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/coupon">
+                        <i class="icon material-icons md-store"></i>
+                        <span class="text">Coupon</span>
                     </a>
                 </li>
                 
@@ -158,15 +172,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
-                                            <select class="form-control" id="product-category" name="category">
-                                                <% if (data1 && data1.length > 0) { %>
-                                                    <% data1.forEach(data => { %>
-                                                        <% if (data.is_list === false) { %>
-                                                            <option value="<%= data.name %>"><%= data.name %></option>
-                                                        <% } %>
-                                                    <% }); %>
-                                                <% } %>                                             
-                                            </select>                                            
+                                                <select class="form-control" id="product-category" name="category">
+                                                    <% if (data1 && data1.length > 0) { %>
+                                                        <% data1.forEach(data => { %>
+                                                            <% if (data.is_list === false) { %>
+                                                                <option value="<%= data._id %>"><%= data.name %></option>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    <% } %>                                             
+                                                </select>                                            
                                         </div>
                                         <div class="form-group">
                                             <label>Price</label>

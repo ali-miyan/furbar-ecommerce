@@ -73,7 +73,6 @@
                         <span class="text">Coupon</span>
                     </a>
                 </li>
-                
             <br />
             <br />
         </nav>
@@ -148,165 +147,77 @@
                 </ul>
             </div>
         </header>
-        <section class="content-main">
-                <div>
-                    <div class="container">
-                    <h2>Category</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-                    <% if (typeof message !=='undefined' ) { %>
-                        <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
-                            <i class="bi-exclamation-octagon-fill"></i>
-                            <strong class="mx-auto"><%- message %></strong>
+            <section class="content-main">
+
+            <div class="card mb-4">
+                
+            <section class="content-main py-4">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="container">
+                            <h2>Add New Coupon</h2>
                         </div>
-                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                        <script>
-                            // Add a script to hide the alert after 5 seconds
-                            $(document).ready(function () {
-                                setTimeout(function () {
-                                    $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                }, 3000); // 3000 milliseconds = 3 seconds
-                            });
-                        </script>
-                        <% } %>
+                        <div class="col-12 col-md-12">
+                            <div class="card">
+                                <%console.log(coupon)%>
+                                <div class="card-body">
+                                    <form action="/admin/editcoupon?id=<%= coupon._id %>" method="post" >
+                                        <div class="form-group">
+                                            <label for="product_title">Coupon name</label>
+                                            <input type="text" class="form-control" id="name" value="<%= coupon.name %>" name="couponname" placeholder="Type here" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="quantity">Coupon code</label>
+                                            <input type="text" class="form-control" id="code" value="<%= coupon.couponCode %>" name="couponcode"  placeholder="Type here" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="quantity">Discount Amount</label>
+                                            <input type="number" class="form-control" id="discount" name="discount" value="<%= coupon.discountAmount %>" placeholder="Type here" required>
+                                        </div>
 
-            </div>
-
-            <main>
-
-
-                <div class="card mb-4">
-
-                    <!-- card-header end// -->
-                    <!-- card-body end// -->
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="tablePagination" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Edit</th>
-                                        <th scope="col">action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if (users) { %>
-                                        <% for (let i=0; i < users.length; i++) { %>
-
-                                            <tr>
-                                                <td>
-                                                    <%= i %>
-                                                </td>
-                                                <td><b>
-                                                        <%= users[i].name %>
-                                                    </b></td>
-                                                <td><b>
-                                                        <%= users[i].description %>
-                                                    </b></td>
-                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span class="badge bg-light">EDIT</span></a>
-                                                </td>
-                                                <td>
-
-                                                    <% if (users[i].is_list) { %>
-                                                        <a class="unblock-user" data-user-id="<%= users[i]._id %>"><span
-                                                                class="badge rounded-pill alert-success">unblock</span></a>
-                                                        <% } else { %>
-                                                            <a class="block-user"
-                                                                data-user-id="<%= users[i]._id %>"><span
-                                                                    class="badge rounded-pill alert-warning">block</span></a>
-                                                            <% } %>
-                                                </td>
-
-                                            </tr>
-
-                                            <% } %>
-                                                <% } else { %>
-                                                    <tr>
-                                                        <td colspan="4">No users found in the database.</td>
-                                                    </tr>
-                                                    <% } %>
-                                </tbody>
-                            </table>
+                                        <div class="form-group">
+                                            <label>Activation Date</label>
+                                            <input type="date" class="form-control" id="activationdate" name="activationdate" value="<%= coupon.activationDate.toISOString().split('T')[0] %>" placeholder="Type here" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Expire Date</label>
+                                            <input type="date" class="form-control" id="expirydate" name="expirydate" value="<%= coupon.expiryDate.toISOString().split('T')[0] %>" placeholder="Type here" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Criteria Amount</label>
+                                            <input type="number" class="form-control"  name="criteriamount" value="<%= coupon.criteriaAmount %>" placeholder="Type here" required>
+                                        </div>
+                                        <div class="container">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <!-- table-responsive //end -->
                     </div>
-                    
-
                 </div>
-                <div class="container">
-                    <a href="/admin/addcategory"><button type="button" class="btn btn-primary"><b>+Add Category</b></button></a>
+            </section>
+            
+     <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
                 </div>
-                    <!-- content-main end// -->
-                    <footer class="main-footer font-xs">
-                        <div class="row pb-30 pt-15">
-                            <div class="col-sm-6">
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                &copy; Nest - HTML Ecommerce Template .
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-end">All rights reserved</div>
-                            </div>
-                        </div>
-                    </footer>
-        </section>
-    </main>
-
-
-    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/vendors/select2.min.js"></script>
-    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
-    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#tablePagination').DataTable();
-        });
-    </script>
-
-    <script>
-        document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
-            console.log(element);
-            element.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const userId = element.getAttribute('data-user-id');
-                const action = element.classList.contains('block-user') ? 'block' : 'unblock';
-
-                fetch(`/admin/blockcategory/${userId}`, {
-                    method: 'PATCH',
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.block === true) {
-                            //updating the button text and color
-                            element.querySelector('span').classList.toggle('alert-success');
-                            element.querySelector('span').classList.toggle('alert-warning');
-                            element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
-
-                            // Replace button class
-                            element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
-                            element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
-                        }
-                    }).catch((error) => {
-                        console.log(error.message);
-                    })
-
-            });
-        });
-    </script>
-
-
-</body>
-
+            </footer>
+        </main>
+        <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/public/assets/js/vendors/select2.min.js"></script>
+        <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
+    </body>
 </html>

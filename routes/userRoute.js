@@ -104,10 +104,8 @@ function generatePDF(order,productsInOrder) {
   const stream = new PassThrough();
   const buffers = [];
 
-  // Pipe the PDF content to the PassThrough stream
   doc.pipe(stream);
 
-  // Collect the PDF content in the buffer
   stream.on('data', (chunk) => {
     buffers.push(chunk);
   });
@@ -118,7 +116,7 @@ function generatePDF(order,productsInOrder) {
 
   // const dataURI = `/sharpimages/${productsInOrder[0].images.image1}`;
 
-  const productDetailsArray = Object.values(productsInOrder);
+const productDetailsArray = Object.values(productsInOrder);
 
 const productNames = [];
 
@@ -126,7 +124,6 @@ for (const product of productDetailsArray) {
   productNames.push(product.name);
 }
 
-  // Add your PDF content here
   doc.text(`Order ID: ${order._id}`);
   doc.text(`Order Date: ${order.orderDate}`);
   doc.text(`Delivery address: ${order.delivery_address}`);
@@ -169,16 +166,14 @@ routeUser.get('/orderdetail/:orderId', async (req, res) => {
       return res.status(404).send('Order not found');
     }
 
-    // Generate PDF content
     const pdfStream = generatePDF(order,productsInOrder);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename=order_details.pdf');
     pdfStream.pipe(res);
 
-
   } catch (error) {
-    console.error(error);
+    console.error(error); 
     res.status(500).send('Internal Server Error');
   }
 });

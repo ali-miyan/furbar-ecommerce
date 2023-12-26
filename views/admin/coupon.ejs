@@ -55,9 +55,9 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="/admin/products">
+                    <a class="menu-link" href="/admin/coupon">
                         <i class="icon material-icons md-store"></i>
-                        <span class="text">products</span>
+                        <span class="text">coupon</span>
                     </a>
                     
                 </li>
@@ -87,7 +87,7 @@
                         <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
                     </div>
                     <datalist id="search_terms">
-                        <option value="Products"></option>
+                        <option value="coupon"></option>
                         <option value="New orders"></option>
                         <option value="Apple iphone"></option>
                         <option value="Ahmed Hassan"></option>
@@ -139,7 +139,7 @@
                                     class="material-icons md-account_balance_wallet"></i>Wallet</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
-                                center</a>
+                                </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="#"><i
                                     class="material-icons md-exit_to_app"></i>Logout</a>
@@ -149,15 +149,16 @@
             </div>
         </header>
         <section class="content-main">
+
                 <div>
                     <div class="container">
-                    <h2>Category</h2>
+                    <h2>coupon</h2>
                     <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                     <% if (typeof message !=='undefined' ) { %>
                         <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
                             <i class="bi-exclamation-octagon-fill"></i>
-                            <strong class="mx-auto"><%- message %></strong>
+                            <strong class="mx-auto"><%= message %></strong>
                         </div>
                         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                         <script>
@@ -169,77 +170,73 @@
                             });
                         </script>
                         <% } %>
-
             </div>
 
             <main>
 
 
                 <div class="card mb-4">
-
-                    <!-- card-header end// -->
-                    <!-- card-body end// -->
-
+                    
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tablePagination" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Edit</th>
-                                        <th scope="col">action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if (users) { %>
-                                        <% for (let i=0; i < users.length; i++) { %>
+                            <% if (coupon.length > 0) { %>
+                                <table id="tablePagination" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">NO</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Coupon code</th>
+                                            <th scope="col">Discount</th>
+                                            <th scope="col">Criteria Amount</th>
+                                            <th scope="col">Activation Date</th>
+                                            <th scope="col">Expiry Date</th>
+                                            <th scope="col">Update</th>
+                                            <th scope="col">Action</th>
 
-                                            <tr>
-                                                <td>
-                                                    <%= i %>
-                                                </td>
-                                                <td><b>
-                                                        <%= users[i].name %>
-                                                    </b></td>
-                                                <td><b>
-                                                        <%= users[i].description %>
-                                                    </b></td>
-                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span class="badge bg-light">EDIT</span></a>
-                                                </td>
-                                                <td>
-
-                                                    <% if (users[i].is_list) { %>
-                                                        <a class="unblock-user" data-user-id="<%= users[i]._id %>"><span
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (let i = 0; i < coupon.length; i++) { %>
+                                            <% if (coupon[i].is_blocked == false) { %>
+                                                <tr>
+                                                    <td><%= i+1 %></td>
+                                                    <td><%=coupon[i].name%></td>
+                                                    <td><%= coupon[i].couponCode %></td>
+                                                    <td><%= coupon[i].discountAmount %></td>
+                                                    <td><%= coupon[i].criteriaAmount %></td>
+                                                    <td><%= coupon[i].activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
+                                                    <td><%= coupon[i].expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
+                                                    <td><a href="/admin/editcoupon?id=<%=coupon[i]._id%>">edit</a></td>
+                                                    <td>
+                                                    <% if (coupon[i].is_blocked) { %>
+                                                        <a class="unblock-user" data-user-id="<%= coupon[i]._id %>"><span
                                                                 class="badge rounded-pill alert-success">unblock</span></a>
                                                         <% } else { %>
                                                             <a class="block-user"
-                                                                data-user-id="<%= users[i]._id %>"><span
+                                                                data-user-id="<%= coupon[i]._id %>"><span
                                                                     class="badge rounded-pill alert-warning">block</span></a>
-                                                            <% } %>
-                                                </td>
-
-                                            </tr>
-
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="8">No users found in the database.</td>
+                                                </tr>
                                             <% } %>
-                                                <% } else { %>
-                                                    <tr>
-                                                        <td colspan="4">No users found in the database.</td>
-                                                    </tr>
-                                                    <% } %>
-                                </tbody>
-                            </table>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            <% } else { %>
+                                <p>No coupon found in the database.</p>
+                            <% } %>
                         </div>
-                        <!-- table-responsive //end -->
                     </div>
                     
-
+                    </div>
+                    <div class="container">
+                    <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">+Add Coupon</button></a>
                 </div>
-                <div class="container">
-                    <a href="/admin/addcategory"><button type="button" class="btn btn-primary"><b>+Add Category</b></button></a>
-                </div>
-                    <!-- content-main end// -->
+                    </div>
                     <footer class="main-footer font-xs">
                         <div class="row pb-30 pt-15">
                             <div class="col-sm-6">
@@ -283,7 +280,7 @@
                 const userId = element.getAttribute('data-user-id');
                 const action = element.classList.contains('block-user') ? 'block' : 'unblock';
 
-                fetch(`/admin/blockcategory/${userId}`, {
+                fetch(`/admin/blockcoupon/${userId}`, {
                     method: 'PATCH',
                 })
                     .then(response => response.json())
