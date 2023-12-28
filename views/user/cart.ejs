@@ -146,32 +146,42 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <p class="value">Shipping</p>
-                                        </td>
-                                        <td>
-                                            <ul class="shipping-list">
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio1" checked="" />
-                                                    <label for="radio1"><span></span>Cash on Delivery</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio2" />
-                                                    <label for="radio2"><span></span>Online Payment</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio3" />
-                                                    <label for="radio3"><span></span>Wallet</label>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                            <td>
+                                                <p class="value">Shipping Type</p>
+                                            </td>
+                                        <tr class="summary-shipping-row">
+                                            <td>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input" onclick="addShipping('free-shipping', 0)" <% if (data.shippingAmount == 0) { %>checked<% } %>>
+                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                                </div>
+                                            </td>
+                                            <td>0.00</td>
+                                        </tr>               
+                                        <tr class="summary-shipping-row">
+                                            <td>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input" onclick="addShipping('standart-shipping', 30)" <% if (data.shippingAmount == 30) { %>checked<% } %>>
+                                                    <label class="custom-control-label" for="standart-shipping">Standard:</label>
+                                                </div>
+                                            </td>
+                                            <td>30.00</td>                                        
+                                         </tr>
+                                        <tr class="summary-shipping-row">
+                                            <td>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input" onclick="addShipping('express-shipping', 60)" <% if (data.shippingAmount == 60) { %>checked<% } %>>
+                                                    <label class="custom-control-label" for="standart-shipping">Express:</label>
+                                                </div>
+                                            </td>
+                                            <td>60.00</td>                                        
+                                         </tr>
                                     <tr>
                                         <td>
                                             <p class="value">Total</p>
                                         </td>
                                         <td>
-                                            <p class="price"><%=subtotal%></p>
+                                            <p class="price">₹<%=total%></p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -218,6 +228,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
+<script>
+    function addShipping(option,amount){
+        const data = {option,amount}
+        $.ajax({
+            method: 'POST',
+            url: '/shippinamount', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.success===true){
+                    $('#reloadDiv').load('/showcart #reloadDiv'); 
+                }else{
+                 
+                }
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
+</script>    
 
     <script>
         function updateQuantity(productId, count) {

@@ -61,9 +61,11 @@ const getCart=async(req,res)=>{
       const cartData=await cartModel.findOne({user:id}).populate('product.productId')
       console.log(cartData)
       const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+      
   
       if(cartData){
-        res.render('cart',{data:cartData,subtotal,id})
+        const total = subtotal+cartData.shippingAmount
+        res.render('cart',{data:cartData,subtotal,id,total})
       }else{
         res.render('cart')
       }

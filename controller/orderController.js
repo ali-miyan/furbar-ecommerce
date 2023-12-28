@@ -22,7 +22,8 @@ const checkout=async(req,res)=>{
       const id=req.session.user_id
       const cartData = await cartModel.findOne({user:id}).populate('product.productId')    
       let address = await addressModel.findOne({user:id})
-      const subtotal = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
+      const total = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
+      const subtotal=total+cartData.shippingAmount
       res.render('checkout',{id,address,cartData,subtotal})
     } catch (error) {
       console.log(error);

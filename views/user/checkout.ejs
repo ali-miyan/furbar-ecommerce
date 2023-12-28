@@ -49,9 +49,7 @@
                 </div>
             </div>
         </div>
-
-        
-                                <form  id="form" action="/checkoutform" method="post">
+                                <form id="form" action="/checkoutform" method="post">
                                     <div class="row">
                                         <div class="col-lg-7">
                                         <% if (address && address.address && address.address.length > 0) { %>
@@ -60,7 +58,7 @@
                                                     <div class="col-lg-6"><br><br>
                                                         <div class="card card-dashboard">
                                                             <div class="card-body">
-                                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" required >
+                                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <% if (index === 0) { %>checked<% } %> required>
                                                                 <h3 class="card-title">Address <%= index + 1 %></h3>
                                                                 <p>Name: <%= address.name %><br>
                                                                 Address: <%= address.address %><br>
@@ -70,7 +68,7 @@
                                                                 Pincode: <%= address.pincode %><br>
                                                                 Phone: <%= address.phone %><br>
                                                                 Email: <%= address.email %><br>
-                                                                <a href="/editAddress?ind=<%= index %>" > <i class="fa fa-edit"></i></a>
+                                                                <a href="/editAddress?ind=<%= index %>" ><i class="fa fa-edit"></i></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -169,20 +167,15 @@
                                                                 <ul class="shipping-list">
                                                                     <li class="radio">
                                                                         <input type="radio" name="shipping" id="radio1" checked />
-                                                                        <label for="radio1"><span></span>
-                                                                            Flat Rate</label>
+                                                                        <label for="radio1"><span></span>Cash on delivery</label>
                                                                     </li>
                                                                     <li class="radio">
                                                                         <input type="radio" name="shipping" id="radio2" />
-                                                                        <label for="radio2"><span></span>
-                                                                            Free
-                                                                            Shipping</label>
+                                                                        <label for="radio2"><span></span>Online paymet</label>
                                                                     </li>
                                                                     <li class="radio">
                                                                         <input type="radio" name="shipping" id="radio3" />
-                                                                        <label for="radio3"><span></span>
-                                                                            Local
-                                                                            Pickup</label>
+                                                                        <label for="radio3"><span></span>Wallet</label>
                                                                     </li>
                                                                 </ul>
                                                             </td>

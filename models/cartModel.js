@@ -26,7 +26,15 @@ const cartSchema = new mongoose.Schema({
             default:0
         }
 
-    }]
+    }],
+  shippingMethod: {
+    type: String,
+    default:"free-shipping",
+  },
+  shippingAmount: {
+    type: Number,
+    default:0,
+  }
 })
 
 
