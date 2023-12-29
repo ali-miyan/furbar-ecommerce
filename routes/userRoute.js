@@ -178,7 +178,7 @@ routeUser.get('/orderdetail/:orderId', async (req, res) => {
   }
 });
 
-routeUser.post('/shippinamount',async (req,res)=>{
+routeUser.post('/shippingamount',async (req,res)=>{
   try{
     const id = req.session.user_id
     const option = req.body.option
@@ -191,6 +191,7 @@ routeUser.post('/shippinamount',async (req,res)=>{
     res.render('500Error')
   }
 })
+
 
 
 module.exports = routeUser;

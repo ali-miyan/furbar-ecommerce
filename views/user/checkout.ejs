@@ -166,15 +166,15 @@
                                                             <td class="Product-price">
                                                                 <ul class="shipping-list">
                                                                     <li class="radio">
-                                                                        <input type="radio" name="shipping" id="radio1" checked />
+                                                                        <input type="radio" name="payment" value="Cash on delivery" id="radio1" checked />
                                                                         <label for="radio1"><span></span>Cash on delivery</label>
                                                                     </li>
                                                                     <li class="radio">
-                                                                        <input type="radio" name="shipping" id="radio2" />
+                                                                        <input type="radio" name="payment" value="Razorpay" id="radio2" />
                                                                         <label for="radio2"><span></span>Online paymet</label>
                                                                     </li>
                                                                     <li class="radio">
-                                                                        <input type="radio" name="shipping" id="radio3" />
+                                                                        <input type="radio" name="payment" value="Wallet" id="radio3" />
                                                                         <label for="radio3"><span></span>Wallet</label>
                                                                     </li>
                                                                 </ul>
@@ -195,7 +195,7 @@
                                             <div class="checkout-payment">
 
                                                 <div class="single-form">
-                                                    <button type="submit" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                                                    <button type="submit" id="razorpayButton" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,5 +206,9 @@
                 
     </div><br><br>
 <!-- Checkout Section End -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
 
 <%- include('../layouts/footer.ejs') -%>

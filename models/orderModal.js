@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
   payment: {
     type: String,
     required: true,
-    method: ['Cash on delivery', 'Razorpay']
+    method: ['Cash on delivery', 'Razorpay' , 'Wallet']
   },
   products: [{
       productId: {

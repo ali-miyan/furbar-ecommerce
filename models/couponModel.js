@@ -9,11 +9,9 @@ const couponSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   discountAmount: {
     type: Number,
   },
-
   activationDate: {
     type: Date,
     required: true,
@@ -34,7 +32,7 @@ const couponSchema = new mongoose.Schema({
   is_blocked: {
     type: Boolean,
     default: false,
-  },
+  }
 });
 
 const CouponModel = mongoose.model("Coupon", couponSchema);
