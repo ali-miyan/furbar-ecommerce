@@ -40,8 +40,8 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'Attempted',
-    enum: ['Attempted', 'Success', 'Cancelled', 'Failed']
+    default: 'pending',
+    enum: ['pending', 'Success', 'Cancelled', 'Failed']
   },
   isOrder: {
     type: Boolean,
@@ -54,6 +54,9 @@ const orderSchema = new mongoose.Schema({
   },
   cancelReason: {
     type: String
+  },
+  wallet:{
+    type:Number,
   }
 })
 

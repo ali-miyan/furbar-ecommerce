@@ -59,7 +59,7 @@
                         <i class="icon material-icons md-store"></i>
                         <span class="text">products</span>
                     </a>
-                    
+
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/orders">
@@ -73,9 +73,9 @@
                         <span class="text">Coupon</span>
                     </a>
                 </li>
-                
-            <br />
-            <br />
+
+                <br />
+                <br />
         </nav>
     </aside>
     <main class="main-wrap">
@@ -149,26 +149,26 @@
             </div>
         </header>
         <section class="content-main">
-                <div>
-                    <div class="container">
+            <div>
+                <div class="container">
                     <h2>Category</h2>
                     <p>Lorem ipsum dolor sit amet.</p>
                 </div>
-                    <% if (typeof message !=='undefined' ) { %>
-                        <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
-                            <i class="bi-exclamation-octagon-fill"></i>
-                            <strong class="mx-auto"><%- message %></strong>
-                        </div>
-                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                        <script>
-                            // Add a script to hide the alert after 5 seconds
-                            $(document).ready(function () {
-                                setTimeout(function () {
-                                    $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                }, 3000); // 3000 milliseconds = 3 seconds
-                            });
-                        </script>
-                        <% } %>
+                <% if (typeof message !=='undefined' ) { %>
+                    <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <strong class="mx-auto"><%- message %></strong>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script>
+                        // Add a script to hide the alert after 5 seconds
+                        $(document).ready(function () {
+                            setTimeout(function () {
+                                $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
+                            }, 3000); // 3000 milliseconds = 3 seconds
+                        });
+                    </script>
+                    <% } %>
 
             </div>
 
@@ -206,7 +206,8 @@
                                                 <td><b>
                                                         <%= users[i].description %>
                                                     </b></td>
-                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span class="badge bg-light">EDIT</span></a>
+                                                <td><a href="/admin/editcategory?id=<%=users[i]._id%>"><span
+                                                            class="badge bg-light">EDIT</span></a>
                                                 </td>
                                                 <td>
 
@@ -233,26 +234,27 @@
                         </div>
                         <!-- table-responsive //end -->
                     </div>
-                    
+
 
                 </div>
                 <div class="container">
-                    <a href="/admin/addcategory"><button type="button" class="btn btn-primary"><b>+Add Category</b></button></a>
+                    <a href="/admin/addcategory"><button type="button" class="btn btn-primary"><b>+Add
+                                Category</b></button></a>
                 </div>
-                    <!-- content-main end// -->
-                    <footer class="main-footer font-xs">
-                        <div class="row pb-30 pt-15">
-                            <div class="col-sm-6">
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                &copy; Nest - HTML Ecommerce Template .
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-end">All rights reserved</div>
-                            </div>
+                <!-- content-main end// -->
+                <footer class="main-footer font-xs">
+                    <div class="row pb-30 pt-15">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>
+                            &copy; Nest - HTML Ecommerce Template .
                         </div>
-                    </footer>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end">All rights reserved</div>
+                        </div>
+                    </div>
+                </footer>
         </section>
     </main>
 

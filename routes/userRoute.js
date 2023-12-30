@@ -192,6 +192,8 @@ routeUser.post('/shippingamount',async (req,res)=>{
   }
 })
 
+routeUser.post('/verifypayment',orderController.verifypayment)
+
 
 
 module.exports = routeUser;

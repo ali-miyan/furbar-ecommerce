@@ -28,6 +28,10 @@ const userSchema= new mongoose.Schema({
     is_blocked: {
         type: Boolean,
         default:false
+    },
+    wallet: {
+        type: Number,
+        default: 0
     }
 });
 

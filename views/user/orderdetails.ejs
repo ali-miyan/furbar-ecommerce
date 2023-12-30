@@ -16,55 +16,37 @@
 </div>
 
 <div id="reloadArea">
-<div class="card card-dashboard">
-    <div class="card-body">
-        <h4 class="account-title">
-            Order summary
-        </h4>
-        <h6 class="name">
-            OrderId: <%= orderData._id %>
-        </h6>
-        <p>
-            Date: <%= orderData.orderDate %><br>
-            payment method:<%= orderData.payment %><br>
-            Total Amount: <%= orderData.subtotal %><br>
-            status: <%= orderData.status %><br>
-            <% if (orderData.status=="Cancelled") { %>
-                cancel Reason:<%= orderData.cancelReason %>
-            <% } %>
-
-        </p>
-
+    <div class="card card-dashboard" style="display: inline-block; margin-right: 10px;">
+        <div class="card-body">
+            <h4 class="account-title">Order summary</h4>
+            <h6 class="name">OrderId: <%= orderData._id %></h6>
+            <p>Date: <%= orderData.orderDate %><br>
+               Payment Method: <%= orderData.payment %><br>
+               Total Amount: <%= orderData.subtotal %><br>
+               Status: <%= orderData.status %><br>
+               <% if (orderData.status === "Cancelled") { %>Cancel Reason: <%= orderData.cancelReason %><% } %>
+            </p>
+            <% if (orderData.status !== 'Cancelled') { %>
+                <button type="button" class="btn btn-danger btn-block" onclick="showCancelConfirmation('<%= orderData._id %>')">Cancel Order</button>
+            <% } %> 
+        </div>
     </div>
-
-    <% if (orderData.status !=='Cancelled') { %>
-        <button type="button" class="btn btn-danger btn-block" onclick="showCancelConfirmation('<%= orderData._id %>')">Cancel Order</button>
-    <% } %> 
-
-</div>
-
-
-
-<div class="card card-dashboard">
-    <div class="card-body">
-        <h4 class="account-title">
-            Delivery Address
-        </h4>
-        <h6 class="name">
-            Name: <%= orderData.delivery_address.name %>
-        </h6>
-        <p>
-            Address: <%= orderData.delivery_address.address %><br>
-            Landmark:<%= orderData.delivery_address.landmark %><br>
-            State: <%= orderData.delivery_address.state %><br>
-            City: <%= orderData.delivery_address.city %><br>
-            Pincode: <%= orderData.delivery_address.pincode %><br>
-            Phone:<%= orderData.delivery_address.phone %><br>
-            Email: <%= orderData.delivery_address.email %><br>
-        </p>
-
+    
+    <div class="card card-dashboard" style="display: inline-block;">
+        <div class="card-body">
+            <h4 class="account-title">Delivery Address</h4>
+            <h6 class="name">Name: <%= orderData.delivery_address.name %></h6>
+            <p>Address: <%= orderData.delivery_address.address %><br>
+               Landmark: <%= orderData.delivery_address.landmark %><br>
+               State: <%= orderData.delivery_address.state %><br>
+               City: <%= orderData.delivery_address.city %><br>
+               Pincode: <%= orderData.delivery_address.pincode %><br>
+               Phone: <%= orderData.delivery_address.phone %><br>
+               Email: <%= orderData.delivery_address.email %><br>
+            </p>
+        </div>
     </div>
-</div>
+    
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

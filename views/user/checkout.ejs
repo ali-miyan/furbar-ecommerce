@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-                                <form id="form" action="/checkoutform" method="post">
+                                <form id="form">
                                     <div class="row">
                                         <div class="col-lg-7">
                                         <% if (address && address.address && address.address.length > 0) { %>
@@ -208,6 +208,95 @@
 <!-- Checkout Section End -->
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $("#form").submit(function(event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "/checkoutform", 
+            data: formData,
+            success: function(response) {
+                console.log("AJAX Success:", response);
+                if(response.success){
+                let orderId = response.orderId;
+                location.href=`/successpage?id=${orderId}`
+            }else if(response.success == false){      
+                console.log("reaaaaaacccccehjddddddddddddd");                  
+               razorpayPayment(response.order)
+            }
+                
+        },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+function razorpayPayment(order){
+    console.log("function called",order);
+let options = {
+    "key": "rzp_test_7MqCdAHp4YDLwZ", 
+    "amount": order.amount,
+    "currency": "INR",
+    "name": "furbar",
+    "description": "Test Transaction",
+    "image": "",
+    "order_id": order.id, 
+    "handler": function (response){
+        verifyPayment(response, order)
+    },
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+    let raz = new Razorpay(options);
+    raz.open();
+
+    function verifyPayment(payment, order) {
+      $.ajax({
+        url: "/verifypayment",
+        method: 'post',
+        data: {
+          payment,
+          order
+        },
+        success: (response) => {
+            console.log("aaaaaaaaajaaaxx",response);
+          if(response.success) {
+            let orderId=response.orderId
+            window.location.href = `/successpage?id=${orderId}`;
+          } 
+         else if (response.onlineSuccess) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Payment has done',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+    }
+
+      })
+    }
+    
+} 
+</script>
+
 
 
 
