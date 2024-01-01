@@ -32,31 +32,38 @@ const orderSchema = new mongoose.Schema({
       totalPrice: {
       type: Number,
       default: 0
+    },
+    productStatus:{
+        type: String,
+        default: 'pending',
+        enum: ['pending','placed', 'Success', 'Cancelled', 'Failed']
+    },
+    cancelReason: {
+      type: String
     }
   }],
   subtotal: {
     type: Number,
     required:true
-  },
+  }
+  ,
   status: {
     type: String,
     default: 'pending',
-    enum: ['pending', 'Success', 'Cancelled', 'Failed']
-  },
-  isOrder: {
-    type: Boolean,
-    default: true
-  },
+    enum: ['pending','placed', 'Success', 'Cancelled', 'Failed']
+  }
+  ,
   orderDate: {
     type: Date,
     default: Date.now,
     required: true
   },
-  cancelReason: {
-    type: String
-  },
   wallet:{
     type:Number,
+  },
+  cancelledProduct:{
+    type:Array,
+    default:[]
   }
 })
 

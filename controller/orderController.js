@@ -49,16 +49,19 @@ const checkout=async(req,res)=>{
       const paymentMethod = req.body.payment;
       const cartData = await cartModel.findOne({ user: userId });
 
+      let status=paymentMethod=="Cash on delivery"?"placed":"pending"
 
       const orderItems = await cartData.product.map(product => ({
         productId: product.productId,
         quantity: product.quantity,
         price: product.price,
         totalPrice: product.quantity * product.price,
+        productStatus:status
       }));
 
-      const totalPrice = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);
-      let status=paymentMethod=="Cash on delivery"?"placed":"pending"
+      const total = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);
+      const totalPrice = total + cartData.shippingAmount
+      console.log(totalPrice,"totalprice");
       console.log("statuesssssssss",);
 
 
@@ -96,8 +99,8 @@ const checkout=async(req,res)=>{
           );
           addressObject = userAddress.address[0];
         }
-      
-      const subtotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
+
+
       
       
 
@@ -108,7 +111,7 @@ const checkout=async(req,res)=>{
         delivery_address: addressObject,
         payment: paymentMethod, 
         products: orderItems,
-        subtotal: subtotal,
+        subtotal: totalPrice,
         status: status,
         orderDate: new Date(), 
       });
@@ -124,7 +127,7 @@ const checkout=async(req,res)=>{
             { $inc: { quantity: -item.quantity } }
           );
         }
-        await Cart.deleteOne({ user: user._id });
+        await cartData.deleteOne({ user: user._id });
         res.json({orderId,success:true})
       }else{
         var options = {
@@ -168,7 +171,6 @@ const checkout=async(req,res)=>{
             await Product.updateOne({ _id: productId }, { $inc: { quantity: -quantity } });
           }
       }
-  
       const newoOrder=await orderModel.findByIdAndUpdate(
         { _id: Data.order.receipt }, 
         { $set: { status: "placed" } }

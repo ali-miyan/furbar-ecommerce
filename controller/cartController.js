@@ -56,18 +56,21 @@ const getCart=async(req,res)=>{
 
   const showCart=async(req,res)=>{
     try {
+      console.log("heloooooooooo");
       if (req.session.user_id) { 
       const id=req.session.user_id;
       const cartData=await cartModel.findOne({user:id}).populate('product.productId')
-      console.log(cartData)
-      const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+      console.log("cartdata",cartData)
       
-  
+        
       if(cartData){
+        const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+        console.log("cart");
         const total = subtotal+cartData.shippingAmount
         res.render('cart',{data:cartData,subtotal,id,total})
       }else{
-        res.render('cart')
+        console.log("cartt");
+        res.render('cart',{data:"hi"})
       }
     }else{
       res.redirect('/login')

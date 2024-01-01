@@ -88,7 +88,6 @@ routeUser.post('/cancelorder',userController.cancelOrder)
 routeUser.post('/edituser',userController.editUser)
 
 
-
 routeUser.get('/successpage',async(req,res)=>{
   try {
     const orderID=req.query.id;

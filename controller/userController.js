@@ -350,35 +350,84 @@ const detailShop=async(req,res)=>{
       const user_id = req.session.user_id
       const order_id = req.query.id
       console.log(order_id);
-      const orderData = await orderModel.findOne({_id:order_id})
-  
+      const orderData = await orderModel.findOne({_id:order_id}).populate('products.productId')
+      await orderData.populate('products.productId.categoryId')
+      console.log(orderData,"idddddddddddd");
       res.render('orderdetails',{orderData,user_id})
     } catch (error) {
       console.log(error.message);
     }
   }
   
-  const cancelOrder=async(req,res)=>{
+  const cancelOrder = async (req, res) => {
     try {
-          const user_id = req.session.user_id
-          const orderId = req.body.orderId;
-          const cancelReason = req.body.cancelReason;
-          const orderData = await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'Cancelled',cancelReason:cancelReason}})
-      
-          for( let i=0;i<orderData.products.length;i++){
-            let productId = orderData.products[i].productId
-            let count = orderData.products[i].quantity
-            await Product.updateOne({_id:productId},{$inc:{quantity:count}})
-          }
-         
-          res.json({ success: true});
-          
-        } catch (error) {
-            console.log(error.message);
-            res.render('500Error')
+        const user_id = req.session.user_id;
+        const orderId = req.body.orderId;
+        const productId = req.body.productId;
+        console.log("hrlooooooooooooooo", orderId, productId);
+        const count = req.body.count;
+        const cancelReason = req.body.cancelReason;
+        const productDetails = await Product.findById(productId).populate('categoryId');
+        const orderData = await orderModel.findOneAndUpdate(
+            { _id: orderId, 'products.productId': productId },
+            {
+                $inc: {
+                    'products.$.quantity': -count,
+                },
+            },
+            { new: true }
+        );
+
+        if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
+            await orderModel.findOneAndUpdate(
+                { _id: orderId },
+                {
+                    $push: {
+                        cancelledProduct: {
+                            quantity: count,
+                            productStatus: 'Cancelled',
+                            cancelReason: cancelReason,
+                            productDetails: productDetails,
+                        },
+                    },
+                    $pull: {
+                        products: { productId: productId, quantity: 0 },
+                    },
+                }
+            );
+        } else {
+            await orderModel.findOneAndUpdate(
+                { _id: orderId },
+                {
+                    $push: {
+                        cancelledProduct: {
+                            productId: productId,
+                            quantity: count,
+                            productStatus: 'Cancelled',
+                            cancelReason: cancelReason,
+                            productDetails: productDetails,
+                        },
+                    },
+                    $pull: {
+                        products: { productId: productId },
+                    },
+                }
+            );
         }
-      
-  }
+
+        console.log("dtaaaaaa", orderData);
+
+        for (let i = 0; i < orderData.products.length; i++) {
+            let productId = orderData.products[i].productId;
+            await Product.updateOne({ _id: productId }, { $inc: { quantity: count } });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.log(error.message);
+        res.render('500Error');
+    }
+};
 
   const editUser=async(req,res)=>{
     try {
