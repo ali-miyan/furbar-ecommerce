@@ -37,41 +37,22 @@
 <div class="container">
     <div class="row">
     <h3 class="mt-3">ORDER DETAILS</h3>
-      <div id="reloadArea" style="display: flex;">
+      <div id="reloadArea" >
   
-        <div class="card card-dashboard mt-3" style="max-width: 250px; flex: 1;">
+        <div class="card card-dashboard mt-3" style="max-width: 350px; flex: 1;">
           <div class="card-body">
-            <h4 class="account-title">Order summary</h4>
-            <h6 class="name">OrderId: <%= orderData._id %></h6>
-            <p>Date: <%= orderData.orderDate %><br>
-              Payment Method: <%= orderData.payment %><br>
-              Total Amount: <%= orderData.subtotal %><br>
-              Status: <%= orderData.status %><br>
-              <% if (orderData.status === "Cancelled") { %>Cancel Reason: <%= orderData.cancelReason %><% } %>
+            <h4 class="name">OrderId: <%= orderData._id %></h4>
+            <p><b>Date:</b> <%= orderData.orderDate.toLocaleDateString('en-GB') %>
+            <br><b>Payment Method:</b> <%= orderData.payment %><br>
+            <b>Address:</b><%= orderData.delivery_address.name %>,<%= orderData.delivery_address.address %> <br>
             </p>
 
-          </div>
-        </div>
-  
-        <div class="card card-dashboard mt-3 mx-3"  style="max-width: 250px; flex: 1;">
-          <div class="card-body">
-            <h4 class="account-title">Delivery Address</h4>
-            <h6 class="name">Name: <%= orderData.delivery_address.name %></h6>
-            <p>Address: <%= orderData.delivery_address.address %><br>
-              Landmark: <%= orderData.delivery_address.landmark %><br>
-              State: <%= orderData.delivery_address.state %><br>
-              City: <%= orderData.delivery_address.city %><br>
-              Pincode: <%= orderData.delivery_address.pincode %><br>
-              Phone: <%= orderData.delivery_address.phone %><br>
-              Email: <%= orderData.delivery_address.email %><br>
-            </p>
           </div>
         </div>
         
       </div>
     </div>
   </div><br>
-  <%console.log(orderData,"dataa")%>
 
   
 
@@ -81,26 +62,27 @@
         <div class="card mt-3">
             <div class="card-body d-flex justify-content-start">
                 <% orderData.products.forEach(function(product, index) { %>
-                    <div class="product-card mt-3">
+                    <div class="product-card d-flex">
                         <div class="product-image">
                             <a href="/detailshop?id=<%= product.productId._id %>">
-                                <img src="sharpimages/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 50px; max-width: 50px;">
+                                <img src="sharpimages/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 250px; max-width: 230px;">
                             </a>
                         </div>
-                        <div class="product-details">
-                            <h5 class="product-name"><a href="/detailshop?id=<%= product.productId._id %>"><%= product.productId.name %></a></h5>
-                            <p class="product-category"><%= product.productId.categoryId.name %></p>
-                            <p class="product-price">₹<%= product.price %></p>
-                            <p class="product-quantity"><%= product.quantity %> units</p>
-                            <p class="product-total">Total: ₹<%= product.totalPrice %></p>
-                            <div class="cancel-section">
+                        <div class="mx-3 " style="width: 180px;">
+                            <h5 class="product-details"><a href="/detailshop?id=<%= product.productId._id %>"><%= product.productId.name %></a></h5>
+                            <p class="product-details"><%= product.productId.categoryId.name %> <br>
+                            Price:₹<%= product.price %> <br>
+                            Quantity:<%= product.quantity %> <br>
+                            Total: ₹<%= product.totalPrice %> <br>  
                                 <% if (orderData.status !== 'Cancelled' || product.productStatus === 'Cancelled') { %>
-                                    <input type="number" min="1" max="<%= product.quantity %>" id="quantity" value="1" class="form-control input-sm" inputmode="none">
-                                    <p id="error-message" class="error-text"></p>
-                                    <button class="mt-2 cancel-btn" onclick="validateAndCancel('<%= product.productId._id %>', '<%= orderData._id %>')">Cancel order</button>
-                                <% } %>
-                            </div>
-                        </div>
+                                    <div id="cancelSection">
+                                        <input type="number" min="1" max="<%= product.quantity %>" id="quantity" value="1" class="form-control" inputmode="none">
+                                        <span id="error-message" class="error-text"></span>
+                                        <br>
+                                        <button class="cancel-btn" onclick="validateAndCancel('<%= product.productId._id %>', '<%= orderData._id %>')">Cancel order</button>
+                                      </div>
+                                    <% } %>
+                        </div>                                
                     </div>
                 <% }); %>
                 <div class="status-line">
