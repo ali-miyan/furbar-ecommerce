@@ -197,7 +197,6 @@
                                     </thead>
                                     <tbody>
                                         <% for (let i = 0; i < products.length; i++) { %>
-                                            <% if (products[i].is_blocked == false) { %>
                                                 <tr>
                                                     <td><%= i+1 %></td>
                                                     <td>
@@ -220,11 +219,6 @@
                                                         <% } %>
                                                     </td>
                                                 </tr>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="8">No users found in the database.</td>
-                                                </tr>
-                                            <% } %>
                                         <% } %>
                                     </tbody>
                                 </table>

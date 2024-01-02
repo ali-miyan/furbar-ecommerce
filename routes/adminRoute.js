@@ -56,9 +56,7 @@ routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
 
 routeAdmin.get('/orders',adminController.Orders)
 
-routeAdmin.get('/editorder',adminController.editorder)
-  
-routeAdmin.post('/editorder',adminController.editOrderPost)
+
 
 routeAdmin.get('/coupon',async(req,res)=>{
     try {
@@ -151,6 +149,31 @@ routeAdmin.patch('/blockcoupon/:id',async(req,res)=>{
       res.json({ block: true });
     } catch (error) {
       console.log(error.message);
+    }
+  })
+
+  routeAdmin.post('/admin/updatestatus',async(req,res)=>{
+    try {
+        console.log("helooq");
+        const { orderId, newStatus } = req.body;
+        const orderData=await orderModel.findById(orderId)
+
+
+        const updatedOrder = await orderModel.findOneAndUpdate(
+            { _id: orderId },
+            {
+                $set: {
+                    orderStatus: newStatus,
+                    "products.$[].productStatus": newStatus
+                }
+            },
+            { new: true }
+        );
+
+        res.json({success:true})
+
+    } catch (error) {
+        console.log(error.message);
     }
   })
 

@@ -1,4 +1,6 @@
 <%- include('../layouts/header.ejs') -%>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 <div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
     <div class="container">
@@ -52,68 +54,96 @@
         
       </div>
     </div>
-  </div><br>
+  </div>
 
   
-
   <% if (orderData.products.length > 0) { %>
     <div class="container mt-5">
-        <h3 class="mb-4">PRODUCTS</h3>
-        <div class="card mt-3">
-            <div class="card-body d-flex justify-content-start">
-                <% orderData.products.forEach(function(product, index) { %>
+        <h3 class="mb-4">Ordered Products</h3>
+        <% orderData.products.forEach(function(product, index) { %>
+            <div class="card mt-3">
+                <div class="card-body d-flex justify-content-start">
                     <div class="product-card d-flex">
                         <div class="product-image">
                             <a href="/detailshop?id=<%= product.productId._id %>">
                                 <img src="sharpimages/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 250px; max-width: 230px;">
                             </a>
                         </div>
-                        <div class="mx-3 " style="width: 180px;">
+                        <div class="mx-3" style="width: 180px;">
                             <h5 class="product-details"><a href="/detailshop?id=<%= product.productId._id %>"><%= product.productId.name %></a></h5>
-                            <p class="product-details"><%= product.productId.categoryId.name %> <br>
-                            Price:₹<%= product.price %> <br>
-                            Quantity:<%= product.quantity %> <br>
-                            Total: ₹<%= product.totalPrice %> <br>  
-                                <% if (orderData.status !== 'Cancelled' || product.productStatus === 'Cancelled') { %>
+                            <p class="product-details">
+                                <%= product.productId.categoryId.name %> <br>
+                                Price: ₹<%= product.price %> <br>
+                                Quantity: <%= product.quantity %> <br>
+                                Total: ₹<%= product.totalPrice %> <br>
+                                <% if (orderData.orderStatus !== 'Cancelled' || product.productStatus === 'Cancelled') { %>
                                     <div id="cancelSection">
                                         <input type="number" min="1" max="<%= product.quantity %>" id="quantity" value="1" class="form-control" inputmode="none">
                                         <span id="error-message" class="error-text"></span>
                                         <br>
                                         <button class="cancel-btn" onclick="validateAndCancel('<%= product.productId._id %>', '<%= orderData._id %>')">Cancel order</button>
-                                      </div>
-                                    <% } %>
-                        </div>                                
+                                    </div>
+                                <% } %>
+                            </p>
+                        </div>
                     </div>
-                <% }); %>
-                <div class="status-line">
-                    <div class="line" id="packedLine">
-                      <div class="inner-line-1"></div>
-                      <div class="status">Packed</div>
+                    <div class="status-line">
+                        <div class="line placed" id="packedLine">
+                            <div class="status">Packed</div>
+                        </div>
+                        <div class="line shipped" id="shippedLine">
+                            <div class="status">Shipped</div>
+                        </div>
+                        <div class="line out-for-delivery" id="outLine">
+                            <div class="status">Out to Delivery</div>
+                        </div>
+                        <div class="line delivered" id="deliveredLine">
+                            <div class="status">Delivered</div>
+                        </div>
                     </div>
-                    <div class="line" id="shippedLine">
-                      <div class="inner-line-2"></div>
-                      <div class="status">Shipped</div>
-                    </div>
-                    <div class="line delivered">
-                      <div class="inner-line-3"></div>
-                      <div class="status">Delivered</div>
-                    </div>
-                    <div class="line out">
-                      <div class="inner-line-4"></div>
-                      <div class="status">Out for Delivery</div>
-                    </div>
-                  </div>
-                  
-                
+                </div>
             </div>
-        </div>
+        <% }); %>
     </div>
+
+    <script>
+        // Assuming orderStatus is a variable that holds the order status
+        var orderStatus = '<%= orderData.orderStatus %>';
+    
+        // Get all lines within each product card
+        var productLines = document.querySelectorAll('.status-line');
+    
+        // Loop through product lines and update background based on orderStatus (in reverse order)
+        productLines.forEach(function (statusLine) {
+            var lines = statusLine.querySelectorAll('.line');
+            var highlight = false;
+    
+            for (var i = lines.length - 1; i >= 0; i--) {
+                var lineClass = lines[i].classList[i]; // get the second class, which corresponds to the status
+    
+                if (lineClass === orderStatus || highlight) {
+                    lines[i].style.background = 'green';
+                    highlight = true;
+                } else {
+                    lines[i].style.background = 'none';
+                }
+            }
+        });
+    </script>
+    
 <% } %>
+
+
+
+
 <script>
 const packedLine = document.getElementById('packedLine');
 const shippedLine = document.getElementById('shippedLine');
+const OutLine = document.getElementById('OutLine');
+const deliveredLine = document.getElementById('deliveredLine');
 
-// Add the classes to the elements
+packedLine.classList.add('packed');
+shippedLine.classList.add('shipped');
 packedLine.classList.add('packed');
 shippedLine.classList.add('shipped');
 </script>
@@ -121,28 +151,43 @@ shippedLine.classList.add('shipped');
 <% if (orderData.cancelledProduct && orderData.cancelledProduct.length > 0) { %>
     <div class="container mt-5">
         <h3 class="mb-4">Cancelled Products</h3>
+        <% orderData.cancelledProduct.forEach(function(cancelledProduct, index) { %>
         <div class="card mt-3">
-            <div class="card-body">
-                <% orderData.cancelledProduct.forEach(function(cancelledProduct, index) { %>
-                    <div class="cancelled-product-card mt-3">
-                        <div class="cancelled-product-image">
-                            <a href="/detailshop?id=<%= cancelledProduct.productDetails._id %>">
-                                <img src="sharpimages/<%= cancelledProduct.productDetails.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 50px; max-width: 50px;">
+            <div class="card-body d-flex justify-content-start" >
+                <div class="cancelled-product-card d-flex">
+                    <div class="cancelled-product-image ">
+                        <a href="/detailshop?id=<%= cancelledProduct.productDetails._id %>">
+                                <img src="sharpimages/<%= cancelledProduct.productDetails.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 250px; max-width: 150px;">
                             </a>
                         </div>
-                        <div class="cancelled-product-details">
-                            <h5 class="cancelled-product-name"><a href="/detailshop?id=<%= cancelledProduct.productDetails._id %>"><%= cancelledProduct.productDetails.name %></a></h5>
-                            <p class="cancelled-product-price">₹<%= cancelledProduct.productDetails.price %></p>
-                            <p class="cancelled-product-quantity"><%= cancelledProduct.quantity %> units</p>
-                            <p class="cancelled-product-status"><%= cancelledProduct.productStatus %></p>
-                            <p class="cancelled-product-reason">Cancel Reason: <%= cancelledProduct.cancelReason %></p>
+                        <div class="mx-3 " style="width: 180px;">
+                        <div class="product-details">
+                            <h5 class="product-details"><a href="/detailshop?id=<%= cancelledProduct.productDetails._id %>"><%= cancelledProduct.productDetails.name %></a></h5>
+                            <p>Price:₹ <%= cancelledProduct.productDetails.price %>
+                            <br>Quantity: <%= cancelledProduct.quantity %> 
+                            <br>Status: <%= cancelledProduct.productStatus %>
+                           <br>Cancel Reason: <%= cancelledProduct.cancelReason %></p>
                         </div>
                     </div>
-                <% }); %>
+                </div>
+                
+                <div class="status-cancel">
+                    <div class="line cancel" id="cancel">
+                      <div class="inner-line-1"></div>
+                      <div class="status">Packed</div>
+                    </div>
+                    <div class="line cancelLine" id="cancelLine">
+                      <div class="inner-line-2"></div>
+                      <div class="status">Cancelled</div>
+                    </div>
+                </div>
+                
             </div>
         </div>
+        <% }); %>
     </div>
 <% } %>
+<br><br>
 
       
 

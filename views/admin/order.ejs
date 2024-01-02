@@ -17,6 +17,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
     <!-- Template CSS -->
     <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 </head>
 
@@ -148,9 +150,9 @@
             </div>
         </header>
 
+        <% if (orderData.length > 0) { %>
         <div class="card-body">
             <div class="table-responsive">
-                <% if (orderData.length > 0) { %>
                     <table id="tablePagination" class="table table-hover">
                         <thead>
                             <tr>
@@ -159,12 +161,12 @@
                                 <th scope="col">payment</th>
                                 <th scope="col">No of itmes</th>
                                 <th scope="col">Total Amount</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% for (let i = 0; i < orderData.length; i++) { %>
+                            <% for (let i = 0; i < orderData.length; i++) { %> <div  id="reloadDiv">
                                 <tr>
                                     <td><%= i+1 %></td>
                                     <td><%= orderData[i]._id%></td>
@@ -172,32 +174,29 @@
                                     <td><%= orderData[i].products.length%></td>
                                     <td><%= orderData[i].subtotal %></td>
                                     <td>
-                                        <% if( orderData[i].status == 'Cancelled') { %>
-                                          <span class="status" style="background: red;">Cancelled</span>
-                                        <%} else if (orderData[i].status == 'Attempted') { %>
-                                            <span class="status completed">
-                                              Attempted</span>
-                                         <% } else if (orderData[i].status == 'Failed')  {%>
-                                          <span class="status pending">
-                                            Failed</span>
-                                       <% } else if (orderData[i].status == 'Success')  {%>
-                                        <span class="status" style="background-color: green;">
-                                          Success</span>
-                                     <% } %>
-                                      </td>
+                                        <select class="statusSelect" onchange="status('<%=orderData[i]._id%>')">
+                                            <option value="placed" <% if (orderData[i].orderStatus == '') { %> selected <% } %>>placed</option>
+                                            <option value="out-for-delivery" <% if (orderData[i].orderStatus == 'out-for-delivery') { %> selected <% } %>>out for delivery</option>
+                                            <option value="shipped" <% if (orderData[i].orderStatus == 'shipped') { %> selected <% } %>>shipped</option>
+                                            <option value="delivered" <% if (orderData[i].orderStatus == 'delivered') { %> selected <% } %>>delivered</option>
+                                        </select>
+                                    </td>
+
                                     
                                     <td>
-                                        <a href="/admin/editorder?id=<%=orderData[i]._id%>"> Edit </a>
+                                        Edit
                                     </td>
+                                    
                                 </tr>
-                            <% } %>
-                        </tbody>
+                                </div>
+                                <% } %> 
+                            </tbody>
                     </table>
-                <% } else { %>
-                    <p>No Orders found in the database.</p>
-                <% } %>
+                </div>
             </div>
-        </div>
+            <% } else { %>
+                <p>No Orders found in the database.</p>
+            <% } %>
         
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -213,7 +212,34 @@
             </div>
         </footer>
     </main>
-
+    <script>
+        function status(orderId) {
+            console.log("hello");
+            var selectElement = document.querySelector(".statusSelect");
+            var selectedStatus = selectElement.value;
+            updateStatus(orderId, selectedStatus);
+        }
+    
+        function updateStatus(id, status) {
+            console.log(id);
+            $.ajax({
+                url: 'admin/updatestatus',
+                type: 'POST',
+                data: {
+                    orderId: id,
+                    newStatus: status
+                },
+                success: function (response) {
+                    if(response.success){
+                        $("#reloadDiv").load("/orders #reloadDiv");
+                    }
+                },
+                error: function (error) {
+                    console.error('Error updating status:', error);
+                }
+            });
+        }
+    </script>
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>

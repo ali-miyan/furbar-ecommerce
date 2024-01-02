@@ -108,21 +108,34 @@
   font-size: 15px;
 }
 
+.status-cancel {
+  display: flex;
+  margin-left: 100px; 
+  align-items: center;
+  width: 100%;
+  }
+
+.line.cancel {
+  background: red ;
+  float: left;
+  position: relative;
+  width: 560px;
+  height: 3px;
+}
+.line.cancelLine{
+
+  &:before {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: red ;
+    content: '';
+    top: -6px;
+    border-radius: 50%;
+}
+}
 
 
-.line.packed {
-  background: green;
-}
-.line.shipped {
-  background: green;
-}
-.line.delivered {
-  background: green;
-}
-
-.line:last-child {
-  background: none;
-}
 
 .line {
   float: left;
@@ -134,7 +147,7 @@
       position: absolute;
       width: 15px;
       height: 15px;
-      background: green;
+      background: green ;
       content: '';
       top: -6px;
       border-radius: 50%;
@@ -149,12 +162,7 @@
 
 
 
-.placed {
-  text-align: center;
-  position: absolute;
-  top: 235px;
-  right: 290px;
-}
+
 
 .status-line {
   display: flex;

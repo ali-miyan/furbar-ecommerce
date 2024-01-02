@@ -172,14 +172,10 @@
                         <% } %>
             </div>
 
-            <main>
-
-
                 <div class="card mb-4">
-                    
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <% if (coupon.length > 0) { %>
+                    <% if (coupon.length > 0) { %>
+                        <div class="card-body">
+                            <div class="table-responsive">
                                 <table id="tablePagination" class="table table-hover">
                                     <thead>
                                         <tr>
@@ -192,12 +188,10 @@
                                             <th scope="col">Expiry Date</th>
                                             <th scope="col">Update</th>
                                             <th scope="col">Action</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% for (let i = 0; i < coupon.length; i++) { %>
-                                            <% if (coupon[i].is_blocked == false) { %>
                                                 <tr>
                                                     <td><%= i+1 %></td>
                                                     <td><%=coupon[i].name%></td>
@@ -208,31 +202,23 @@
                                                     <td><%= coupon[i].expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
                                                     <td><a href="/admin/editcoupon?id=<%=coupon[i]._id%>">edit</a></td>
                                                     <td>
-                                                    <% if (coupon[i].is_blocked) { %>
-                                                        <a class="unblock-user" data-user-id="<%= coupon[i]._id %>"><span
-                                                                class="badge rounded-pill alert-success">unblock</span></a>
+                                                        <% if (coupon[i].is_blocked) { %>
+                                                            <a class="unblock-user" data-user-id="<%= coupon[i]._id %>"><span
+                                                                    class="badge rounded-pill alert-success">unblock</span></a>
                                                         <% } else { %>
-                                                            <a class="block-user"
-                                                                data-user-id="<%= coupon[i]._id %>"><span
+                                                            <a class="block-user" data-user-id="<%= coupon[i]._id %>"><span
                                                                     class="badge rounded-pill alert-warning">block</span></a>
                                                         <% } %>
                                                     </td>
-                                                </tr>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="8">No users found in the database.</td>
                                                 </tr>
                                             <% } %>
                                         <% } %>
                                     </tbody>
                                 </table>
-                            <% } else { %>
-                                <p>No coupon found in the database.</p>
-                            <% } %>
+                            </div>
                         </div>
-                    </div>
-                    
-                    </div>
+
+                </div>
                     <div class="container">
                     <a href="/admin/addcoupon"><button type="button" class="btn btn-primary">+Add Coupon</button></a>
                 </div>
@@ -251,7 +237,6 @@
                         </div>
                     </footer>
         </section>
-    </main>
 
 
     <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>

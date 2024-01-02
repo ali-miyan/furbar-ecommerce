@@ -112,14 +112,14 @@ const checkout=async(req,res)=>{
         payment: paymentMethod, 
         products: orderItems,
         subtotal: totalPrice,
-        status: status,
+        orderStatus: status,
         orderDate: new Date(), 
       });
     
       await order.save();
       const orderId = order._id;
 
-      if(order.status=="placed"){
+      if(order.orderStatus=="placed"){
         console.log("placeeddddddddddddddd");
         for (const item of orderItems) {
           await Product.updateOne(
@@ -171,11 +171,22 @@ const checkout=async(req,res)=>{
             await Product.updateOne({ _id: productId }, { $inc: { quantity: -quantity } });
           }
       }
-      const newoOrder=await orderModel.findByIdAndUpdate(
+      const newOrder=await orderModel.findByIdAndUpdate(
         { _id: Data.order.receipt }, 
-        { $set: { status: "placed" } }
+        { $set: { orderStatus: "placed" } }
       );
-      const orderId=await newoOrder._id
+
+      newOrder.products.forEach((product) => {
+        product.productStatus = "placed";
+      });
+      console.log();
+      await orderModel.findByIdAndUpdate(
+        { _id: newOrder._id }, 
+        { $set:{ products: newOrder.products } },      
+        { new: true }            
+      );
+      
+      const orderId=await newOrder._id
   
       await cartData.deleteOne({ user: id });
       console.log("iddddddddddd"+orderId);

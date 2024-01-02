@@ -237,7 +237,6 @@
                     if (response.success) {
                         $("#reloadDiv").load("/showcart #reloadDiv");
                     } else {
-                        // Handle other cases or errors here
                         swal.fire({
                             icon: "error ",
                             title: "Oops...",
@@ -247,7 +246,6 @@
                 },
                 error: (error) => {
                     console.error('Error updating cart:', error);
-                    // Handle the error
                 }
             });
         }

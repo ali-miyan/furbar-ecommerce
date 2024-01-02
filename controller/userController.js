@@ -352,7 +352,6 @@ const detailShop=async(req,res)=>{
       console.log(order_id);
       const orderData = await orderModel.findOne({_id:order_id}).populate('products.productId')
       await orderData.populate('products.productId.categoryId')
-      console.log(orderData,"idddddddddddd");
       res.render('orderdetails',{orderData,user_id})
     } catch (error) {
       console.log(error.message);
