@@ -156,6 +156,7 @@ routeAdmin.patch('/blockcoupon/:id',async(req,res)=>{
     try {
         console.log("helooq");
         const { orderId, newStatus } = req.body;
+        console.log(req.body,"body");
         const orderData=await orderModel.findById(orderId)
 
 
@@ -172,6 +173,20 @@ routeAdmin.patch('/blockcoupon/:id',async(req,res)=>{
 
         res.json({success:true})
 
+    } catch (error) {
+        console.log(error.message);
+    }
+  })
+
+
+  routeAdmin.get('/showorder',async(req,res)=>{
+    try {
+        const id=req.query.id
+        const orderData=await orderModel.findById(id).populate('products.productId')
+        const address=orderData.delivery_address
+        const cancelled=await orderData.cancelledProduct
+        const returned = await orderData.returnedProduct
+        res.render('showorder',{address,orderData,cancelled,returned})
     } catch (error) {
         console.log(error.message);
     }

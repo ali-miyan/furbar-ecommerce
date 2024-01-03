@@ -36,7 +36,7 @@ const orderSchema = new mongoose.Schema({
     productStatus:{
         type: String,
         default: 'pending',
-        enum: ['pending','placed', 'delivered', 'cancelled', 'shipped','out-for-delivery']
+        enum: ['pending','placed', 'delivered', 'cancelled', 'shipped','out-for-delivery','returned']
       },
     cancelReason: {
       type: String
@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema({
   orderStatus: {
     type: String,
     default: 'pending',
-    enum: ['pending','placed', 'delivered', 'cancelled', 'shipped','out-for-delivery']
+    enum: ['pending','placed', 'delivered', 'cancelled', 'shipped','out-for-delivery','returned']
   }
   ,
   orderDate: {
@@ -62,6 +62,10 @@ const orderSchema = new mongoose.Schema({
     type:Number,
   },
   cancelledProduct:{
+    type:Array,
+    default:[]
+  },
+  returnedProduct:{
     type:Array,
     default:[]
   }

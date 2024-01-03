@@ -134,8 +134,13 @@
     border-radius: 50%;
 }
 }
+.line.cancelLine{
+  background: none;
+}
 
-
+.line.delivered{
+  background: none;
+}
 
 .line {
   float: left;

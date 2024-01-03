@@ -39,7 +39,7 @@ const checkout=async(req,res)=>{
     }
   }
 
-  const checkoutPost = async (req, res) => {
+const checkoutPost = async (req, res) => {
     try {
       console.log("hrloooooooo",req.body);
       const userId = req.session.user_id;
@@ -179,13 +179,18 @@ const checkout=async(req,res)=>{
       newOrder.products.forEach((product) => {
         product.productStatus = "placed";
       });
-      console.log();
-      await orderModel.findByIdAndUpdate(
+        const orderItems=await orderModel.findByIdAndUpdate(
         { _id: newOrder._id }, 
         { $set:{ products: newOrder.products } },      
         { new: true }            
       );
-      
+
+      for (const item of orderItems.products) {
+        await Product.updateOne(
+          { _id: item.productId },
+          { $inc: { quantity: -item.quantity } }
+        );
+      }
       const orderId=await newOrder._id
   
       await cartData.deleteOne({ user: id });

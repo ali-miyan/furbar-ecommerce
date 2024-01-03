@@ -56,7 +56,6 @@
     </div>
   </div>
 
-  
   <% if (orderData.products.length > 0) { %>
     <div class="container mt-5">
         <h3 class="mb-4">Ordered Products</h3>
@@ -77,27 +76,29 @@
                                 Quantity: <%= product.quantity %> <br>
                                 Total: ₹<%= product.totalPrice %> <br>
                                 <% if (orderData.orderStatus !== 'Cancelled' || product.productStatus === 'Cancelled') { %>
-                                    <div id="cancelSection">
-                                        <input type="number" min="1" max="<%= product.quantity %>" id="quantity" value="1" class="form-control" inputmode="none">
+                                    <div class="cancelSection">
+                                        <input type="number" id="quantity" min="1" max="<%= product.quantity %>" class="form-control quantity" value="1" inputmode="none">
                                         <span id="error-message" class="error-text"></span>
                                         <br>
-                                        <button class="cancel-btn" onclick="validateAndCancel('<%= product.productId._id %>', '<%= orderData._id %>')">Cancel order</button>
+                                        <button class="cancel-btn" onclick="validateAndCancel('<%= product.productId._id %>', '<%= orderData._id %>','<%= product.productStatus %>')" <%= (product.productStatus === 'delivered') ? '' : 'disabled' %>>
+                                            <%= (product.productStatus === 'delivered') ? 'Return order' : (product.productStatus === 'out-for-delivery') ? 'No action' : 'Cancel order' %>
+                                        </button>                                 
                                     </div>
                                 <% } %>
                             </p>
                         </div>
                     </div>
                     <div class="status-line">
-                        <div class="line placed" id="packedLine">
-                            <div class="status">Packed</div>
+                        <div class="line placed">
+                            <div class="status">Placed</div>
                         </div>
-                        <div class="line shipped" id="shippedLine">
+                        <div class="line shipped">
                             <div class="status">Shipped</div>
                         </div>
-                        <div class="line out-for-delivery" id="outLine">
+                        <div class="line out-for-delivery">
                             <div class="status">Out to Delivery</div>
                         </div>
-                        <div class="line delivered" id="deliveredLine">
+                        <div class="line delivered">
                             <div class="status">Delivered</div>
                         </div>
                     </div>
@@ -105,27 +106,25 @@
             </div>
         <% }); %>
     </div>
-
     <script>
-        // Assuming orderStatus is a variable that holds the order status
-        var orderStatus = '<%= orderData.orderStatus %>';
+        let orderStatus = '<%= orderData.products[0].productStatus %>';
+        console.log(orderStatus, "status");
+        let productLines = document.querySelectorAll('.status-line');
     
-        // Get all lines within each product card
-        var productLines = document.querySelectorAll('.status-line');
-    
-        // Loop through product lines and update background based on orderStatus (in reverse order)
         productLines.forEach(function (statusLine) {
-            var lines = statusLine.querySelectorAll('.line');
-            var highlight = false;
+            let lines = statusLine.querySelectorAll('.line');
+            let highlight = false;
     
-            for (var i = lines.length - 1; i >= 0; i--) {
-                var lineClass = lines[i].classList[i]; // get the second class, which corresponds to the status
+            for (let i = lines.length-1; i > 0; i--) {
+                let lineClass = lines[i].classList[1];
     
                 if (lineClass === orderStatus || highlight) {
-                    lines[i].style.background = 'green';
+                    lines[i-1].style.background = 'green';
                     highlight = true;
-                } else {
-                    lines[i].style.background = 'none';
+
+                    if (lineClass == 'delivered') {
+                        lines[i].style.background = 'none';
+                    }
                 }
             }
         });
@@ -134,19 +133,6 @@
 <% } %>
 
 
-
-
-<script>
-const packedLine = document.getElementById('packedLine');
-const shippedLine = document.getElementById('shippedLine');
-const OutLine = document.getElementById('OutLine');
-const deliveredLine = document.getElementById('deliveredLine');
-
-packedLine.classList.add('packed');
-shippedLine.classList.add('shipped');
-packedLine.classList.add('packed');
-shippedLine.classList.add('shipped');
-</script>
 
 <% if (orderData.cancelledProduct && orderData.cancelledProduct.length > 0) { %>
     <div class="container mt-5">
@@ -188,19 +174,127 @@ shippedLine.classList.add('shipped');
     </div>
 <% } %>
 <br><br>
+<% if (orderData.returnedProduct && orderData.returnedProduct.length > 0) { %>
+    <div class="container mt-5">
+        <h3 class="mb-4">Returned Products</h3>
+        <% orderData.returnedProduct.forEach(function(returnedProduct, index) { %>
+        <div class="card mt-3">
+            <div class="card-body d-flex justify-content-start" >
+                <div class="cancelled-product-card d-flex">
+                    <div class="cancelled-product-image ">
+                        <a href="/detailshop?id=<%= returnedProduct.productDetails._id %>">
+                                <img src="sharpimages/<%= returnedProduct.productDetails.images.image1 %>" alt="" class="img-thumbnail" style="max-height: 250px; max-width: 150px;">
+                            </a>
+                        </div>
+                        <div class="mx-3 " style="width: 180px;">
+                        <div class="product-details">
+                            <h5 class="product-details"><a href="/detailshop?id=<%= returnedProduct.productDetails._id %>"><%= returnedProduct.productDetails.name %></a></h5>
+                            <p>Price:₹ <%= returnedProduct.productDetails.price %>
+                            <br>Quantity: <%= returnedProduct.quantity %> 
+                            <br>Status: <%= returnedProduct.productStatus %>
+                           <br>return Reason: <%= returnedProduct.returnReason %></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-cancel">
+                    <div class="line cancel" id="cancel">
+                      <div class="inner-line-1"></div>
+                      <div class="status">Packed</div>
+                    </div>
+                    <div class="line cancelLine" id="cancelLine">
+                      <div class="inner-line-2"></div>
+                      <div class="status">returned</div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <% }); %>
+    </div>
+<% } %>
+<br><br>
 
       
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
-    function showCancelConfirmation(productId,orderId,count) {
+    function validateAndCancel(productId, orderId,status) {
+      console.log('reachwede');
+        let quantityInput = document.getElementById('quantity');
+        let quantityValue = parseInt(quantityInput.value, 10);
+  
+        if (quantityValue < parseInt(quantityInput.min, 10) || quantityValue > parseInt(quantityInput.max, 10)) {
+            document.getElementById('error-message').innerText = 'Invalid quantity';
+            return;
+        }
+        document.getElementById('error-message').innerText = '';
+        if (status == 'delivered') {
+          showReturnConfirmation(productId, orderId, quantityValue)
+        }else{
+        showCancelConfirmation(productId, orderId, quantityValue);
+        }
+    }
+  </script>
+
+<script>
+    function showReturnConfirmation(productId,orderId,count) {
+        console.log('rech2');
         Swal.fire({
             title: 'Cancel Order',
             input: 'text',
-            inputLabel: 'Reason for cancellation',
+            inputLabel: 'Reason for return',
             showCancelButton: true,
-            confirmButtonText: 'Cancel Order',
+            confirmButtonText: 'return Order',
+            cancelButtonText: 'Close',
+            preConfirm: (reason) => {
+                if (!reason) {
+                    Swal.showValidationMessage('Please enter a reason');
+                }
+                return reason;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const returnReason = result.value;
+                returnProduct(productId,orderId, returnReason,count);
+            }
+        });
+    }
+
+    function returnProduct(productId,orderId, returnReason,count) {
+        $.ajax({
+            type: 'POST',
+            url: '/returnorder',
+            data: {productId, orderId, returnReason,count},
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire('Cancel Canceled', 'Your order has been returned.', 'success').then(() => {
+                    location.reload();      
+                    // $("#reloadDiv").load("/showcart #reloadDiv");
+                    });
+                } else {
+                    Swal.fire('Error', 'Failed to return the order.', 'error');
+                }
+            },
+            error: function (error) {
+                console.error('Error returnig order', error);
+            }
+        });
+    }
+
+
+    //cancelllllllllllllllllllll
+
+
+    function showCancelConfirmation(productId,orderId,count) {
+        console.log('rech2');
+        Swal.fire({
+            title: 'cancel Order',
+            input: 'text',
+            inputLabel: 'Reason for cancel',
+            showCancelButton: true,
+            confirmButtonText: 'cancel Order',
             cancelButtonText: 'Close',
             preConfirm: (reason) => {
                 if (!reason) {
@@ -241,19 +335,7 @@ shippedLine.classList.add('shipped');
 
 
 </script>
-<script>
-  function validateAndCancel(productId, orderId) {
-      var quantityInput = document.getElementById('quantity');
-      var quantityValue = parseInt(quantityInput.value, 10);
 
-      if (quantityValue < parseInt(quantityInput.min, 10) || quantityValue > parseInt(quantityInput.max, 10)) {
-          document.getElementById('error-message').innerText = 'Invalid quantity';
-          return;
-      }
-      document.getElementById('error-message').innerText = '';
-      showCancelConfirmation(productId, orderId, quantityValue);
-  }
-</script>
 
 
 

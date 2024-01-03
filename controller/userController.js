@@ -384,7 +384,7 @@ const detailShop=async(req,res)=>{
                     $push: {
                         cancelledProduct: {
                             quantity: count,
-                            productStatus: 'Cancelled',
+                            productStatus: 'cancelled',
                             cancelReason: cancelReason,
                             productDetails: productDetails,
                         },
@@ -402,7 +402,7 @@ const detailShop=async(req,res)=>{
                         cancelledProduct: {
                             productId: productId,
                             quantity: count,
-                            productStatus: 'Cancelled',
+                            productStatus: 'cancelled',
                             cancelReason: cancelReason,
                             productDetails: productDetails,
                         },
@@ -410,8 +410,87 @@ const detailShop=async(req,res)=>{
                     $pull: {
                         products: { productId: productId },
                     },
+                    
+                    $set: {
+                        orderStatus: 'cancelled'
+                    }
                 }
             );
+
+        }
+
+        console.log("dtaaaaaa", orderData);
+
+        for (let i = 0; i < orderData.products.length; i++) {
+            let productId = orderData.products[i].productId;
+            await Product.updateOne({ _id: productId }, { $inc: { quantity: count } });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.log(error.message);
+        res.render('500Error');
+    }
+};
+  const returnOrder = async (req, res) => {
+    try {
+        const user_id = req.session.user_id;
+        const orderId = req.body.orderId;
+        const productId = req.body.productId;
+        console.log("returnnnnnnn", orderId, productId);
+        const count = req.body.count;
+        const returnReason = req.body.returnReason;
+        const productDetails = await Product.findById(productId).populate('categoryId');
+        const orderData = await orderModel.findOneAndUpdate(
+            { _id: orderId, 'products.productId': productId },
+            {
+                $inc: {
+                    'products.$.quantity': -count,
+                },
+            },
+            { new: true }
+        );
+
+        if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
+            await orderModel.findOneAndUpdate(
+                { _id: orderId },
+                {
+                    $push: {
+                        returnedProduct: {
+                            quantity: count,
+                            productStatus: 'returned',
+                            returnReason: returnReason,
+                            productDetails: productDetails,
+                        },
+                    },
+                    $pull: {
+                        products: { productId: productId, quantity: 0 },
+                    },
+                }
+            );
+        } else {
+            await orderModel.findOneAndUpdate(
+                { _id: orderId },
+                {
+                    $push: {
+                        returnedProduct: {
+                            productId: productId,
+                            quantity: count,
+                            productStatus: 'returned',
+                            returnReason: returnReason,
+                            productDetails: productDetails,
+                        },
+                    },
+                    $pull: {
+                        products: { productId: productId },
+                    },
+                    
+                    $set: {
+                        orderStatus: 'returned'
+                    }
+                }
+            );
+
         }
 
         console.log("dtaaaaaa", orderData);
@@ -467,4 +546,5 @@ module.exports={
     detailOrder,
     cancelOrder,
     editUser,
+    returnOrder
 }

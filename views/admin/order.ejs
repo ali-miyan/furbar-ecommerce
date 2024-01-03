@@ -162,7 +162,6 @@
                                 <th scope="col">No of itmes</th>
                                 <th scope="col">Total Amount</th>
                                 <th scope="col">Action</th>
-                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -172,19 +171,9 @@
                                     <td><%= orderData[i]._id%></td>
                                     <td><%= orderData[i].payment %></td>
                                     <td><%= orderData[i].products.length%></td>
-                                    <td><%= orderData[i].subtotal %></td>
+                                    <td><%= orderData[i].subtotal %></td>                                    
                                     <td>
-                                        <select class="statusSelect" onchange="status('<%=orderData[i]._id%>')">
-                                            <option value="placed" <% if (orderData[i].orderStatus == '') { %> selected <% } %>>placed</option>
-                                            <option value="out-for-delivery" <% if (orderData[i].orderStatus == 'out-for-delivery') { %> selected <% } %>>out for delivery</option>
-                                            <option value="shipped" <% if (orderData[i].orderStatus == 'shipped') { %> selected <% } %>>shipped</option>
-                                            <option value="delivered" <% if (orderData[i].orderStatus == 'delivered') { %> selected <% } %>>delivered</option>
-                                        </select>
-                                    </td>
-
-                                    
-                                    <td>
-                                        Edit
+                                        <a href="/admin/showorder?id=<%= orderData[i]._id%>">View</a>
                                     </td>
                                     
                                 </tr>
@@ -213,12 +202,12 @@
         </footer>
     </main>
     <script>
-        function status(orderId) {
-            console.log("hello");
-            var selectElement = document.querySelector(".statusSelect");
-            var selectedStatus = selectElement.value;
-            updateStatus(orderId, selectedStatus);
-        }
+function status(orderId, selectElement) {
+    console.log("hello");
+    var selectedStatus = selectElement.value;
+    console.log(selectedStatus);
+    updateStatus(orderId, selectedStatus);
+}
     
         function updateStatus(id, status) {
             console.log(id);
