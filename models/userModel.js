@@ -31,8 +31,16 @@ const userSchema= new mongoose.Schema({
     },
     wallet: {
         type: Number,
-        default: 0
-    }
+        default: 0,
+    },
+    walletHistory:[{
+        date:{
+            type:Date
+        },
+        amount:{
+            type:Number,
+        },
+    }]
 });
 
 const User =mongoose.model('User',userSchema);

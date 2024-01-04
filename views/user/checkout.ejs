@@ -173,9 +173,17 @@
                                                                         <input type="radio" name="payment" value="Razorpay" id="radio2" />
                                                                         <label for="radio2"><span></span>Online paymet</label>
                                                                     </li>
+                                                                    <%console.log(wallet)%>
                                                                     <li class="radio">
-                                                                        <input type="radio" name="payment" value="Wallet" id="radio3" />
-                                                                        <label for="radio3"><span></span>Wallet</label>
+                                                                        <% if (wallet.wallet < subtotal) { %>
+                                                                            <input type="radio" name="payment" value="Wallet" id="radio3" disabled />
+                                                                            <label for="radio3"><span></span>Wallet</label>
+                                                                            <p>Wallet Balance: ₹<%=wallet.wallet%> (Not enough balance)</p>
+                                                                        <% } else { %>
+                                                                            <input type="radio" name="payment" value="Wallet" id="radio3" />
+                                                                            <label for="radio3"><span></span>Wallet</label>
+                                                                            <p>Wallet Balance: ₹<%=wallet.wallet%></p>
+                                                                        <% } %>
                                                                     </li>
                                                                 </ul>
                                                             </td>

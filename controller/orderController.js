@@ -28,12 +28,12 @@ const razorpay = new Razorpay({
 
 const checkout=async(req,res)=>{
     try {
-      const id=req.session.user_id
-      const cartData = await cartModel.findOne({user:id}).populate('product.productId')    
-      const address = await addressModel.findOne({user:id})
+      const wallet=await User.findById(req.session.user_id)
+      const cartData = await cartModel.findOne({user:req.session.user_id}).populate('product.productId')    
+      const address = await addressModel.findOne({user:req.session.user_id})
       const total = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
       const subtotal=total+cartData.shippingAmount
-      res.render('checkout',{id,address,cartData,subtotal})
+      res.render('checkout',{wallet,address,cartData,subtotal})
     } catch (error) {
       console.log(error);
     }
@@ -63,24 +63,6 @@ const checkoutPost = async (req, res) => {
       const totalPrice = total + cartData.shippingAmount
       console.log(totalPrice,"totalprice");
       console.log("statuesssssssss",);
-
-
-      if (paymentMethod == "Wallet") {
-        if(user.wallet>=totalPrice){
-        const reduce = user.wallet - totalPrice;
-        status = "placed";
-        await User.findOneAndUpdate(
-          {_id:user},
-          {
-            $set: { wallet: reduce },
-          }
-        )
-        res.json({wallet:true})
-        }else{
-          res.json({wallet:false})
-        }
-      }
-
   
         if (selectedAddress === undefined || selectedAddress === null) {
           const { name, address, landmark, state, city, pincode, phone, email } = req.body;
@@ -128,7 +110,25 @@ const checkoutPost = async (req, res) => {
           );
         }
         await cartData.deleteOne({ user: user._id });
-        res.json({orderId,success:true})
+        return res.json({orderId,success:true})
+      }else if (paymentMethod == "Wallet") {
+
+        const data ={
+          amount:-totalPrice,
+          date:new Date()
+        }
+
+        await orderModel.findOneAndUpdate({_id:order._id},{$set:{orderStatus:'placed'}})
+        await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-totalPrice},$push:{walletHistory:data}})
+
+        for (const item of orderItems) {
+          await Product.updateOne(
+            { _id: item.productId },
+            { $inc: { quantity: -item.quantity } }
+          );
+        }
+        return res.json({orderId,success:true})
+        
       }else{
         var options = {
           amount: totalPrice * 100,

@@ -360,10 +360,10 @@ const detailShop=async(req,res)=>{
   
   const cancelOrder = async (req, res) => {
     try {
-        const user_id = req.session.user_id;
+        const userId = req.session.user_id;
+        console.log(userId);
         const orderId = req.body.orderId;
         const productId = req.body.productId;
-        console.log("hrlooooooooooooooo", orderId, productId);
         const count = req.body.count;
         const cancelReason = req.body.cancelReason;
         const productDetails = await Product.findById(productId).populate('categoryId');
@@ -377,6 +377,16 @@ const detailShop=async(req,res)=>{
             { new: true }
         );
 
+
+        const walletAmount=count*orderData.products[0].price
+        console.log(walletAmount,'wallll');
+
+        const data = {
+          amount:  walletAmount,
+          date: Date.now(),
+        }
+        const newD = await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
+        console.log(newD,'neww');
         if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
             await orderModel.findOneAndUpdate(
                 { _id: orderId },
@@ -419,7 +429,6 @@ const detailShop=async(req,res)=>{
 
         }
 
-        console.log("dtaaaaaa", orderData);
 
         for (let i = 0; i < orderData.products.length; i++) {
             let productId = orderData.products[i].productId;
@@ -434,10 +443,9 @@ const detailShop=async(req,res)=>{
 };
   const returnOrder = async (req, res) => {
     try {
-        const user_id = req.session.user_id;
+        const userId=req.session.user_id
         const orderId = req.body.orderId;
         const productId = req.body.productId;
-        console.log("returnnnnnnn", orderId, productId);
         const count = req.body.count;
         const returnReason = req.body.returnReason;
         const productDetails = await Product.findById(productId).populate('categoryId');
@@ -450,6 +458,14 @@ const detailShop=async(req,res)=>{
             },
             { new: true }
         );
+
+            const walletAmount=count*orderData.products[0].price
+
+            const data = {
+              amount:  walletAmount,
+              date: Date.now(),
+            }
+            await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
 
         if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
             await orderModel.findOneAndUpdate(

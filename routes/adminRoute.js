@@ -152,24 +152,25 @@ routeAdmin.patch('/blockcoupon/:id',async(req,res)=>{
     }
   })
 
-  routeAdmin.post('/admin/updatestatus',async(req,res)=>{
+  routeAdmin.post('/updatestatus',async(req,res)=>{
     try {
         console.log("helooq");
-        const { orderId, newStatus } = req.body;
+        const {newStatus,productId} = req.body;
         console.log(req.body,"body");
-        const orderData=await orderModel.findById(orderId)
-
+        console.log(productId);
 
         const updatedOrder = await orderModel.findOneAndUpdate(
-            { _id: orderId },
+            { 
+                'products._id': productId
+            },
             {
                 $set: {
-                    orderStatus: newStatus,
-                    "products.$[].productStatus": newStatus
+                    'products.$.productStatus': newStatus
                 }
             },
             { new: true }
         );
+
 
         res.json({success:true})
 

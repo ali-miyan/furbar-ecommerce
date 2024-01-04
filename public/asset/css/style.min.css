@@ -107,77 +107,112 @@
   color: #333;
   font-size: 15px;
 }
-
 .status-cancel {
   display: flex;
   margin-left: 100px; 
   align-items: center;
   width: 100%;
-  }
+}
 
 .line.cancel {
-  background: red ;
+  background: red;
   float: left;
   position: relative;
   width: 560px;
   height: 3px;
 }
-.line.cancelLine{
 
+.line.cancel {
+  position: relative;
   &:before {
+    content: '';
     position: absolute;
     width: 15px;
     height: 15px;
-    background: red ;
-    content: '';
-    top: -6px;
+    background: green;
+    top: -7px;
     border-radius: 50%;
+  }
 }
+.line.cancelLine {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: red;
+    top: -7px;
+    border-radius: 50%;
+  }
 }
-.line.cancelLine{
+
+.line.cancelLine {
   background: none;
 }
 
-.line.delivered{
-  background: none;
+/* Styling for the status line container */
+.status-line {
+  display: flex;
+  margin-left: 30px;
+  align-items: center;
+  width: 100%;
 }
 
+/* Styling for each status item container */
 .line {
-  float: left;
+  display: flex;
+}
+
+/* Styling for each status item */
+.placed,
+.shipped,
+.out-for-delivery,
+.delivered {
   position: relative;
   width: 180px;
   height: 3px;
   background: #dad0d0;
+
   &:before {
       position: absolute;
       width: 15px;
       height: 15px;
-      background: green ;
       content: '';
+      background: green;
       top: -6px;
       border-radius: 50%;
   }
 }
 
+/* Styling for specific status */
+.placed.green,
+.shipped.green,
+.out-for-delivery.green {
+  background: green;
+
+  &:before {
+      background: green;
+  }
+}
+
+.delivered {
+  background: none;
+}
+
+/* Styling for status text */
 .status {
   position: absolute;
   left: -20px;
   top: 20px;
 }
 
-
-
-
-
-.status-line {
-  display: flex;
-  margin-left: 30px; 
-  align-items: center;
-  width: 100%;
-  }
-
+/* Responsive styling for smaller screens */
 @media (max-width: 768px) {
-  .line {
+  .placed,
+  .shipped,
+  .out-for-delivery,
+  .delivered {
       width: 100%;
       font-size: 9px;
   }
