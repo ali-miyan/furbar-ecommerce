@@ -1,4 +1,5 @@
 <%- include('../layouts/header.ejs') -%>
+<script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
 
 
 
@@ -27,27 +28,35 @@
                 <i class="fa fa-exclamation-circle"></i> Have a coupon?
                 <a data-bs-toggle="collapse" href="#coupon">Click here to enter your code</a>
             </p>
-
+            <%console.log(coupons)%>
             <div class="collapse" id="coupon">
                 <div class="card-body">
-                    <form action="#" method="">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="single-form">
-                                    <input type="email" placeholder="Coupon code" />
+                            <% for (let i = 0; i < coupons.length; i++) { %>
+                                <div class="col-lg-2">
+                                    <div class="card">
+                                        <div class="card-body mx-3 my-2">
+                                            <h5 class="coupon-tag"><%= coupons[i].name %></h5>
+                                            <p class="coupon-text"> Coupon Code: <%= coupons[i].couponCode %> <br>
+                                            Discount Amount: ₹<%= coupons[i].discountAmount %> <br>
+                                            only applicable if you order above ₹<%=coupons[i].criteriaAmount%> </p>
+                                            <% if(111>coupons[i].criteriaAmount) {%>
+                                            <button type="submit" onclick="applyCoupon('<%=coupons[i]._id%>')" class="apply-btn btn btn-primary mx-3" >
+                                                <span> Apply</span>
+                                            </button>
+                                            <% } else { %>
+                                                <span
+                                                    class="badge  alert-danger mx-3 my-3">not Applicable
+                                                </span>
+                                                <%}%>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="single-form">
-                                    <button class="btn btn-primary btn-hover-dark">
-                                        Coupon
-                                    </button>
-                                </div>
-                            </div>
+                            <% } %>
                         </div>
-                    </form>
                 </div>
             </div>
+            
         </div>
                                 <form id="form">
                                     <div class="row">
@@ -173,7 +182,6 @@
                                                                         <input type="radio" name="payment" value="Razorpay" id="radio2" />
                                                                         <label for="radio2"><span></span>Online paymet</label>
                                                                     </li>
-                                                                    <%console.log(wallet)%>
                                                                     <li class="radio">
                                                                         <% if (wallet.wallet < subtotal) { %>
                                                                             <input type="radio" name="payment" value="Wallet" id="radio3" disabled />
@@ -193,7 +201,12 @@
                                                                 <p>Total</p>
                                                             </td>
                                                             <td class="total-price">
-                                                                <p>₹<%=subtotal%></p>
+                                                                <% if (discountAmount) { %>
+                                                                    <p>Original Total: ₹<%= subtotal %></p>
+                                                                    <p>Discounted Total: ₹<%= discountAmount %></p>
+                                                                <% } else { %>
+                                                                    <p>₹<%= subtotal %></p>
+                                                                <% } %>
                                                             </td>
                                                         </tr>
                                                     </tfoot>
@@ -217,6 +230,9 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
 
 <script>
 $(document).ready(function() {
@@ -304,7 +320,54 @@ let options = {
     
 } 
 </script>
+<script>
+function applyCoupon(id) {
+    console.log('heloooo');
+    $.ajax({
+        url: "/applycoupon",
+        method: 'post',
+        data: {
+            id,
+        },
+        success: (response) => {
+    if (response.coupon == false) {
+        Swal.fire({
+            title: "No Coupon Available",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+    } else if (response.coupon == 'alreadyUsed') {
+        Swal.fire({
+            title: "This Coupon No Longer Available",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+    }else if (response.coupon == 'used') {
+        Swal.fire({
+            title: "This Coupon Is Already Used. Try Another One",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+    } else if (response.coupon) {
+        Swal.fire({
+            title: "Success",
+            text: "Coupon Added!",
+            icon: "success",
+            confirmButtonText: "OK",
+        });
+    } else {
+        Swal.fire({
+            title: "Something Wrong",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+    }
+}
 
+    });
+}
+
+</script>
 
 
 

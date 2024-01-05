@@ -97,6 +97,7 @@ const signupPost = async (req, res) => {
                 });
 
                 const result = await newUser.save();
+                req.session.user_id=newUser._id
                 console.log(result);
                 sendOTPverification(result, res);
             }
@@ -110,9 +111,6 @@ const signupPost = async (req, res) => {
 //rendering otp page
 const verifyOTP=async (req, res) => {
     try {
-        req.session.user_id = req.query.id; 
-        console.log("Session ID set:", req.session.user_id);   
-        console.log("Session ID set:", req.query.id);
         res.render('otp');
     } catch (error) {
         console.log("Error setting session:", error.message);
@@ -142,6 +140,7 @@ const verifyPost=async(req,res)=>{
                     const validOTP=await bcrypt.compare(otp,hashedOTP);
                     if(!validOTP){
                         res.render('otp',{message:"Invalid code"})
+
                     }else{
                        await User.updateOne({_id:userId},{verfied:true});
                        await userVerification.deleteMany({userId});
@@ -192,7 +191,7 @@ const sendOTPverification=async({_id,email},res)=>{
     //save otp records
     await newOTP.save();
     await transporter.sendMail(mailOption);
-    res.redirect(`/verifyOTP?id=${_id}`);
+    res.redirect(`/verifyOTP`);
     
     } catch (error) {
         throw new Error;

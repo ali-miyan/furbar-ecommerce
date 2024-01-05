@@ -217,3 +217,33 @@
       font-size: 9px;
   }
 }
+
+.ticket{
+  font-size: 50px;
+  position: relative;
+  right: 250px;
+}
+
+.coupon-text{
+  text-align: center;
+  font-family:'Times New Roman', Times, serif;  
+}
+.coupon-tag{
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.apply-btn {
+
+  width: 80px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Horizontally center the text */
+  border: 1px solid #ced4da; /* Adding a border for visibility */
+}
+
+/* Adjust the font size if needed */
+.apply-btn span {
+  font-size:8px;
+}

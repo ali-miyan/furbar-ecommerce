@@ -19,6 +19,7 @@ const Razorpay = require('razorpay');
 const dotenv = require('dotenv')
 dotenv.config()
 const crypto = require('crypto')
+const couponModel = require('../models/couponModel')
 
 const razorpay = new Razorpay({
   key_id:process.env.KEY_ID,
@@ -28,16 +29,33 @@ const razorpay = new Razorpay({
 
 const checkout=async(req,res)=>{
     try {
-      const wallet=await User.findById(req.session.user_id)
-      const cartData = await cartModel.findOne({user:req.session.user_id}).populate('product.productId')    
-      const address = await addressModel.findOne({user:req.session.user_id})
-      const total = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
-      const subtotal=total+cartData.shippingAmount
-      res.render('checkout',{wallet,address,cartData,subtotal})
+      const wallet = await User.findById(req.session.user_id);
+      const cartData = await cartModel.findOne({ user: req.session.user_id }).populate('product.productId');
+      
+      // Check if there is a couponDiscount and populate it
+      if (cartData.couponDiscount !== 0) {
+          await cartData.populate('couponDiscount');
+      }
+      
+      const couponDiscount = cartData.couponDiscount !== 0 ? cartData.couponDiscount.discountAmount : 0;
+      
+      const address = await addressModel.findOne({ user: req.session.user_id });
+      const total = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
+      const coupons = await couponModel.find();
+      const subtotal = total + cartData.shippingAmount;
+  
+      const discountAmount = subtotal-couponDiscount;
+      
+      console.log(discountAmount, "helooooo");
+      
+      res.render('checkout', { wallet, address, cartData, subtotal, coupons, discountAmount });
+      
     } catch (error) {
       console.log(error);
     }
   }
+
+
 
 const checkoutPost = async (req, res) => {
     try {
@@ -81,10 +99,6 @@ const checkoutPost = async (req, res) => {
           );
           addressObject = userAddress.address[0];
         }
-
-
-      
-      
 
       console.log("productsssssss",orderItems);
 
