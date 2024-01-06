@@ -30,7 +30,7 @@
             </p>
             <%console.log(coupons)%>
             <div class="collapse" id="coupon">
-                <div class="card-body">
+                <div class="card-body" id="reloadDiv" >
                         <div class="row">
                             <% for (let i = 0; i < coupons.length; i++) { %>
                                 <div class="col-lg-2">
@@ -41,9 +41,16 @@
                                             Discount Amount: ₹<%= coupons[i].discountAmount %> <br>
                                             only applicable if you order above ₹<%=coupons[i].criteriaAmount%> </p>
                                             <% if(111>coupons[i].criteriaAmount) {%>
-                                            <button type="submit" onclick="applyCoupon('<%=coupons[i]._id%>')" class="apply-btn btn btn-primary mx-3" >
-                                                <span> Apply</span>
-                                            </button>
+                                                <% console.log('Coupon ID:', coupons[i]._id, 'Applied Coupon ID:', cartData.couponDiscount ? cartData.couponDiscount._id : 'No Coupon Applied') %>
+                                                   <% if (discountAmount && coupons[i]._id.toString() !== (cartData.couponDiscount ? cartData.couponDiscount._id.toString() : null)) { %>
+                                                    <button type="submit" onclick="applyCoupon('<%=coupons[i]._id%>')" id="applyButton" class="apply-btn btn btn-primary mx-3">
+                                                        <span> Apply</span>
+                                                    </button>
+                                                <% } else if (cartData.couponDiscount && coupons[i]._id.toString() === (cartData.couponDiscount._id ? cartData.couponDiscount._id.toString() : null)) { %>
+                                                    <button type="submit" onclick="removeCoupon('<%=coupons[i]._id%>')" id="applyButton" class="apply-btn btn btn-danger mx-3">
+                                                        <span> Remove</span>
+                                                    </button>
+                                                <% } %>
                                             <% } else { %>
                                                 <span
                                                     class="badge  alert-danger mx-3 my-3">not Applicable
@@ -58,6 +65,7 @@
             </div>
             
         </div>
+
                                 <form id="form">
                                     <div class="row">
                                         <div class="col-lg-7">
@@ -148,7 +156,7 @@
                                                 <h4 class="title">Your Order</h4>
                                             </div>
 
-                                            <div class="checkout-order-table table-responsive">
+                                            <div class="checkout-order-table table-responsive" id="reloadAmount">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
@@ -201,11 +209,11 @@
                                                                 <p>Total</p>
                                                             </td>
                                                             <td class="total-price">
-                                                                <% if (discountAmount) { %>
-                                                                    <p>Original Total: ₹<%= subtotal %></p>
-                                                                    <p>Discounted Total: ₹<%= discountAmount %></p>
+                                                                <% if (discountAmount !== subtotal ) { %>
+                                                                    Original Amount: ₹ <del><%= subtotal %></del> <br>       
+                                                                    Discounted Amount: ₹<%= discountAmount %>
                                                                 <% } else { %>
-                                                                    <p>₹<%= subtotal %></p>
+                                                                    ₹<%= subtotal %>
                                                                 <% } %>
                                                             </td>
                                                         </tr>
@@ -330,45 +338,89 @@ function applyCoupon(id) {
             id,
         },
         success: (response) => {
-    if (response.coupon == false) {
-        Swal.fire({
-            title: "No Coupon Available",
-            icon: "error",
-            confirmButtonText: "OK",
-        });
-    } else if (response.coupon == 'alreadyUsed') {
-        Swal.fire({
-            title: "This Coupon No Longer Available",
-            icon: "error",
-            confirmButtonText: "OK",
-        });
-    }else if (response.coupon == 'used') {
-        Swal.fire({
-            title: "This Coupon Is Already Used. Try Another One",
-            icon: "error",
-            confirmButtonText: "OK",
-        });
-    } else if (response.coupon) {
-        Swal.fire({
-            title: "Success",
-            text: "Coupon Added!",
-            icon: "success",
-            confirmButtonText: "OK",
-        });
-    } else {
-        Swal.fire({
-            title: "Something Wrong",
-            icon: "error",
-            confirmButtonText: "OK",
-        });
-    }
-}
-
+            console.log(response);
+            if (response.coupon === false) {
+                Swal.fire({
+                    title: "No Coupon Available",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }else if (response.coupon === 'alreadyApplied') {
+                Swal.fire({
+                    title: "One coupon is already Active",
+                    icon: "info",
+                    confirmButtonText: "OK",
+                });
+            }else if (response.coupon === 'alreadyUsed') {
+                Swal.fire({
+                    title: "You already used this coupon",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            } else if (response.coupon === 'expired') {
+                Swal.fire({
+                    title: "Oops",
+                    text: "This coupon has expired",
+                    icon: "info",
+                    confirmButtonText: "OK",
+                });
+           
+            } else if (response.coupon) {
+                Swal.fire({
+                    title: "Success",
+                    text: "Coupon added successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then((result) => { 
+                    if (result.isConfirmed) {
+                        $('#reloadDiv').load('/checkout #reloadDiv'); 
+                        $('#reloadAmount').load('/checkout #reloadAmount'); 
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Something Wrong",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        }
     });
 }
-
 </script>
 
+<script>
+    function removeCoupon(id) {
+        console.log('heloooo');
+        $.ajax({
+            url: "/removecoupon",
+            method: 'post',
+            data: {
+                id,
+            },
+            success: (response) => {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Coupon removed",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#reloadDiv').load('/checkout #reloadDiv'); 
+                            $('#reloadAmount').load('/checkout #reloadAmount'); 
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error removing coupon",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
+            }
+        });
+    }
+</script>
 
 
 <%- include('../layouts/footer.ejs') -%>

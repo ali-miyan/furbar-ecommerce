@@ -20,7 +20,9 @@ const orderModel = require('../models/orderModal');
 //route to home page
 const loadHome=async(req,res)=>{
     try {
-        res.render('home')
+        const user_id=req.session.user_id
+        const user = await User.findById(user_id)
+        res.render('home',{user})
 
     } catch (error) {
         console.log(error);
@@ -48,7 +50,6 @@ const loadSignup=async(req,res)=>{
 //profile page
 const loadProfile = async (req, res) => {
     try {
-        if (req.session.user_id) {
             console.log("profile session" + req.session.user_id);
             const user = await User.findOne({ _id: req.session.user_id });
             const address = await addressModel.findOne({ user: req.session.user_id });
@@ -56,9 +57,7 @@ const loadProfile = async (req, res) => {
             .populate('products.productId')
         
             res.render('profile', { user, address, order });
-        } else {
-            res.redirect('/login');
-        }
+        
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
@@ -81,23 +80,20 @@ const signupPost = async (req, res) => {
     try {
         let { name, email,mobile,password } = req.body;
             const userExists = await User.findOne({ email });
-
             if (userExists) {
                 res.render('signup', { message: 'User with provided email already exists' });
                 console.log(userExists);
             } else {
                 const hashedPassword = await securePassword(password);
                 const newUser = new User({
-                    name: req.body.name,
-                    email: req.body.email,
-                    mobile: req.body.mobile,
+                    name: name,
+                    email: email,
+                    mobile: mobile,
                     password: hashedPassword,
                     verified: false,
                     isAdmin:0
                 });
-
                 const result = await newUser.save();
-                req.session.user_id=newUser._id
                 console.log(result);
                 sendOTPverification(result, res);
             }
@@ -111,7 +107,8 @@ const signupPost = async (req, res) => {
 //rendering otp page
 const verifyOTP=async (req, res) => {
     try {
-        res.render('otp');
+        const id = req.query.id
+        res.render('otp',{id});
     } catch (error) {
         console.log("Error setting session:", error.message);
     }
@@ -121,7 +118,7 @@ const verifyOTP=async (req, res) => {
 const verifyPost=async(req,res)=>{
     try {
       const otp= req.body.otp
-      const userId=req.session.user_id
+      const userId=req.body.id
       console.log("Session ID:", userId);
         
             const userOTPVerificationrecord=await userVerification.find({user_id:userId})
@@ -144,7 +141,7 @@ const verifyPost=async(req,res)=>{
                     }else{
                        await User.updateOne({_id:userId},{verfied:true});
                        await userVerification.deleteMany({userId});
-
+                       req.session.user_id=userId
                     res.redirect(`/`)
                     }
                 }
@@ -191,7 +188,7 @@ const sendOTPverification=async({_id,email},res)=>{
     //save otp records
     await newOTP.save();
     await transporter.sendMail(mailOption);
-    res.redirect(`/verifyOTP`);
+    res.redirect(`/verifyOTP?id=${_id}`);
     
     } catch (error) {
         throw new Error;

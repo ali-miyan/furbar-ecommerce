@@ -46,7 +46,7 @@ routeUser.get("/", userController.loadHome);
 
 routeUser.get("/shop", userController.loadShop);
 
-routeUser.get("/profile", userController.loadProfile);
+routeUser.get("/profile",auth.isLogin, userController.loadProfile);
 
 routeUser.get("/signup", auth.isLogout, userController.loadSignup);
 
@@ -205,28 +205,43 @@ routeUser.post('/applycoupon', async (req, res) => {
 
     if (couponData && !couponData.is_blocked) {
       if (currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate) {
-          const exists = couponData.usedUsers.includes(user_id);
+        const exists = couponData.usedUsers.includes(user_id);
 
-          if (!exists) {
-            const existingCart = await cartModel.findOne({ user: user_id });
+        if (!exists) {
+          const existingCart = await cartModel.findOne({ user: user_id });
 
-            if (existingCart) {
-              await CouponModel.findOneAndUpdate({ _id: couponId }, { $push: { usedUsers: user_id } });
-              await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: couponData._id } });
-              res.json({ coupon: true });
-            } else {
-              res.json({ coupon: 'noCart' });
-            }
+          if (existingCart && existingCart.couponDiscount == null) {
+            // Check if the user has not applied any other coupon
+            await CouponModel.findOneAndUpdate({ _id: couponId }, { $push: { usedUsers: user_id } });
+            await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: couponData._id } });
+            res.json({ coupon: true });
           } else {
-            res.json({ coupon: 'alreadyUsed' });
+            res.json({ coupon: 'alreadyApplied' });
           }
-        
+        } else {
+          res.json({ coupon: 'alreadyUsed' });
+        }
       } else {
         res.json({ coupon: 'expired' });
       }
     } else {
       res.json({ coupon: false });
     }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+routeUser.post('/removecoupon', async (req, res) => {
+  try {
+    const couponId = req.body.id;
+    const user_id = req.session.user_id
+    const cartData = await cartModel.findOne({ user: user_id })
+    const couponData = await CouponModel.findOneAndUpdate({ _id: couponId }, { $pull: { usedUsers: user_id } })
+    const updateCart = await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: null } })
+    res.json({success:true})
+   
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: 'Internal Server Error' });

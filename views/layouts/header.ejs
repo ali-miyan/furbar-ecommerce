@@ -92,7 +92,11 @@
                         </div>
 
                         <div class="dropdown">
+                            <%if(locals.user){%>
                             <a class="action" href="/profile" role="button" ><i class="pe-7s-user"></i></a>
+                            <%}else{%>
+                                <a class="action" href="/login" role="button" ><i class="pe-7s-user"></i></a>
+                                <%}%>
                         </div>
                         <a class="action" href="#"><i class="pe-7s-like"></i></a>
 

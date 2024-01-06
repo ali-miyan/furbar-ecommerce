@@ -27,35 +27,28 @@ const razorpay = new Razorpay({
 });
 
 
-const checkout=async(req,res)=>{
-    try {
+const checkout = async (req, res) => {
+  try {
       const wallet = await User.findById(req.session.user_id);
-      const cartData = await cartModel.findOne({ user: req.session.user_id }).populate('product.productId');
-      
-      // Check if there is a couponDiscount and populate it
-      if (cartData.couponDiscount !== 0) {
-          await cartData.populate('couponDiscount');
-      }
-      
-      const couponDiscount = cartData.couponDiscount !== 0 ? cartData.couponDiscount.discountAmount : 0;
-      
+      const cartData = await cartModel.findOne({ user: req.session.user_id }).populate({path: 'product.productId',model: 'Product'}).populate('couponDiscount');
+    
       const address = await addressModel.findOne({ user: req.session.user_id });
       const total = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
       const coupons = await couponModel.find();
       const subtotal = total + cartData.shippingAmount;
-  
-      const discountAmount = subtotal-couponDiscount;
+
+      const couponDiscount = cartData.couponDiscount ? cartData.couponDiscount.discountAmount : 0;
+      const discountAmount = subtotal - couponDiscount;
       
+
       console.log(discountAmount, "helooooo");
-      
+
       res.render('checkout', { wallet, address, cartData, subtotal, coupons, discountAmount });
-      
-    } catch (error) {
+
+  } catch (error) {
       console.log(error);
-    }
   }
-
-
+}
 
 const checkoutPost = async (req, res) => {
     try {
