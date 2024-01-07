@@ -93,26 +93,19 @@
                                                     <div class="modal-dialog" role="document" style="position: relative; top: 250px;" >
                                                       <div class="modal-content">
                                                         <div class="modal-header">
-                                                          <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
-                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                          </button>
+                                                          <p class="modal-title" id="editProfileModalLabel">Edit Profile</p>
                                                         </div>
                                                         <div class="modal-body">
                                                           <form action="/edituser" method="post" id="editProfileForm">
-                                                            <div class="form-group">
+                                                            <div class="form-group ">
                                                               <label for="editName">Name:</label>
                                                               <input type="text" class="form-control" value="<%= user.name %>" id="editName" name="editname" placeholder="Enter your name">
                                                             </div>
                                                             <div class="form-group">
-                                                              <label for="editPhone">Phone:</label>
+                                                              <label for="editPhone mt-4">Phone:</label>
                                                               <input type="tel" class="form-control" value="<%= user.mobile %>" id="editPhone" name="editmobile" placeholder="Enter your phone number">
                                                             </div>
-                                                            <div class="form-group">
-                                                              <label for="editEmail">Email:</label>
-                                                              <input type="email" class="form-control" value="<%= user.email %>" id="editEmail" name="editemail" placeholder="Enter your email">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                            <button type="submit" class="btn btn-primary mt-4 text-centered">Save Changes</button>
                                                           </form>
                                                         </div>
                                                       </div>

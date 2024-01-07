@@ -15,6 +15,7 @@ config.connectDB();
 const Product=require("../models/productModel");
 const addressModel = require('../models/addressModel');
 const orderModel = require('../models/orderModal');
+const categoryModel = require('../models/categoryModel');
 
 
 //route to home page
@@ -30,15 +31,34 @@ const loadHome=async(req,res)=>{
 }
 
 //shop page
-const loadShop=async(req,res)=>{
+const loadShop = async (req, res) => {
     try {
-        const product=await Product.find({})
-        res.render('shop',{product:product})
+      const category = await categoryModel.find({ _id: { $in: await Product.distinct("categoryId") } });
+      let product;
+      if (req.query.filteredProducts) {
+        product = JSON.parse(req.query.filteredProducts);
+      } else {
+        product = await Product.find({});
+      }
+      const selectedCategories = req.query.categories ? JSON.parse(req.query.categories) : [];
+      res.render('shop', { product, category, selectedCategories });
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
+  }
 
+  const categoryFilter = async (req, res) => {
+    try {
+        const filtered = req.body.category;
+        console.log(filtered,'ddddddddd');
+      const products = await Product.find({ categoryId: { $in: filtered } }).populate('categoryId');
+      res.json({ products });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
 //signup page
 const loadSignup=async(req,res)=>{
     try {
@@ -529,7 +549,6 @@ const detailShop=async(req,res)=>{
                   $set: {
                       name:req.body.editname,
                       mobile:req.body.editmobile,
-                      email:req.body.editemail,
                   },
               },
               { new: true }
@@ -558,5 +577,6 @@ module.exports={
     detailOrder,
     cancelOrder,
     editUser,
-    returnOrder
+    returnOrder,
+    categoryFilter
 }

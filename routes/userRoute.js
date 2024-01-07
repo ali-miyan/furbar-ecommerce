@@ -240,13 +240,14 @@ routeUser.post('/removecoupon', async (req, res) => {
     const cartData = await cartModel.findOne({ user: user_id })
     const couponData = await CouponModel.findOneAndUpdate({ _id: couponId }, { $pull: { usedUsers: user_id } })
     const updateCart = await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: null } })
-    res.json({success:true})
-   
+    res.json({success:true})  
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+
+routeUser.post('/categoryfilter',userController.categoryFilter)
 
 module.exports = routeUser;
