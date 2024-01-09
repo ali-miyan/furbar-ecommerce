@@ -61,14 +61,22 @@ const checkoutPost = async (req, res) => {
       const cartData = await cartModel.findOne({ user: userId });
 
       let status=paymentMethod=="Cash on delivery"?"placed":"pending"
+      const orderItems = [];
 
-      const orderItems = await cartData.product.map(product => ({
-        productId: product.productId,
-        quantity: product.quantity,
-        price: product.price,
-        totalPrice: product.quantity * product.price,
-        productStatus:status
-      }));
+      for (const product of cartData.product) {
+        const { productId, quantity, price } = product;
+      
+        for (let i = 0; i < quantity; i++) {
+          const item = {
+            productId,
+            quantity: 1,
+            price,
+            totalPrice: price,
+            productStatus: status,
+          };
+          orderItems.push(item);
+        }
+      }      
 
       const total = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);
       const totalPrice = total + cartData.shippingAmount
@@ -208,8 +216,22 @@ const checkoutPost = async (req, res) => {
     }
   }
 
+
+  const successPage = async (req, res) => {
+    try {
+      const orderID = req.query.id;
+      const orderData = await orderModel.findOne({ _id: orderID })
+      res.render('successpage', { orderData })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  
+
   module.exports={
     checkout,
     checkoutPost,
-    verifypayment
+    verifypayment,
+    successPage
   }

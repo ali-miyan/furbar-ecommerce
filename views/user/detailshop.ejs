@@ -85,7 +85,7 @@
                             High quality vase bottle.
                         </h4>
                         <div class="price">
-                            <span class="sale-price">$240.00</span>
+                            <span class="sale-price">₹<%=data.price%></span>
                             <span class="old-price">$290.00</span>
                         </div>
                         <div class="review-wrapper">
@@ -97,31 +97,6 @@
                             </p>
                         </div>
 
-                        <div class="product-color">
-                            <span class="lable">Color:</span>
-                            <ul>
-                                <li>
-                                    <input type="radio" name="colors" id="color1" />
-                                    <label for="color1"><span class="color-blue"></span></label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="colors" id="color2" />
-                                    <label for="color2"><span class="color-gray"></span></label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="colors" id="color3" />
-                                    <label for="color3"><span
-                                                class="color-dark-blue"
-                                            ></span></label>
-                                </li>
-                                <li>
-                                    <input type="radio" name="colors" id="color4" />
-                                    <label for="color4"><span
-                                                class="color-gray-dark"
-                                            ></span></label>
-                                </li>
-                            </ul>
-                        </div>
 
                         <p>
                             Lorem ipsum dolor sit amet, consectet
@@ -134,15 +109,6 @@
                         </p>
 
                         <div class="product-meta">
-                            <div class="product-quantity d-inline-flex">
-                                <button type="button" class="sub">
-                                    -
-                                </button>
-                                <input type="text" value="1" />
-                                <button type="button" class="add">
-                                    +
-                                </button>
-                            </div>
                             <div class="meta-action">
                                 <button onclick="addToCart('<%= data._id%>')"  class="btn btn-dark btn-hover-primary">
                                     Add To Cart
@@ -151,56 +117,13 @@
                             <div class="meta-action">
                                 <a class="action" href="#"><i class="pe-7s-like"></i></a>
                             </div>
-                            <div class="meta-action">
-                                <a class="action" href="#"><i class="pe-7s-shuffle"></i></a>
-                            </div>
+
                         </div>
 
                         <div class="product-info">
                             <div class="single-info">
-                                <span class="lable">SKU:</span>
-                                <span class="value">Ch-256xl</span>
-                            </div>
-                            <div class="single-info">
-                                <span class="lable">Categories:</span>
-                                <span class="value"
-                                        ><a href="#">Office,</a>
-                                        <a href="#">Home</a></span>
-                            </div>
-                            <div class="single-info">
-                                <span class="lable">tag:</span>
-                                <span class="value"
-                                        ><a href="#">Furniture</a></span>
-                            </div>
-                            <div class="single-info">
-                                <span class="lable">Share:</span>
-                                <ul class="social">
-                                    <li>
-                                        <a href="#"><i
-                                                    class="fa fa-facebook-f"
-                                                ></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i
-                                                    class="fa fa-dribbble"
-                                                ></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i
-                                                    class="fa fa-pinterest-p"
-                                                ></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i
-                                                    class="fa fa-twitter"
-                                                ></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i
-                                                    class="fa fa-linkedin"
-                                                ></i></a>
-                                    </li>
-                                </ul>
+                                <span class="value">Categories:</span>
+                                <span class="lable"><%= data.categoryId.name %></span>
                             </div>
                         </div>
                     </div>

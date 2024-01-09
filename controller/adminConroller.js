@@ -181,6 +181,49 @@ const Orders=async(req,res)=>{
 }
 
 
+const updateStatus = async(req,res)=>{
+  try {
+      console.log("helooq");
+      const {newStatus,productId} = req.body;
+      console.log(req.body,"body");
+      console.log(productId,'stat1');
+      console.log(newStatus,'stat');
+
+      const updatedOrder = await orderModel.findOneAndUpdate(
+          { 
+              'products._id': productId
+          },
+          {
+              $set: {
+                  'products.$.productStatus': newStatus
+              }
+          },
+          { new: true }
+      );
+
+
+      res.json({success:true})
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
+const showOrder = async(req,res)=>{
+  try {
+      const id=req.query.id
+      const orderData=await orderModel.findById(id).populate('products.productId')
+      const address=orderData.delivery_address
+      const cancelled=await orderData.cancelledProduct
+      const returned = await orderData.returnedProduct
+      res.render('showorder',{address,orderData,cancelled,returned})
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
 
 
 module.exports = {
@@ -196,5 +239,7 @@ module.exports = {
   editCategoryPost,
   blockUser,
   Orders,
+  updateStatus,
+  showOrder
 
 };

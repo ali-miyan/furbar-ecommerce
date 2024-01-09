@@ -271,9 +271,9 @@ const userLogout = async (req, res) => {
 const detailShop=async(req,res)=>{
     try {
         const id=req.query.id;
-        const data=await Product.findOne({_id:id})
+        const data=await Product.findOne({_id:id}).populate('categoryId')
         console.log(data);
-        res.render('detailshop',{data:data})
+        res.render('detailshop',{data})
     } catch (error) {
         console.log(error.message);
     }
@@ -379,77 +379,51 @@ const detailShop=async(req,res)=>{
         const userId = req.session.user_id;
         console.log(userId);
         const orderId = req.body.orderId;
+        const id = req.body.id
         const productId = req.body.productId;
-        const count = req.body.count;
+        console.log(productId);
         const cancelReason = req.body.cancelReason;
         const productDetails = await Product.findById(productId).populate('categoryId');
-        const orderData = await orderModel.findOneAndUpdate(
-            { _id: orderId, 'products.productId': productId },
-            {
-                $inc: {
-                    'products.$.quantity': -count,
-                },
-            },
-            { new: true }
-        );
+ 
+        
+    const orderData = await orderModel.findOneAndUpdate(
+      { _id: orderId, 'products._id': id },
+      {
+        $push: {
+          cancelledProduct: {
+            quantity: 1,
+            productStatus: 'cancelled',
+            cancelReason: cancelReason,
+            productDetails: productDetails,
+          },
+        },
+        $pull: {
+          products: { _id: id },
+        },
+      },
+      { new: true }
+    );
 
+    if (orderData.products.length === 0) {
+      await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
+    }
+    if(orderData.payment !== 'Cash on delivery'){
 
-        const walletAmount=count*orderData.products[0].price
-        console.log(walletAmount,'wallll');
-
+        const walletAmount = orderData.cancelledProduct.reduce((acc, product) => {
+        const productPrice = product.productDetails.price || 0;
+              return acc + product.quantity * productPrice;
+        },0); 
+      
         const data = {
           amount:  walletAmount,
           date: Date.now(),
         }
         const newD = await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
-        console.log(newD,'neww');
-        if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
-            await orderModel.findOneAndUpdate(
-                { _id: orderId },
-                {
-                    $push: {
-                        cancelledProduct: {
-                            quantity: count,
-                            productStatus: 'cancelled',
-                            cancelReason: cancelReason,
-                            productDetails: productDetails,
-                        },
-                    },
-                    $pull: {
-                        products: { productId: productId, quantity: 0 },
-                    },
-                }
-            );
-        } else {
-            await orderModel.findOneAndUpdate(
-                { _id: orderId },
-                {
-                    $push: {
-                        cancelledProduct: {
-                            productId: productId,
-                            quantity: count,
-                            productStatus: 'cancelled',
-                            cancelReason: cancelReason,
-                            productDetails: productDetails,
-                        },
-                    },
-                    $pull: {
-                        products: { productId: productId },
-                    },
-                    
-                    $set: {
-                        orderStatus: 'cancelled'
-                    }
-                }
-            );
 
-        }
+      }
 
-
-        for (let i = 0; i < orderData.products.length; i++) {
-            let productId = orderData.products[i].productId;
-            await Product.updateOne({ _id: productId }, { $inc: { quantity: count } });
-        }
+        await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
+        
 
         res.json({ success: true });
     } catch (error) {
@@ -462,75 +436,51 @@ const detailShop=async(req,res)=>{
         const userId=req.session.user_id
         const orderId = req.body.orderId;
         const productId = req.body.productId;
-        const count = req.body.count;
+        const id = req.body.id
         const returnReason = req.body.returnReason;
         const productDetails = await Product.findById(productId).populate('categoryId');
+
+            
+
+        
         const orderData = await orderModel.findOneAndUpdate(
-            { _id: orderId, 'products.productId': productId },
-            {
-                $inc: {
-                    'products.$.quantity': -count,
-                },
+          { _id: orderId, 'products._id': id },
+          {
+            $push: {
+              returnedProduct: {
+                quantity: 1,
+                productStatus: 'returned',
+                returnReason: returnReason,
+                productDetails: productDetails,
+              },
             },
-            { new: true }
+            $pull: {
+              products: { _id: id },
+            },
+          },
+          { new: true }
         );
+        console.log("dtaaaaaa", orderData);
 
-            const walletAmount=count*orderData.products[0].price
+        if (orderData.products.length === 0) {
+          // If it's empty, update the orderStatus
+          await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
+        }
 
+
+            await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
+
+
+        const walletAmount = orderData.cancelledProduct.reduce((acc, product) => {
+             const productPrice = product.productDetails.price || 0;
+          
+            return acc + product.quantity * productPrice;
+          }, 0);
             const data = {
               amount:  walletAmount,
               date: Date.now(),
             }
             await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
-
-        if (orderData.products.length > 0 && orderData.products[0].quantity > 0) {
-            await orderModel.findOneAndUpdate(
-                { _id: orderId },
-                {
-                    $push: {
-                        returnedProduct: {
-                            quantity: count,
-                            productStatus: 'returned',
-                            returnReason: returnReason,
-                            productDetails: productDetails,
-                        },
-                    },
-                    $pull: {
-                        products: { productId: productId, quantity: 0 },
-                    },
-                }
-            );
-        } else {
-            await orderModel.findOneAndUpdate(
-                { _id: orderId },
-                {
-                    $push: {
-                        returnedProduct: {
-                            productId: productId,
-                            quantity: count,
-                            productStatus: 'returned',
-                            returnReason: returnReason,
-                            productDetails: productDetails,
-                        },
-                    },
-                    $pull: {
-                        products: { productId: productId },
-                    },
-                    
-                    $set: {
-                        orderStatus: 'returned'
-                    }
-                }
-            );
-
-        }
-
-        console.log("dtaaaaaa", orderData);
-
-        for (let i = 0; i < orderData.products.length; i++) {
-            let productId = orderData.products[i].productId;
-            await Product.updateOne({ _id: productId }, { $inc: { quantity: count } });
-        }
 
         res.json({ success: true });
     } catch (error) {

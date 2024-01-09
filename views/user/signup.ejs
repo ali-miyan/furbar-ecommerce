@@ -113,10 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (name === "") {
             displayError('name', 'name cannot empty');
             isValid = false;
-        } else if (!/^[a-zA-Z]+$/.test(name)) {
-            displayError('name', 'Invalid name entered');
-            isValid = false;
-        }
+            } else if (/^[]/.test(name)) {
+                displayError('name', 'Invalid name entered');
+                isValid = false;
+            }
 
         if (email === "") {
             displayError('email', 'email cannot be empty');

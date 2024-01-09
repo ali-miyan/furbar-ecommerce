@@ -260,7 +260,7 @@
                                                     <td><%= product.quantity %></td>
                                                     <td><%= product.totalPrice %></td>
                                                     <td>
-                                                        <select class="statusSelect" id="orderStat" onchange="status('<%=orderData._id%>','<%=product._id%>')">
+                                                        <select class="statusSelect" id="<%=orderData._id%><%=product._id%>" onchange="status('<%=orderData._id%>', '<%=product._id%>')">
                                                             <option value="placed" <% if (product.productStatus == 'placed') { %> selected <% } %>>placed</option>
                                                             <option value="out-for-delivery" <% if (product.productStatus == 'out-for-delivery') { %> selected <% } %>>out for delivery</option>
                                                             <option value="shipped" <% if (product.productStatus == 'shipped') { %> selected <% } %>>shipped</option>
@@ -357,12 +357,13 @@
                                             <% }); %>
                                         </tbody>
                                     </table>
-                                </div>
+                               
                                 <!-- table-responsive// -->
                             </div>
                         </div>
                         <%}%>
                     <!-- card-body end// -->
+                </div>
                 </div>
                 <!-- card end// -->
             </section>
@@ -385,7 +386,10 @@
 
         <script>
                     function status(id, productId) {
-                        const status=document.getElementById('orderStat').value
+                        console.log('iddddddddd',id );
+                        const statusElementId = `${id}${productId}`;
+                        const status = document.getElementById(statusElementId).value;
+                        console.log(status,'statttttttttt');
                         $.ajax({
                             url: '/admin/updatestatus',
                             type: 'POST',
@@ -395,7 +399,8 @@
                             },
                             success: function (response) {
                                 if(response.success){
-                                    $("#reloadDiv").load(`/admin/showorder?=${id} #reloadDiv`);
+                                    $("#reloadDiv").load(`/admin/showorder?id=${id} #reloadDiv`);
+                                    // location.reload()
                                 }
                             },
                             error: function (error) {

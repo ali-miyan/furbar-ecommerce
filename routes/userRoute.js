@@ -22,6 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const { PassThrough } = require('stream');
 const CouponModel = require("../models/couponModel");
+const couponController = require('../controller/couponController')
 
 
 const routeUser = express();
@@ -91,161 +92,94 @@ routeUser.post('/returnorder', userController.returnOrder)
 routeUser.post('/edituser', userController.editUser)
 
 
-routeUser.get('/successpage', async (req, res) => {
-  try {
-    const orderID = req.query.id;
-    const orderData = await orderModel.findOne({ _id: orderID })
-    res.render('successpage', { orderData })
-  } catch (error) {
-    console.log(error.message);
-  }
-})
+routeUser.get('/successpage',orderController.successPage)
 
-function generatePDF(order, productsInOrder) {
-  const doc = new PDFDocument();
-  const stream = new PassThrough();
-  const buffers = [];
+// function generatePDF(order, productsInOrder) {
+//   const doc = new PDFDocument();
+//   const stream = new PassThrough();
+//   const buffers = [];
 
-  doc.pipe(stream);
+//   doc.pipe(stream);
 
-  stream.on('data', (chunk) => {
-    buffers.push(chunk);
-  });
+//   stream.on('data', (chunk) => {
+//     buffers.push(chunk);
+//   });
 
-  stream.on('end', () => {
-    const pdfBuffer = Buffer.concat(buffers);
-  });
+//   stream.on('end', () => {
+//     const pdfBuffer = Buffer.concat(buffers);
+//   });
 
-  // const dataURI = `/sharpimages/${productsInOrder[0].images.image1}`;
+//   // const dataURI = `/sharpimages/${productsInOrder[0].images.image1}`;
 
-  const productDetailsArray = Object.values(productsInOrder);
+//   const productDetailsArray = Object.values(productsInOrder);
 
-  const productNames = [];
+//   const productNames = [];
 
-  for (const product of productDetailsArray) {
-    productNames.push(product.name);
-  }
+//   for (const product of productDetailsArray) {
+//     productNames.push(product.name);
+//   }
 
-  doc.text(`Order ID: ${order._id}`);
-  doc.text(`Order Date: ${order.orderDate}`);
-  doc.text(`Delivery address: ${order.delivery_address}`);
-  doc.text(`Payment method: ${order.payment}`);
-  doc.text(`Total price: ${order.subtotal}`);
-  doc.text(`Order Date: ${order.orderDate}`);
-  doc.text(`Product details: ${productNames}`);
-  // doc.image(dataURI,{ width: 200, height: 200 });
+//   doc.text(`Order ID: ${order._id}`);
+//   doc.text(`Order Date: ${order.orderDate}`);
+//   doc.text(`Delivery address: ${order.delivery_address}`);
+//   doc.text(`Payment method: ${order.payment}`);
+//   doc.text(`Total price: ${order.subtotal}`);
+//   doc.text(`Order Date: ${order.orderDate}`);
+//   doc.text(`Product details: ${productNames}`);
+//   // doc.image(dataURI,{ width: 200, height: 200 });
 
-  doc.end();
+//   doc.end();
 
-  return stream;
-}
+//   return stream;
+// }
 
-routeUser.get('/orderdetail/:orderId', async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    const order = await orderModel.findById(orderId);
+// routeUser.get('/orderdetail/:orderId', async (req, res) => {
+//   try {
+//     const orderId = req.params.orderId;
+//     const order = await orderModel.findById(orderId);
 
 
-    const fetchProductDetails = async () => {
-      const productDetails = [];
+//     const fetchProductDetails = async () => {
+//       const productDetails = [];
 
-      for (const product of order.products) {
-        const productId = product.productId;
+//       for (const product of order.products) {
+//         const productId = product.productId;
 
-        try {
-          const productInfo = await Product.findById(productId);
-          productDetails.push(productInfo);
-        } catch (error) {
-          console.error(`Error fetching product details for product ID ${productId}: ${error.message}`);
-        }
-      }
+//         try {
+//           const productInfo = await Product.findById(productId);
+//           productDetails.push(productInfo);
+//         } catch (error) {
+//           console.error(`Error fetching product details for product ID ${productId}: ${error.message}`);
+//         }
+//       }
 
-      return productDetails;
-    };
-    const productsInOrder = await fetchProductDetails();
+//       return productDetails;
+//     };
+//     const productsInOrder = await fetchProductDetails();
 
-    if (!order || !productsInOrder) {
-      return res.status(404).send('Order not found');
-    }
+//     if (!order || !productsInOrder) {
+//       return res.status(404).send('Order not found');
+//     }
 
-    const pdfStream = generatePDF(order, productsInOrder);
+//     const pdfStream = generatePDF(order, productsInOrder);
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename=order_details.pdf');
-    pdfStream.pipe(res);
+//     res.setHeader('Content-Type', 'application/pdf');
+//     res.setHeader('Content-Disposition', 'inline; filename=order_details.pdf');
+//     pdfStream.pipe(res);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
-routeUser.post('/shippingamount', async (req, res) => {
-  try {
-    const id = req.session.user_id
-    const option = req.body.option
-    const amount = req.body.amount
-    const cartData = await cartModel.findOneAndUpdate({ user: id }, { $set: { shippingMethod: option, shippingAmount: amount } })
-    res.json({ success: true })
-
-  } catch (error) {
-    console.log(error.message);
-    res.render('500Error')
-  }
-})
+routeUser.post('/shippingamount', cartController.shippingAmount)
 
 routeUser.post('/verifypayment', orderController.verifypayment)
 
-routeUser.post('/applycoupon', async (req, res) => {
-  try {
-    const couponId = req.body.id;
-    const user_id = req.session.user_id;
-    const currentDate = new Date();
-    const couponData = await CouponModel.findOne({ _id: couponId });
+routeUser.post('/applycoupon', couponController.applyCoupon);
 
-    if (couponData && !couponData.is_blocked) {
-      if (currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate) {
-        const exists = couponData.usedUsers.includes(user_id);
-
-        if (!exists) {
-          const existingCart = await cartModel.findOne({ user: user_id });
-
-          if (existingCart && existingCart.couponDiscount == null) {
-            // Check if the user has not applied any other coupon
-            await CouponModel.findOneAndUpdate({ _id: couponId }, { $push: { usedUsers: user_id } });
-            await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: couponData._id } });
-            res.json({ coupon: true });
-          } else {
-            res.json({ coupon: 'alreadyApplied' });
-          }
-        } else {
-          res.json({ coupon: 'alreadyUsed' });
-        }
-      } else {
-        res.json({ coupon: 'expired' });
-      }
-    } else {
-      res.json({ coupon: false });
-    }
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-routeUser.post('/removecoupon', async (req, res) => {
-  try {
-    const couponId = req.body.id;
-    const user_id = req.session.user_id
-    const cartData = await cartModel.findOne({ user: user_id })
-    const couponData = await CouponModel.findOneAndUpdate({ _id: couponId }, { $pull: { usedUsers: user_id } })
-    const updateCart = await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: null } })
-    res.json({success:true})  
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+routeUser.post('/removecoupon',couponController.removeCoupon);
 
 
 routeUser.post('/categoryfilter',userController.categoryFilter)

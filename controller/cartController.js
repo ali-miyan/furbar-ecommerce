@@ -141,11 +141,26 @@ const getCart=async(req,res)=>{
     }
   }
 
+  const shippingAmount = async (req, res) => {
+    try {
+      const id = req.session.user_id
+      const option = req.body.option
+      const amount = req.body.amount
+      const cartData = await cartModel.findOneAndUpdate({ user: id }, { $set: { shippingMethod: option, shippingAmount: amount } })
+      res.json({ success: true })
+  
+    } catch (error) {
+      console.log(error.message);
+      res.render('500Error')
+    }
+  }
+
 
   module.exports={
     getCart,
     showCart,
     updateCart,
     removeCart,
+    shippingAmount
   }
 
