@@ -32,7 +32,6 @@ const loadUser=async(req,res)=>{
     } catch (error) {
         console.log(error);
     }
-    
 }
 
 const loadSignin = async (req, res) => {
@@ -171,7 +170,7 @@ const editCategoryPost=async(req,res)=>{
   }
 }
 
-const Orders=async(req,res)=>{
+const showOrders=async(req,res)=>{
   try {
       const orderData=await orderModel.find({})
       res.render('order',{orderData})
@@ -210,7 +209,7 @@ const updateStatus = async(req,res)=>{
 }
 
 
-const showOrder = async(req,res)=>{
+const detailOrder = async(req,res)=>{
   try {
       const id=req.query.id
       const orderData=await orderModel.findById(id).populate('products.productId')
@@ -238,8 +237,8 @@ module.exports = {
   blockCategory,
   editCategoryPost,
   blockUser,
-  Orders,
+  showOrders,
   updateStatus,
-  showOrder
+  detailOrder
 
 };

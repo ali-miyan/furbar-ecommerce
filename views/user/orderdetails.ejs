@@ -80,25 +80,22 @@
                                     <%console.log(product.productStatus,"helo")%>
                                     <div class="status-line">
                                         <div class="line">
-                                            <div
-                                                class="placed <%= (product.productStatus === 'shipped' || product.productStatus === 'out-for-delivery' || product.productStatus === 'delivered') ? 'green' : '' %>">
-                                                <div class="status">Placed</div>
-                                            </div>
-                                            <div
-                                                class="shipped <%= (product.productStatus === 'out-for-delivery' || product.productStatus === 'delivered') ? 'green' : '' %>">
-                                                <div class="status">Shipped</div>
-                                            </div>
-                                            <div
-                                                class="out-for-delivery <%= (product.productStatus === 'delivered') ? 'green' : '' %>">
-                                                <div class="status">Out to Delivery</div>
-                                            </div>
-                                            <div
-                                                class="delivered <%= (product.productStatus === 'delivered') ? 'green' : '' %>">
-                                                <div class="status">Delivered</div>
-                                            </div>
+                                          <div class="placed <%= (product.productStatus === 'shipped' || product.productStatus === 'out-for-delivery' || product.productStatus === 'delivered') ? 'green status-dot' : '' %>">
+                                            <div class="status">Placed</div>
+                                          </div>
+                                          <div class="shipped <%= (product.productStatus === 'out-for-delivery' || product.productStatus === 'delivered') ? 'green status-dot' : '' %>">
+                                            <div class="status">Shipped</div>
+                                          </div>
+                                          <div class="out-for-delivery <%= (product.productStatus === 'delivered') ? 'green status-dot' : '' %>">
+                                            <div class="status">Out to Delivery</div>
+                                          </div>
+                                          <div class="delivered <%= (product.productStatus === 'delivered') ? 'green status-dot' : '' %>">
+                                            <div class="status">Delivered</div>
+                                          </div>
                                         </div>
+                                      </div>
+                                      
                                     </div>
-                                </div>
                             </div>
                         <% }); %>
                     <% } %>

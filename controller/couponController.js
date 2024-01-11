@@ -15,6 +15,8 @@ const cartModel=require('../models/cartModel')
 const addressModel=require('../models/addressModel')
 const cartController=require('./cartController')
 const orderModel=require('../models/orderModal')
+const couponModel = require('../models/couponModel')
+
 
 
 
@@ -23,18 +25,13 @@ const applyCoupon = async (req, res) => {
       const couponId = req.body.id;
       const user_id = req.session.user_id;
       const currentDate = new Date();
-      const couponData = await CouponModel.findOne({ _id: couponId });
-  
-      if (couponData && !couponData.is_blocked) {
-        if (currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate) {
+      const couponData = await couponModel.findOne({_id: couponId,expiryDate: { $gte: currentDate },is_blocked: false});  
           const exists = couponData.usedUsers.includes(user_id);
   
           if (!exists) {
             const existingCart = await cartModel.findOne({ user: user_id });
-  
             if (existingCart && existingCart.couponDiscount == null) {
-              // Check if the user has not applied any other coupon
-              await CouponModel.findOneAndUpdate({ _id: couponId }, { $push: { usedUsers: user_id } });
+              await couponModel.findOneAndUpdate({ _id: couponId }, { $push: { usedUsers: user_id } });
               await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: couponData._id } });
               res.json({ coupon: true });
             } else {
@@ -43,12 +40,6 @@ const applyCoupon = async (req, res) => {
           } else {
             res.json({ coupon: 'alreadyUsed' });
           }
-        } else {
-          res.json({ coupon: 'expired' });
-        }
-      } else {
-        res.json({ coupon: false });
-      }
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -62,7 +53,7 @@ const applyCoupon = async (req, res) => {
       const couponId = req.body.id;
       const user_id = req.session.user_id
       const cartData = await cartModel.findOne({ user: user_id })
-      const couponData = await CouponModel.findOneAndUpdate({ _id: couponId }, { $pull: { usedUsers: user_id } })
+      const couponData = await couponModel.findOneAndUpdate({ _id: couponId }, { $pull: { usedUsers: user_id } })
       const updateCart = await cartModel.findOneAndUpdate({ user: user_id }, { $set: { couponDiscount: null } })
       res.json({success:true})  
     } catch (error) {

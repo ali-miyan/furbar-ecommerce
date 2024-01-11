@@ -126,7 +126,7 @@
                                                     <th class="date">Date</th>
                                                     <th class="total">Amount</th>
                                                     <th class="">Payment</th>
-                                                    <th class="name">Status</th>
+                                                    <th class="name">Inovoice</th>
                                                     <th class="action">details</th>
                                                 </tr>
                                             </thead>
@@ -134,10 +134,10 @@
                                                 <% for (let i = 0; i < order.length; i++) { %>
                                                     <tr>
                                                         <td><%= i + 1 %></td>
-                                                        <td><%= order[i].orderDate%></td>
+                                                        <td><%= order[i].orderDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                                         <td><%= order[i].subtotal %></td>
                                                         <td><%= order[i].payment %></td>
-                                                        <td><%= order[i].orderStatus %></td>
+                                                        <td><a href="/generatepdf?id=<%=order[i]._id%>"><i class="fa fa-download" aria-hidden="true"></a></i></td>
                                                         <td>
                                                             <a href="/detailorder?id=<%=order[i]._id%>">View</a>
                                                         </td>

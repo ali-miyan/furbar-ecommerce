@@ -1,56 +1,272 @@
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
-  </head>
-    <style>
-      body {
-        text-align: center;
-        padding: 40px 0;
-        background: #EBF0F5;
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    
+    <!-- Mirrored from htmldemo.net/furbar-1/furbar/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:15:27 GMT -->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Furbar - Furniture eCommerce Bootstrap 5 Template</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="asset/images/favicon.png" />
+    
+        <!-- CSS
+      ============================================ -->
+    
+        <!-- Icon Font CSS -->
+        <link rel="stylesheet" href="asset/css/plugins/pe-icon-7-stroke.css" />
+        <link rel="stylesheet" href="asset/css/plugins/font-awesome.min.css" />
+    
+        <!-- Plugins CSS -->
+        <link rel="stylesheet" href="asset/css/plugins/bootstrap.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/animate.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/odometer.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/select2.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/ion.rangeSlider.min.css" />
+    
+        <!-- Main Style CSS -->
+        <!-- <link rel="stylesheet" href="asset/css/style.css"> -->
+        <link rel="stylesheet" href="asset/css/style.min.css" />
+      </head>
+    <body >
+      <div class="center-container">
+        <div class="card custom-card">
+          <div class="card-body">
+            <h1>Success</h1> 
+            <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
+            <a href="/shop"><button class="btn btn-primary btn-hover-dark">Explore more</button></a>
+            <a href="/detailorder?id=<%=orderData._id%>">view order details</a>
+          </div>
+        </div>
+        <canvas id="canvas">Canvas is not supported in your browser.</canvas>        </div>
+    
+        
+      </body>
+    
+<script>
+  window.requestAnimFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      function (callback) {
+        window.setTimeout(callback, 1000 / 60);
       }
-        h1 {
-          color: #88B04B;
-          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-          font-weight: 900;
-          font-size: 40px;
-          margin-bottom: 10px;
-        }
-        p {
-          color: #404F5E;
-          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-          font-size:20px;
-          margin: 0;
-        }
-      i {
-        color: #9ABC66;
-        font-size: 100px;
-        line-height: 200px;
-        margin-left:-15px;
-      }
-      .card {
-        background: white;
-        padding: 60px;
-        border-radius: 4px;
-        box-shadow: 0 2px 3px #C8D0D8;
-        display: inline-block;
-        margin: 0 auto;
-      }
-    </style>
-    <body>
-      <div class="card">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-        <i class="checkmark">✓</i>
-      </div>
-        <h1>Success</h1> 
-        <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
-      </div>
-      <a href="/shop"><button>Explore more</button></a>
-      <div class="card">
-        <a href="/orderdetail/<%= orderData._id %>" download>
-          <button>Download Order Details</button>
-        </a>
-    </div>
+    );
+  })();
 
-    <%console.log("Orderdaaraa",orderData)%>
-    </body>
+  var canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d'),
+    cw = window.innerWidth,
+    ch = window.innerHeight,
+    fireworks = [],
+    particles = [],
+    hue = 120,
+    limiterTotal = 5,
+    limiterTick = 0,
+    timerTotal = 80,
+    timerTick = 0,
+    mousedown = false,
+    mx,
+    my;
+
+  canvas.width = cw;
+  canvas.height = ch;
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function calculateDistance(p1x, p1y, p2x, p2y) {
+    var xDistance = p1x - p2x,
+      yDistance = p1y - p2y;
+    return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+  }
+
+  function Firework(sx, sy, tx, ty) {
+    this.x = sx;
+    this.y = sy;
+    this.sx = sx;
+    this.sy = sy;
+    this.tx = tx;
+    this.ty = ty;
+    this.distanceToTarget = calculateDistance(sx, sy, tx, ty);
+    this.distanceTraveled = 0;
+    this.coordinates = [];
+    this.coordinateCount = 3;
+
+    while (this.coordinateCount--) {
+      this.coordinates.push([this.x, this.y]);
+    }
+    this.angle = Math.atan2(ty - sy, tx - sx);
+    this.speed = 5; // Increased initial speed
+    this.acceleration = 1.08; // Increased acceleration
+    this.brightness = random(50, 70);
+    this.targetRadius = 2; // Increased target radius for a larger explosion
+  }
+
+  Firework.prototype.update = function (index) {
+    this.coordinates.pop();
+    this.coordinates.unshift([this.x, this.y]);
+
+    if (this.targetRadius < 12) {
+      this.targetRadius += 0.5;
+    } else {
+      this.targetRadius = 2;
+    }
+
+    this.speed *= this.acceleration;
+
+    var vx = Math.cos(this.angle) * this.speed,
+      vy = Math.sin(this.angle) * this.speed;
+
+    this.distanceTraveled = calculateDistance(
+      this.sx,
+      this.sy,
+      this.x + vx,
+      this.y + vy
+    );
+
+    if (this.distanceTraveled >= this.distanceToTarget) {
+      createParticles(this.tx, this.ty);
+      fireworks.splice(index, 1);
+    } else {
+      this.x += vx;
+      this.y += vy;
+    }
+  };
+
+  Firework.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.moveTo(
+      this.coordinates[this.coordinates.length - 1][0],
+      this.coordinates[this.coordinates.length - 1][1]
+    );
+    ctx.lineTo(this.x, this.y);
+    ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(this.tx, this.ty, this.targetRadius, 0, Math.PI * 2);
+    ctx.stroke();
+  };
+
+  function Particle(x, y) {
+    this.x = x;
+    this.y = y;
+    this.coordinates = [];
+    this.coordinateCount = 5;
+
+    while (this.coordinateCount--) {
+      this.coordinates.push([this.x, this.y]);
+    }
+
+    this.angle = random(0, Math.PI * 2);
+    this.speed = random(5, 15); // Increased initial speed
+    this.friction = 0.95;
+    this.gravity = 0.5; // Slightly decreased gravity
+    this.hue = random(hue - 50, hue + 50);
+    this.brightness = random(50, 80);
+    this.alpha = 1;
+    this.decay = random(0.02, 0.05); // Increased decay for longer trails
+  }
+
+  Particle.prototype.update = function (index) {
+    this.coordinates.pop();
+    this.coordinates.unshift([this.x, this.y]);
+    this.speed *= this.friction;
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed + this.gravity;
+    this.alpha -= this.decay;
+
+    if (this.alpha <= this.decay) {
+      particles.splice(index, 1);
+    }
+  };
+
+  Particle.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.moveTo(
+      this.coordinates[this.coordinates.length - 1][0],
+      this.coordinates[this.coordinates.length - 1][1]
+    );
+    ctx.lineTo(this.x, this.y);
+    ctx.strokeStyle =
+      'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+    ctx.stroke();
+  };
+
+  function createParticles(x, y) {
+    var particleCount = 50; // Increased particle count
+    while (particleCount--) {
+      particles.push(new Particle(x, y));
+    }
+  }
+
+  function loop() {
+    requestAnimFrame(loop);
+
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.globalCompositeOperation = 'lighter';
+
+    var i = fireworks.length;
+    while (i--) {
+      fireworks[i].draw();
+      fireworks[i].update(i);
+    }
+
+    var i = particles.length;
+    while (i--) {
+      particles[i].draw();
+      particles[i].update(i);
+    }
+
+    if (timerTick >= timerTotal) {
+      if (!mousedown) {
+        fireworks.push(
+          new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2))
+        );
+        timerTick = 0;
+      }
+    } else {
+      timerTick++;
+    }
+
+    if (limiterTick >= limiterTotal) {
+      if (mousedown) {
+        fireworks.push(new Firework(cw / 2, ch, mx, my));
+        limiterTick = 0;
+      }
+    } else {
+      limiterTick++;
+    }
+  }
+
+  canvas.addEventListener('mousemove', function (e) {
+    mx = e.pageX - canvas.offsetLeft;
+    my = e.pageY - canvas.offsetTop;
+  });
+
+  canvas.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    mousedown = true;
+  });
+
+  canvas.addEventListener('mouseup', function (e) {
+    e.preventDefault();
+    mousedown = false;
+  });
+
+  window.onload = loop;
+</script>
+
+      </body>
 </html>

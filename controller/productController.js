@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
 const adminController = require("../controller/adminConroller");
 const Product=require("../models/productModel")
+const couponModel = require('../models/couponModel')
 
 const getProduct=async(req,res)=>{
     try {

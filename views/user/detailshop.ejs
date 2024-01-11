@@ -78,11 +78,11 @@
                     </div>
                     <!-- Product Details Images End -->
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 my-4" >
                     <!-- Product Details Description Start -->
                     <div class="product-details-description">
                         <h4 class="product-name">
-                            High quality vase bottle.
+                            <%=data.name%>
                         </h4>
                         <div class="price">
                             <span class="sale-price">₹<%=data.price%></span>
@@ -110,7 +110,7 @@
 
                         <div class="product-meta">
                             <div class="meta-action">
-                                <button onclick="addToCart('<%= data._id%>')"  class="btn btn-dark btn-hover-primary">
+                                <button onclick="addToCart('<%= data._id%>')"  id="cartBtn" class="btn btn-dark btn-hover-primary">
                                     Add To Cart
                                 </button>
                             </div>
@@ -841,53 +841,64 @@
 </div>
 <!-- Sale Product Section End -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    function addToCart(id){
-       $.ajax({
-           url:'/getcart',
-           method:'POST',
-           data:{id:id},
-           success:function(response){
-            // if(response.failed){
-            //    Swal.fire(
-            //        'Out of Stock',
-            //        'This product is currently out of stock.',
-            //        'warning'
-            //    );
-            //    }else
-                if(response.failed){ 
-               Swal.fire({
-                 icon: "warning",
-                 title: "Please Login",
-                 confirmButtonColor: "#3085d6",
-                 confirmButtonText: "Login",
-                 showCancelButton: true,
-                 cancelButtonColor: "#d33",
-               })
-               .then((result) =>{
-                 if (result.isConfirmed) {
-                   window.location.href = "/login";
-                 }
-               });
-               }
-               else{
-                   Swal.fire({
-                   title: 'Item Added to Cart',
-                   text: 'Do you want to see cart?',
-                   icon: 'success',
-                   confirmButtonText: 'Show Cart',
-                   confirmButtonColor: '#1e6e2c',
-                   timer: 2000,
-               }).then((result)=>{
-                   if (result.isConfirmed) {
-                       window.location.href = '/showcart';
-                   }
-               })
-               }
-                 
-               }
-   })	
-}
-</script>
+    <script>
+        function addToCart(id){
+        $.ajax({
+            url:'/getcart',
+            method:'POST',
+            data:{id:id},
+            success:function(response){
+                console.log(response);
+                    if(response.success){
+                    Swal.fire({
+                    title: 'Item Added to Cart',
+                    text: 'Do you want to see cart?',
+                    icon: 'success',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                }).then((result)=>{
+                    if (result.isConfirmed) {
+                        window.location.href = '/showcart';
+                    }    
+                    
+                })
+
+                }
+                else if(response.status=='alreadyAdded'){
+                    Swal.fire({
+                    title: 'Already added',
+                    text: 'Do you want to see cart?',
+                    icon: 'info',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                }).then((result)=>{
+                    if (result.isConfirmed) {
+                        window.location.href = '/showcart';
+                    }    
+                    
+                })
+
+                }
+                else if (response.failed) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Please Login",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "Login",
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "/login";
+                        }
+                    });
+                }
+                    
+            }
+    })	
+    }
+    </script>
 
 <%- include('../layouts/footer.ejs') -%>

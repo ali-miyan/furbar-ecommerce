@@ -11,11 +11,14 @@ const User = require('../models/userModel');
 const userOTP = require('../models/userOTP');
 const dotenv = require('dotenv')
 dotenv.config()
+const path = require('path')
+const ejs = require('ejs')
 config.connectDB();
 const Product=require("../models/productModel");
 const addressModel = require('../models/addressModel');
 const orderModel = require('../models/orderModal');
 const categoryModel = require('../models/categoryModel');
+const puppeteer = require('puppeteer')
 
 
 //route to home page
@@ -347,7 +350,6 @@ const detailShop=async(req,res)=>{
 
   const deleteAddress=async(req,res)=>{
     try {
-      console.log('helooooooooooooooo');
       const user_id=req.session.user_id
       const addressId = req.body.addressId
   
@@ -361,133 +363,9 @@ const detailShop=async(req,res)=>{
    }
   }
 
-  const detailOrder=async(req,res)=>{
-    try {
-      const user_id = req.session.user_id
-      const order_id = req.query.id
-      console.log(order_id);
-      const orderData = await orderModel.findOne({_id:order_id}).populate('products.productId')
-      await orderData.populate('products.productId.categoryId')
-      res.render('orderdetails',{orderData,user_id})
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  
-  const cancelOrder = async (req, res) => {
-    try {
-        const userId = req.session.user_id;
-        console.log(userId);
-        const orderId = req.body.orderId;
-        const id = req.body.id
-        const productId = req.body.productId;
-        console.log(productId);
-        const cancelReason = req.body.cancelReason;
-        const productDetails = await Product.findById(productId).populate('categoryId');
- 
-        
-    const orderData = await orderModel.findOneAndUpdate(
-      { _id: orderId, 'products._id': id },
-      {
-        $push: {
-          cancelledProduct: {
-            quantity: 1,
-            productStatus: 'cancelled',
-            cancelReason: cancelReason,
-            productDetails: productDetails,
-          },
-        },
-        $pull: {
-          products: { _id: id },
-        },
-      },
-      { new: true }
-    );
-
-    if (orderData.products.length === 0) {
-      await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
-    }
-    if(orderData.payment !== 'Cash on delivery'){
-
-        const walletAmount = orderData.cancelledProduct.reduce((acc, product) => {
-        const productPrice = product.productDetails.price || 0;
-              return acc + product.quantity * productPrice;
-        },0); 
-      
-        const data = {
-          amount:  walletAmount,
-          date: Date.now(),
-        }
-        const newD = await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
-
-      }
-
-        await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
-        
-
-        res.json({ success: true });
-    } catch (error) {
-        console.log(error.message);
-        res.render('500Error');
-    }
-};
-  const returnOrder = async (req, res) => {
-    try {
-        const userId=req.session.user_id
-        const orderId = req.body.orderId;
-        const productId = req.body.productId;
-        const id = req.body.id
-        const returnReason = req.body.returnReason;
-        const productDetails = await Product.findById(productId).populate('categoryId');
-
-            
-
-        
-        const orderData = await orderModel.findOneAndUpdate(
-          { _id: orderId, 'products._id': id },
-          {
-            $push: {
-              returnedProduct: {
-                quantity: 1,
-                productStatus: 'returned',
-                returnReason: returnReason,
-                productDetails: productDetails,
-              },
-            },
-            $pull: {
-              products: { _id: id },
-            },
-          },
-          { new: true }
-        );
-        console.log("dtaaaaaa", orderData);
-
-        if (orderData.products.length === 0) {
-          // If it's empty, update the orderStatus
-          await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
-        }
 
 
-            await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
 
-
-        const walletAmount = orderData.cancelledProduct.reduce((acc, product) => {
-             const productPrice = product.productDetails.price || 0;
-          
-            return acc + product.quantity * productPrice;
-          }, 0);
-            const data = {
-              amount:  walletAmount,
-              date: Date.now(),
-            }
-            await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
-
-        res.json({ success: true });
-    } catch (error) {
-        console.log(error.message);
-        res.render('500Error');
-    }
-};
 
   const editUser=async(req,res)=>{
     try {
@@ -509,6 +387,33 @@ const detailShop=async(req,res)=>{
     }
   }
 
+  
+
+  const generatePdf = async(req,res)=>{
+    try {
+        console.log('heloooooooooo');
+        const orderId = req.query.id
+        console.log(orderId);
+        const orderData = await orderModel.findById({_id:orderId}).populate('products.productId')
+        console.log(orderData,'orderdataaaaaaaaaaaaa');
+        console.log(__dirname)
+        const ejsPagePath = path.join(__dirname, '../views/user/pdf.ejs');
+        const ejsPage = await ejs.renderFile(ejsPagePath,{orderData});
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(ejsPage);
+        const pdfBuffer = await page.pdf();
+        await browser.close();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+        res.send(pdfBuffer);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
+
 module.exports={
     verifyOTP,
     verifyPost,
@@ -524,9 +429,7 @@ module.exports={
     addressform,
     editAddress,
     deleteAddress,
-    detailOrder,
-    cancelOrder,
     editUser,
-    returnOrder,
-    categoryFilter
+    categoryFilter,
+    generatePdf
 }

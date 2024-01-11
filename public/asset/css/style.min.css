@@ -151,7 +151,6 @@
   background: none;
 }
 
-/* Styling for the status line container */
 .status-line {
   display: flex;
   margin-left: 30px;
@@ -164,8 +163,24 @@
   display: flex;
 }
 
+.placed{
+  position: relative;
+  width: 180px;
+  height: 3px;
+  background: #dad0d0;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: green;
+    top: -6px;
+    border-radius: 50%;
+  }
+}
+
 /* Styling for each status item */
-.placed,
+
 .shipped,
 .out-for-delivery,
 .delivered {
@@ -175,30 +190,79 @@
   background: #dad0d0;
 
   &:before {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      content: '';
-      background: green;
-      top: -6px;
-      border-radius: 50%;
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #dad0d0;
+    top: -6px;
+    border-radius: 50%;
   }
 }
 
 /* Styling for specific status */
+.placed.green:before {
+  background: green;
+}
+
+.shipped.green:before,
+.placed.green + .shipped:before {
+  background: green;
+}
+
+.out-for-delivery.green:before,
+.placed.green + .shipped.green + .out-for-delivery:before {
+  background: green;
+}
+
+
 .placed.green,
 .shipped.green,
 .out-for-delivery.green {
   background: green;
 
   &:before {
-      background: green;
+    background: green;
   }
 }
 
+.delivered.green{
+  &:before {
+    background: green;
+  }
+}
+
+
+.status-dot:before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: green;
+  top: -6px;
+  border-radius: 50%;
+}
+
+/* Styling for delivered status */
 .delivered {
   background: none;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #dad0d0;
+    top: -6px;
+    border-radius: 50%;
+  }
 }
+
+/* Hide the line when status is delivered */
+.delivered .line {
+  display: none;
+}
+
 
 /* Styling for status text */
 .status {
@@ -206,7 +270,6 @@
   left: -20px;
   top: 20px;
 }
-
 /* Responsive styling for smaller screens */
 @media (max-width: 768px) {
   .placed,
@@ -226,24 +289,120 @@
 
 .coupon-text{
   text-align: center;
-  font-family:'Times New Roman', Times, serif;  
+  font-family:sans-serif;  
 }
 .coupon-tag{
   text-align: center;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: sans-serif;
 }
 
 .apply-btn {
-
   width: 80px;
   height: 30px;
   display: flex;
   align-items: center;
-  justify-content: center; /* Horizontally center the text */
-  border: 1px solid #ced4da; /* Adding a border for visibility */
+  justify-content: center;
+  border: 1px solid #ced4da; 
 }
 
-/* Adjust the font size if needed */
-.apply-btn span {
-  font-size:8px;
+.coupon-card {
+  width: 100%;
+  max-width: 250px; /* Set a maximum width */
+  height: 250px; /* Adjust the height as needed */
+  border: 1px solid #dee2e6; /* Border color */
+  border-radius: 10px; /* Rounded corners */
+  transition: transform 0.3s ease-in-out; /* Add a smooth transition */
 }
+
+.coupon-card:hover {
+  transform: scale(1.05); /* Zoom in a bit on hover */
+}
+
+.apply-btn {
+  margin-top: 10px; /* Adjust spacing between text and button */
+}
+
+.not-applicable {
+  background-color: #f8d7da; 
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 8px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+}
+.apply-btn span {
+  font-size: 12px; 
+  font-family: sans-serif;
+
+}
+.otp {
+  margin: 30% 5% 10% 5%;
+}
+
+@media only screen and (min-width: 600px) {
+  .otp {
+      margin: 10% auto;
+      max-width: 400px;
+  }
+}
+
+.otp-input-wrapper {
+width: 240px;
+text-align: left;
+display: inline-block;
+}
+.otp-input-wrapper input {
+padding: 0;
+width: 264px;
+font-size: 32px;
+font-weight: 600;
+color: #3e3e3e;
+background-color: transparent;
+border: 0;
+margin-left: 12px;
+letter-spacing: 48px;
+font-family: sans-serif !important;
+}
+.otp-input-wrapper input:focus {
+box-shadow: none;
+outline: none;
+}
+.otp-input-wrapper svg {
+position: relative;
+display: block;
+width: 240px;
+height: 2px;
+}
+
+
+    .custom-card {
+        max-width: 400px;
+        margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 20px; 
+    }
+
+    .custom-title {
+        margin-bottom: 15px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-top: 0; 
+    }
+
+    .otp-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .verify-btn {
+        margin-top: 15px; 
+    }

@@ -37,38 +37,47 @@
                         </div>
                         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                         <script>
-                            // Add a script to hide the alert after 5 seconds
                             $(document).ready(function () {
                                 setTimeout(function () {
-                                    $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                }, 3000); // 3000 milliseconds = 3 seconds
+                                    $("#errorAlert").fadeOut(500); 
+                                }, 3000);
                             });
                         </script>
                     <% } %>
                     
                     <form id="signupForm" action="" method="post">
+
                         <div class="single-form">
                             <input type="text" id="name" name="name" placeholder="First Name" />
                             <div class="error-container">
                                 <div id="nameError" class="error-message"></div>
                             </div>
                         </div>
+
                         <div class="single-form">
                             <input type="text" id="email" name="email" placeholder="Email Address *" />
                             <div class="error-container">
                                 <div id="emailError" class="error-message"></div>
                             </div>
                         </div>
+
                         <div class="single-form">
                             <input type="text" id="mobile" name="mobile" placeholder="Mobile" />
                             <div class="error-container">
                                 <div id="mobileError" class="error-message"></div>
                             </div>
                         </div>
+
                         <div class="single-form">
                             <input type="password" id="password" name="password" placeholder="Password" />
                             <div class="error-container">
                                 <div id="passwordError" class="error-message"></div>
+                            </div>
+                        </div>
+                        <div class="single-form">
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" />
+                            <div class="error-container">
+                                <div id="confirmPasswordError" class="error-message"></div>
                             </div>
                         </div>
                     
@@ -108,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value;
         const mobile = document.getElementById('mobile').value;
         const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
         let isValid = true;
 
         if (name === "") {
@@ -138,8 +148,15 @@ document.addEventListener('DOMContentLoaded', function () {
             displayError('password', 'Password is too short');
             isValid = false;
         }
+        if (confirmPassword === "") {
+            displayError('confirmPassword', 'password cannot be empty');
+            isValid = false;
+        }else if(password !== confirmPassword){
+            displayError('confirmPassword', 'password is not matching');
+            isValid = false;
+        }
 
-        return isValid; // Form is valid
+        return isValid;
     }
 
     function displayError(fieldId, errorMessage) {

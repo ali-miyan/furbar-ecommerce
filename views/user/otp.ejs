@@ -1,108 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
 
-<!-- Mirrored from htmldemo.net/furbar-1/furbar/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:15:27 GMT -->
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Furbar - Furniture eCommerce Bootstrap 5 Template</title>
-    <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="asset/images/favicon.png" />
+    <!-- Mirrored from htmldemo.net/furbar-1/furbar/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:15:27 GMT -->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Furbar - Furniture eCommerce Bootstrap 5 Template</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="asset/images/favicon.png" />
 
-    <!-- CSS
-	============================================ -->
+        <!-- CSS
+        ============================================ -->
 
-    <!-- Icon Font CSS -->
-    <link rel="stylesheet" href="asset/css/plugins/pe-icon-7-stroke.css" />
-    <link rel="stylesheet" href="asset/css/plugins/font-awesome.min.css" />
+        <!-- Icon Font CSS -->
+        <link rel="stylesheet" href="asset/css/plugins/pe-icon-7-stroke.css" />
+        <link rel="stylesheet" href="asset/css/plugins/font-awesome.min.css" />
 
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="asset/css/plugins/bootstrap.min.css" />
-    <link rel="stylesheet" href="asset/css/plugins/animate.min.css" />
-    <link rel="stylesheet" href="asset/css/plugins/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="asset/css/plugins/odometer.min.css" />
-    <link rel="stylesheet" href="asset/css/plugins/select2.min.css" />
-    <link rel="stylesheet" href="asset/css/plugins/ion.rangeSlider.min.css" />
+        <!-- Plugins CSS -->
+        <link rel="stylesheet" href="asset/css/plugins/bootstrap.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/animate.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/odometer.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/select2.min.css" />
+        <link rel="stylesheet" href="asset/css/plugins/ion.rangeSlider.min.css" />
 
-    <!-- Main Style CSS -->
-    <!-- <link rel="stylesheet" href="asset/css/style.css"> -->
-    <link rel="stylesheet" href="asset/css/style.min.css" />
-</head>
-    <style>
-        .otp {
-            margin: 30% 5% 10% 5%;
-        }
-    
-        @media only screen and (min-width: 600px) {
-            .otp {
-                margin: 10% auto;
-                max-width: 400px;
-            }
-        }
+        <!-- Main Style CSS -->
+        <!-- <link rel="stylesheet" href="asset/css/style.css"> -->
+        <link rel="stylesheet" href="asset/css/style.min.css" />
+    </head>
 
-        .otp-input-wrapper {
-  width: 240px;
-  text-align: left;
-  display: inline-block;
-}
-.otp-input-wrapper input {
-  padding: 0;
-  width: 264px;
-  font-size: 32px;
-  font-weight: 600;
-  color: #3e3e3e;
-  background-color: transparent;
-  border: 0;
-  margin-left: 12px;
-  letter-spacing: 48px;
-  font-family: sans-serif !important;
-}
-.otp-input-wrapper input:focus {
-  box-shadow: none;
-  outline: none;
-}
-.otp-input-wrapper svg {
-  position: relative;
-  display: block;
-  width: 240px;
-  height: 2px;
-}
-    </style>
 
-<h2 class="account-title">
-    Verify OTP
-</h2>
-<br>
-<br>
 
-    <div class="otp card">
-    <%
-    if(typeof message !== 'undefined'){
-        %>
-        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-            <i class="bi-exclamation-octagon-fill"></i>
-            <strong class="mx-auto" >  <%- message %></strong>  
-           
+
+
+<div class="card custom-card">
+    <div class="card-body">
+        <h2 class="custom-title">Verify OTP</h2>
+
+            <div class="card-body">
+                <% if(typeof message !== 'undefined') { %>
+                    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <strong class="mx-auto"><%- message %></strong>
+                    </div>
+                <% } %>
+
+                <form action="" method="post">
+                    <div class="otp-input-wrapper">
+                        <input type="text" maxlength="4" name="otp" pattern="[0-9]*" autocomplete="off" class="form-control mb-3">
+                        <svg viewBox="0 0 240 1" xmlns="http://www.w3.org/2000/svg" class="mb-3">
+                            <line x1="0" y1="0" x2="240" y2="0" stroke="#3e3e3e" stroke-width="2" stroke-dasharray="44,22" />
+                        </svg>
+                        <input type="text" name="id" value="<%=id%>" hidden>
+                    </div>
+                    <button class="btn btn-primary btn-hover-dark mt-4 verify-btn" type="submit">Verify OTP</button>
+                </form>
         </div>
-        <%
-    } 
-    %>
-    <form action="" method="post">
-    <div class="otp-input-wrapper">
-        <input type="text" maxlength="4" name="otp" pattern="[0-9]*" autocomplete="off">
-        <svg viewBox="0 0 240 1" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="240" y2="0" stroke="#3e3e3e" stroke-width="2" stroke-dasharray="44,22" />
-        </svg>
-        <input type="text"  name="id" value="<%=id%>"  id="" hidden>
-      </div><br>
-      <button  class="btn btn-primary btn-hover-dark my-5" type="submit">Verify OTP</button>
-    </form>
+    </div>
 </div>
-
 
 <!-- Modernizer & jQuery JS -->
 <script src="asset/js/vendor/modernizr-3.11.2.min.js"></script>

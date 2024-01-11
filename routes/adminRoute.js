@@ -15,8 +15,6 @@ const orderModel=require('../models/orderModal')
 const couponModel=require('../models/couponModel')
 const couponController = require('../controller/couponController')
 
-// const auth=require('../middleware/auth')
-
 routeAdmin.set("view engine", "ejs");
 routeAdmin.set("views", "./views/admin");
 
@@ -54,9 +52,7 @@ routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProdu
 
 routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
 
-routeAdmin.get('/orders',adminController.Orders)
-
-
+routeAdmin.get('/orders',adminController.showOrders)
 
 routeAdmin.get('/coupon', couponController.coupon)
 
@@ -75,6 +71,6 @@ routeAdmin.patch('/blockcoupon/:id',couponController.blockCoupon)
   routeAdmin.post('/updatestatus',adminController.updateStatus)
 
 
-  routeAdmin.get('/showorder', adminController.showOrder)
+  routeAdmin.get('/showorder', adminController.detailOrder)
 
 module.exports = routeAdmin;

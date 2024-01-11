@@ -624,3 +624,6 @@
         $(this).siblings(".payment-details").slideToggle(500)
     })
 })(jQuery)
+
+
+    

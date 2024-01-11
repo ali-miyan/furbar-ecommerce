@@ -27,7 +27,7 @@ const getCart=async(req,res)=>{
   
       if(productData.quantity>0){
         if(cartProduct){
-          res.json({failed:false})
+          res.json({status:'alreadyAdded',cartProduct})
         }else{
           const data={
             productId:product_id,
@@ -37,7 +37,8 @@ const getCart=async(req,res)=>{
           console.log(data);
         
         await cartModel.findOneAndUpdate({user:userid},{$set:{user:userid},$push:{product:data}},{upsert:true,new:true})
-        res.json({failed:false})
+        res.json({success:true})
+        
         }
       }
       // else{
