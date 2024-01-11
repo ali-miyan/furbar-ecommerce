@@ -31,7 +31,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item ">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin/dashboard">
                         <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
@@ -50,7 +50,7 @@
                         <span class="text">Categoty</span>
                     </a>
                 </li>
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin/products">
                         <i class="icon material-icons md-store"></i>
                         <span class="text">products</span>
@@ -66,10 +66,10 @@
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/coupon">
                         <i class="icon material-icons md-store"></i>
-                        <span class="text">Coupon</span>
+                        <span class="text">coupon</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active">
                     <a class="menu-link" href="/admin/offer">
                         <i class="icon material-icons md-store"></i>
                         <span class="text">offer</span>
@@ -154,13 +154,13 @@
 
                 <div>
                     <div class="container">
-                    <h2>Products</h2>
+                    <h2>coupon</h2>
                     <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                     <% if (typeof message !=='undefined' ) { %>
                         <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
                             <i class="bi-exclamation-octagon-fill"></i>
-                            <strong class="mx-auto"><%- message %></strong>
+                            <strong class="mx-auto"><%= message %></strong>
                         </div>
                         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                         <script>
@@ -174,65 +174,51 @@
                         <% } %>
             </div>
 
-            <main>
-
-
                 <div class="card mb-4">
-                    
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <% if (products.length > 0) { %>
-                                <table id="tablePagination" class="table table-hover">
+                        <div class="card-body">
+                            <%if(offerData.length>0) {%>
+                            <div class="table-responsive">
+                                <table  class="table table-hover">
                                     <thead>
                                         <tr>
                                             <th scope="col">NO</th>
-                                            <th scope="col">Image</th>
                                             <th scope="col">Name</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Category</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Offer</th>
-                                            <th scope="col">edit</th>
-                                            <th scope="col">update</th>
-
+                                            <th scope="col">Discount</th>
+                                            <th scope="col">Activation Date</th>
+                                            <th scope="col">Expiry Date</th>
+                                            <th scope="col">Edit</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% for (let i = 0; i < products.length; i++) { %>
+                                        <% for (let i = 0; i < offerData.length; i++) { %>
                                                 <tr>
                                                     <td><%= i+1 %></td>
+                                                    <td><%=offerData[i].name%></td>
+                                                    <td><%= offerData[i].discountAmount %></td>
+                                                    <td><%= offerData[i].activationDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' })  %></td>
+                                                    <td><%= offerData[i].expiryDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' })  %></td>
+                                                    <td><a href="/admin/editoffer?id=<%=offerData[i]._id%>">Edit</a></td>
                                                     <td>
-                                                        <img src="/sharpimages/<%=products[i].images.image1 %>" style="width: 50px;" alt="">
-                                                    </td>
-                                                    <td><%= products[i].name %></td>
-                                                    <td><%= products[i].quantity %></td>
-                                                    <td><%= products[i].category %></td>
-                                                    <td><%= products[i].price %></td>
-                                                    <td><%= products[i].offer %></td>
-                                                    <td><a href="/admin/editproducts?id=<%=products[i]._id%>">edit</a></td>
-                                                    <td>
-                                                    <% if (products[i].is_blocked) { %>
-                                                        <a class="unblock-user" data-user-id="<%= products[i]._id %>"><span
-                                                                class="badge rounded-pill alert-success">unblock</span></a>
+                                                        <% if (offerData[i].is_blocked) { %>
+                                                            <a class="unblock-user" data-user-id="<%= offerData[i]._id %>"><span
+                                                                    class="badge rounded-pill alert-success">unblock</span></a>
                                                         <% } else { %>
-                                                            <a class="block-user"
-                                                                data-user-id="<%= products[i]._id %>"><span
+                                                            <a class="block-user"  data-user-id="<%= offerData[i]._id %>"><span
                                                                     class="badge rounded-pill alert-warning">block</span></a>
                                                         <% } %>
                                                     </td>
                                                 </tr>
+                                            <% } %>
                                         <% } %>
                                     </tbody>
                                 </table>
-                            <% } else { %>
-                                <p>No products found in the database.</p>
-                            <% } %>
+                            </div>
                         </div>
-                    </div>
-                    
-                    </div>
+
+                </div>
                     <div class="container">
-                    <a href="/admin/addproducts"><button type="button" class="btn btn-primary">+Add Products</button></a>
+                    <a href="/admin/addoffer"><button type="button" class="btn btn-primary">+Add offer</button></a>
                 </div>
                     </div>
                     <footer class="main-footer font-xs">
@@ -259,8 +245,7 @@
                 <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
                 <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
+                <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
     <script>
         document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
@@ -271,18 +256,16 @@
                 const userId = element.getAttribute('data-user-id');
                 const action = element.classList.contains('block-user') ? 'block' : 'unblock';
 
-                fetch(`/admin/blockproducts/${userId}`, {
+                fetch(`/admin/blockoffer/${userId}`, {
                     method: 'PATCH',
                 })
                     .then(response => response.json())
                     .then(data => {
                         if (data.block === true) {
-                            //updating the button text and color
                             element.querySelector('span').classList.toggle('alert-success');
                             element.querySelector('span').classList.toggle('alert-warning');
                             element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
 
-                            // Replace button class
                             element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
                             element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
                         }

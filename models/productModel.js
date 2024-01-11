@@ -20,8 +20,8 @@ const productSchema = mongoose.Schema({
         required: true
     },
     offer: {
-        type: String,
-        required: false
+        type: ObjectId,
+        ref:'offerModel'
     },
     description: {
         type: String,

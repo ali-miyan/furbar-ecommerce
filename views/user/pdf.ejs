@@ -1,5 +1,3 @@
-<!-- orderInvoice.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,66 +8,186 @@
         body {
             font-family: 'Arial', sans-serif;
             margin: 20px;
+            background-color: #f8f9fa;
+            color: #495057;
         }
 
-        table {
+        section.content-main {
+            margin: 20px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            width: 31%; /* Adjust the width based on your preference */
+            box-sizing: border-box;
+            height: 180px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h2.content-title {
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .order-info-wrap {
+            margin-top: 20px;
+        }
+
+        article.icontext {
+            display: flex;
+            align-items: start;
+        }
+
+        article.icontext .icon {
+            margin-right: 15px;
+        }
+
+        table.table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        table.table th, table.table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
 
-        th {
+        table.table th {
             background-color: #f2f2f2;
         }
 
-        h1 {
-            color: #333;
+        footer.main-footer {
+            margin-top: 20px;
+            font-size: 12px;
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer.main-footer a {
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <h1>Order Invoice</h1>
-    <%=orderData.productId.name%>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total Price</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (let i = 0; i < orderData.products.length; i++) { %>
-                <tr>
-                    <td><%= orderData.products[i].productName %></td>
-                    <td><%= orderData.products[i].quantity %></td>
-                    <td>$<%= orderData.products[i].price %></td>
-                    <td>$<%= orderData.products[i].totalPrice %></td>
-                    <td><%= orderData.products[i].productStatus %></td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
+    <hr>
+    <section class="content-main">
+        <div class="content-header">
+            <h2 class="content-title">Order Detail</h2>
+            <p>Order ID: <%=orderData._id%></p>
+        </div>
+        
+        <div class="card-container">
+            <div class="card">
+                <article class="icontext">
+                    <div class="text">
+                        <p class="mb-1">
+                            <b>Customer</b><br>
+                            <%= orderData.delivery_address.name %> <br>
+                            <%= orderData.delivery_address.email %> <br>
+                            <%= orderData.delivery_address.phone %> <br>
+                        </p>
+                    </div>
+                </article>
+            </div>
 
-    <p><strong>Delivery Address:</strong></p>
-    <p><%= orderData.delivery_address.name %></p>
-    <p><%= orderData.delivery_address.address %>, <%= orderData.delivery_address.city %>, <%= orderData.delivery_address.state %> - <%= orderData.delivery_address.pincode %></p>
-    <p>Email: <%= orderData.delivery_address.email %></p>
+            <div class="card">
+                <article class="icontext">
+                    <div class="text">
+                        <p class="mb-1">
+                            <b>Order Info</b><br>
+                            Total Amount: ₹<%= orderData.subtotal %><br>
+                            Payment: <%= orderData.payment %><br>
+                            Payment Date:<%= orderData.orderDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' }) %><br>
+                        </p>
+                    </div>
+                </article>
+            </div>
 
-    <p><strong>Payment Method:</strong> <%= orderData.payment %></p>
+            <div class="card">
+                <article class="icontext">
+                    <div class="text">
+                        <p class="mb-1">
+                            <b>Deliver to</b><br>
+                            Address: <%= orderData.delivery_address.address %><br>
+                            City: <%= orderData.delivery_address.city %> <br>
+                            Pincode: <%= orderData.delivery_address.pincode %> <br>
+                            State: <%= orderData.delivery_address.state %> <br>
+                            Landmark: <%= orderData.delivery_address.landmark %> <br>
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
 
-    <p><strong>Order Status:</strong> <%= orderData.orderStatus %></p>
-    <p><strong>Order Date:</strong> <%= orderData.orderDate.toDateString() %></p>
+        <p>ORDERED PRODUCTS</p>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="25%">Name</th>
+                        <th width="15%">Unit Price</th>
+                        <th width="15%">Quantity</th>
+                        <th width="20%">Total</th>
+                        <th width="20%">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orderData.products.forEach((product, index) => { %>
+                        <tr>
+                            <td><%=index + 1%></td>
+                            <td><%= product.productId.name %></td>
+                            <td>₹<%= product.productId.price %></td>
+                            <td><%= product.quantity %></td>
+                            <td>₹<%= product.totalPrice %></td>
+                            <td><%= product.productStatus %></td>
+                        </tr>
+                    <% }); %>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-    <h2>Total: $<%= orderData.subtotal %></h2>
+    <footer class="main-footer">
+        <div class="row">
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            &copy; Nest - HTML Ecommerce Template.
+            <div class="col-sm-6 text-sm-end">
+                All rights reserved
+            </div>
+        </div>
+    </footer><br><br>
+    <hr>
 </body>
 </html>

@@ -14,6 +14,7 @@ const productController=require("../controller/productController")
 const orderModel=require('../models/orderModal')
 const couponModel=require('../models/couponModel')
 const couponController = require('../controller/couponController')
+const offerController = require('../controller/offerController')
 
 routeAdmin.set("view engine", "ejs");
 routeAdmin.set("views", "./views/admin");
@@ -64,13 +65,22 @@ routeAdmin.get('/editcoupon', couponController.editCoupon)
 
 routeAdmin.post('/editcoupon',couponController.editCouponPost)
 
+routeAdmin.get('/offer', offerController.offer)
 
+routeAdmin.get('/addoffer',offerController.addOffer)
+
+routeAdmin.post('/addoffer',offerController.addOfferPost)
+
+routeAdmin.patch('/blockoffer/:id',offerController.blockOffer )
+
+routeAdmin.get('/editoffer',offerController.editOffer)
+
+routeAdmin.post('/editoffer',offerController.editOfferPost)
 
 routeAdmin.patch('/blockcoupon/:id',couponController.blockCoupon)
 
-  routeAdmin.post('/updatestatus',adminController.updateStatus)
+ routeAdmin.post('/updatestatus',adminController.updateStatus)
 
-
-  routeAdmin.get('/showorder', adminController.detailOrder)
+ routeAdmin.get('/showorder', adminController.detailOrder)
 
 module.exports = routeAdmin;

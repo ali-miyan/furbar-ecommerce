@@ -131,7 +131,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for (let i = 0; i < order.length; i++) { %>
+                                                <% for (let i = 0; i < order.length; i++) { %>  
                                                     <tr>
                                                         <td><%= i + 1 %></td>
                                                         <td><%= order[i].orderDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
