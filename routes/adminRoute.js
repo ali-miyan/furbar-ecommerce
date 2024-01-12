@@ -61,26 +61,22 @@ routeAdmin.get('/addcoupon',couponController.addCoupon)
 
 routeAdmin.post('/addcoupon',couponController.addCouponPost)
 
-routeAdmin.get('/editcoupon', couponController.editCoupon)
-
-routeAdmin.post('/editcoupon',couponController.editCouponPost)
-
 routeAdmin.get('/offer', offerController.offer)
 
 routeAdmin.get('/addoffer',offerController.addOffer)
 
 routeAdmin.post('/addoffer',offerController.addOfferPost)
 
-routeAdmin.patch('/blockoffer/:id',offerController.blockOffer )
+routeAdmin.patch('/deleteoffer',offerController.deleteOffer)
 
-routeAdmin.get('/editoffer',offerController.editOffer)
-
-routeAdmin.post('/editoffer',offerController.editOfferPost)
-
-routeAdmin.patch('/blockcoupon/:id',couponController.blockCoupon)
+routeAdmin.patch('/deletecoupon',couponController.deleteCoupon)
 
  routeAdmin.post('/updatestatus',adminController.updateStatus)
 
  routeAdmin.get('/showorder', adminController.detailOrder)
+
+ routeAdmin.patch('/applyoffer',offerController.applyOffer)
+
+ routeAdmin.patch('/removeoffer',offerController.removeOffer)
 
 module.exports = routeAdmin;

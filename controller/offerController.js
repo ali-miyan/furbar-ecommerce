@@ -52,58 +52,57 @@ const addOfferPost = async (req,res)=>{
     }
 }
 
-const editOffer = async (req,res)=>{
+const deleteOffer = async (req,res) =>{
     try {
-
-        const id = req.query.id;
-        const offerData = await offerModel.findById(id)
-        res.render("editoffer",{offerData})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-const editOfferPost = async (req,res)=>{
-    try {
-        const id = req.query.id
-        const offerData = await offerModel.findById(id)
-
-        await offerModel.findOneAndUpdate({_id:id},
-            {
-                name:req.body.name,
-                discountAmount:req.body.discount,
-                activationDate:req.body.activationDate,
-                expiryDate:req.body.expiryDate,
-            })
-
-        res.redirect("/admin/offer")
-
-    } catch (error) {
-        console.log(error.message);
-        res.render('500Error')
-    }
-}
-
-const blockOffer = async (req,res)=>{
-    try {
-        const id = req.params.id; 
-        const userValue = await offerModel.findOne({ _id: id });
-        if (userValue.is_blocked) {
-          await offerModel.updateOne({ _id: id }, { $set: { is_blocked: false } });
-        } else {
-          await offerModel.updateOne({ _id: id }, { $set: { is_blocked: true } });
-        }
-        res.json({ block: true });
+        const user = req.body.id; 
+        console.log(user);
+        const userValue = await offerModel.deleteOne({ _id: user });
+        console.log(user);
+        res.json({ success: true });
       } catch (error) {
         console.log(error.message);
       }
 }
 
+const applyOffer = async(req,res)=>{
+    try {
+        const {id,productId} = req.body; 
+        console.log(productId,'idddd');
+        const product = await Product.findOneAndUpdate(
+            { _id:productId },
+            { $set: { offer: id } },
+            { new: true }
+        );    
+        res.json({success:true})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const removeOffer = async(req,res)=>{
+    try {
+        console.log('heloooo');
+        const id = req.body.id
+        console.log(id);
+        const product = await Product.findOneAndUpdate(
+            { _id:id },
+            { $unset: { offer:1,discountedPrice:1} },
+            { new: true }
+        );    
+
+        console.log(product);
+        res.json({success:true})
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports={
-    editOffer,
     addOffer,
     offer,
     addOfferPost,
-    blockOffer,
-    editOfferPost
+    deleteOffer,
+    applyOffer,
+    removeOffer
 }

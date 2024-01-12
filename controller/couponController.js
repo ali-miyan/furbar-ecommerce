@@ -106,60 +106,24 @@ const addCouponPost = async (req,res)=>{
   }
 }
 
-const editCoupon = async (req,res)=>{
+
+const deleteCoupon = async(req,res)=>{
   try {
-      const couponId = req.query.id;
-      const coupon = await couponModel.findById(couponId)
-      res.render("editcoupon",{coupon})
-
-  } catch (error) {
-      console.log(error.message);
-      res.render('500Error')
-  }
-}
-
-const editCouponPost = async (req,res)=>{
-  try {
-      const couponId = req.query.id
-      const couponData = await couponModel.findOneAndUpdate({_id:couponId},
-          {
-              name:req.body.couponname,
-              couponCode:req.body.couponcode,
-              discountAmount:req.body.discount,
-              activationDate:req.body.activationdate,
-              expiryDate:req.body.expirydate,
-              criteriaAmount:req.body.criteriamount,
-          })
-  
-          res.redirect("/admin/coupon")
-
-  } catch (error) {
-      console.log(error.message);
-  }
-}
-
-const blockCoupon = async(req,res)=>{
-  try {
-    const user = req.params.id; 
-    const userValue = await couponModel.findOne({ _id: user });
-    if (userValue.is_blocked) {
-      await couponModel.updateOne({ _id: user }, { $set: { is_blocked: false } });
-    } else {
-      await couponModel.updateOne({ _id: user }, { $set: { is_blocked: true } });
-    }
-    res.json({ block: true });
+    const user = req.body.id; 
+    console.log(user);
+    const userValue = await couponModel.deleteOne({ _id: user });
+    console.log(user);
+    res.json({ success: true });
   } catch (error) {
     console.log(error.message);
   }
 }
 
   module.exports={
-    applyCoupon,
+    applyCoupon,  
     removeCoupon,
     coupon,
     addCoupon,
     addCouponPost,
-    editCoupon,
-    editCouponPost,
-    blockCoupon
+    deleteCoupon
 }

@@ -274,7 +274,7 @@ const userLogout = async (req, res) => {
 const detailShop=async(req,res)=>{
     try {
         const id=req.query.id;
-        const data=await Product.findOne({_id:id}).populate('categoryId')
+        const data=await Product.findOne({_id:id}).populate('categoryId').populate('offer')
         console.log(data);
         res.render('detailshop',{data})
     } catch (error) {

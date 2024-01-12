@@ -7,13 +7,23 @@ const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
 const adminController = require("../controller/adminConroller");
 const Product=require("../models/productModel")
-const couponModel = require('../models/couponModel')
+const couponModel = require('../models/couponModel');
+const offerModel = require("../models/offerModel");
 
 const getProduct=async(req,res)=>{
     try {
-        const users=await Product.find({})
-        console.log(users);
-        res.render('products',{products:users})
+        const products=await Product.find({}).populate('offer').populate('categoryId')
+        const offer = await offerModel.find({})
+
+        products.forEach(async(product) => {
+          if (product.offer) {
+            const discountedPrice = product.price * (1 - product.offer.discountAmount / 100);
+            product.discountedPrice = discountedPrice;
+            await product.save();
+          }
+      });      
+
+      res.render('products',{products,offer})
     } catch (error) {
         console.log(error.message);
     }
@@ -54,7 +64,6 @@ const addProductsPost = async (req, res) => {
         quantity: details.quantity,
         categoryId: details.category,
         price: details.price,
-        offer: details.offer,
         description: details.description,
         images: {
           image1: img[0],
@@ -113,7 +122,6 @@ const editProductsPost = async (req, res) => {
         quantity: details.quantity,
         categoryId: details.category,
         price: details.price,
-        offer: details.offer,
         description: details.description,
         images: {
           image1: img[0],

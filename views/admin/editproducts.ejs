@@ -168,23 +168,16 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
-                                                <select class="form-control" id="product-category" name="category">
-                                                    <% if (data1 && data1.length > 0) { %>
-                                                        <% data1.forEach(data => { %>
-                                                            <% if (data.is_list === false) { %>
-                                                                <option value="<%= data._id %>"><%= data.name %></option>
-                                                            <% } %>
-                                                        <% }); %>
-                                                    <% } %>                                             
-                                                </select>                                            
+                                            <select class="form-control" id="product-category" name="category">
+                                                <option value="<%= data.categoryId._id %>"><%= data.categoryId.name %></option>
+                                                <% for (let i = 0; i < data1.length; i++) { %>
+                                                    <option value="<%= data1[i]._id %>"><%= data1[i].name %></option>
+                                                <% } %>
+                                            </select>                                         
                                         </div>
                                         <div class="form-group">
                                             <label>Price</label>
                                             <input type="text" class="form-control" value="<%= data.price%>" name="price" placeholder="Type here" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="offer">Offer</label>
-                                            <input type="text" class="form-control" value="<%= data.offer%>" id="offer" name="offer" placeholder="Type here" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Description</label>

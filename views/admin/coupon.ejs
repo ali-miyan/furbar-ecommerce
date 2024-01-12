@@ -177,7 +177,7 @@
                 <div class="card mb-4">
                     <% if (coupon.length > 0) { %>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" id="reloadDiv">
                                 <table id="tablePagination" class="table table-hover">
                                     <thead>
                                         <tr>
@@ -188,7 +188,6 @@
                                             <th scope="col">Criteria Amount</th>
                                             <th scope="col">Activation Date</th>
                                             <th scope="col">Expiry Date</th>
-                                            <th scope="col">Update</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -202,19 +201,12 @@
                                                     <td><%= coupon[i].criteriaAmount %></td>
                                                     <td><%= coupon[i].activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
                                                     <td><%= coupon[i].expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
-                                                    <td><a href="/admin/editcoupon?id=<%=coupon[i]._id%>">edit</a></td>
-                                                    <td>
-                                                        <% if (coupon[i].is_blocked) { %>
-                                                            <a class="unblock-user" data-user-id="<%= coupon[i]._id %>"><span
-                                                                    class="badge rounded-pill alert-success">unblock</span></a>
-                                                        <% } else { %>
-                                                            <a class="block-user" data-user-id="<%= coupon[i]._id %>"><span
-                                                                    class="badge rounded-pill alert-warning">block</span></a>
-                                                        <% } %>
-                                                    </td>
+                                                    <td><button onclick="deleteCoupon('<%=coupon[i]._id%>')">delete</button></td>
                                                 </tr>
                                             <% } %>
-                                        <% } %>
+                                        <% }else{ %>
+                                            <td><p class="text-center">no coupons available</p></td>
+                                            <%}%>
                                     </tbody>
                                 </table>
                             </div>
@@ -250,39 +242,46 @@
                 <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
-        document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
-            console.log(element);
-            element.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const userId = element.getAttribute('data-user-id');
-                const action = element.classList.contains('block-user') ? 'block' : 'unblock';
-
-                fetch(`/admin/blockcoupon/${userId}`, {
-                    method: 'PATCH',
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.block === true) {
-                            //updating the button text and color
-                            element.querySelector('span').classList.toggle('alert-success');
-                            element.querySelector('span').classList.toggle('alert-warning');
-                            element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
-
-                            // Replace button class
-                            element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
-                            element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
+        function deleteCoupon(id) {
+            console.log(id);
+    
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This coupon will be deleted',
+                icon: 'question',
+                reverseButtons: true,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                confirmButtonColor: '#1e6e2c',
+                cancelButtonColor: '#97a399',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/deletecoupon`,
+                        method: 'PATCH',
+                        data: { id: id },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire('Success succes', 'successfully deleted coupon.', 'success');
+                                $("#reloadDiv").load("/showcart #reloadDiv");
+                            } else {
+                                Swal.fire('Error', 'Error deleting coupon.', 'error');
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
                         }
-                    }).catch((error) => {
-                        console.log(error.message);
-                    })
-
+                    });
+                } else {
+                    console.log('cancelled');
+                }
             });
-        });
+        }
     </script>
-
 
 </body>
 

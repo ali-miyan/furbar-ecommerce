@@ -80,7 +80,11 @@
                                                                 <% if (product.quantity==0){ %>Out of Stock<%}%>
                                                             </h4>
                                                             <div class="price">
-                                                                <span class="sale-price">₹<%=product.price%></span>
+                                                                <%if(!product.discountedPrice){%>
+                                                                    <span class="sale-price">₹<%=product.price%></span>
+                                                                <%}else{%>
+                                                                    <del>₹<%=product.price%></del><span class="sale-price">₹<%=product.discountedPrice%></span>
+                                                                <%}%>
                                                             </div>
                                                         </div>
                                                         <ul class="product-meta">
