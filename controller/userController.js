@@ -36,12 +36,12 @@ const loadHome=async(req,res)=>{
 //shop page
 const loadShop = async (req, res) => {
     try {
-      const category = await categoryModel.find({ _id: { $in: await Product.distinct("categoryId") } });
+      const category = await categoryModel.find({ _id: { $in: await Product.distinct("categoryId")}});
       let product;
       if (req.query.filteredProducts) {
         product = JSON.parse(req.query.filteredProducts);
       } else {
-        product = await Product.find({});
+        product = await Product.find({}).populate('offer');
       }
       const selectedCategories = req.query.categories ? JSON.parse(req.query.categories) : [];
       res.render('shop', { product, category, selectedCategories });
@@ -52,9 +52,9 @@ const loadShop = async (req, res) => {
 
   const categoryFilter = async (req, res) => {
     try {
-        const filtered = req.body.category;
-        console.log(filtered,'ddddddddd');
-      const products = await Product.find({ categoryId: { $in: filtered } }).populate('categoryId');
+    const filtered = req.body.category;
+    console.log(filtered,'ddddddddd');
+    const products = await Product.find({ categoryId: { $in: filtered } }).populate('categoryId');
       res.json({ products });
     } catch (error) {
       console.log(error.message);

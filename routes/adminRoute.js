@@ -79,4 +79,8 @@ routeAdmin.patch('/deletecoupon',couponController.deleteCoupon)
 
  routeAdmin.patch('/removeoffer',offerController.removeOffer)
 
+ routeAdmin.patch('/applycategoryoffer',offerController.applyCategoryOffer)
+
+ routeAdmin.patch('/removecategoryoffer',offerController.removeCategoryOffer)
+
 module.exports = routeAdmin;

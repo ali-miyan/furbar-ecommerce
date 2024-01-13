@@ -12,16 +12,30 @@ const offerModel = require("../models/offerModel");
 
 const getProduct=async(req,res)=>{
     try {
-        const products=await Product.find({}).populate('offer').populate('categoryId')
+        const products=await Product.find({}).populate({
+          path: 'categoryId',
+          populate: {
+            path: 'offer'
+          }
+        }).populate('offer');
         const offer = await offerModel.find({})
 
         products.forEach(async(product) => {
-          if (product.offer) {
+          if(product.categoryId.offer){
+            const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
+            product.discountedPrice = parseInt(offerPrice);
+            product.offer = product.categoryId.offer
+            await product.save();
+          }
+          else if (product.offer) {
             const discountedPrice = product.price * (1 - product.offer.discountAmount / 100);
-            product.discountedPrice = discountedPrice;
+            product.discountedPrice = parseInt(discountedPrice);
             await product.save();
           }
       });      
+
+      console.log(products,'backenddddd');
+
 
       res.render('products',{products,offer})
     } catch (error) {

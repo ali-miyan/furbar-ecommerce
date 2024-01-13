@@ -5,7 +5,9 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
 const adminController = require("../controller/adminConroller");
-const orderModel=require('../models/orderModal')
+const orderModel=require('../models/orderModal');
+const offerModel = require("../models/offerModel");
+const Product = require("../models/productModel");
 
 
 const adminLogin=async(req,res)=>{
@@ -78,8 +80,9 @@ const blockUser = async (req, res) => {
 const loadCategory=async(req,res)=>{
   try {
     const message=req.query.message
-      const users=await categoryModel.find({})
-      res.render('category',{users:users,message:message})
+    const offer = await offerModel.find({})
+    const users=await categoryModel.find({}).populate('offer')
+      res.render('category',{users,message,offer})
   } catch (error) {
       console.log(error.message);
   }
@@ -153,11 +156,12 @@ const editCategoryPost=async(req,res)=>{
   try {
 
     const existingCategory = await categoryModel.findOne({ name: req.body.name });
+    
     console.log(existingCategory.name);
     console.log(req.body.name);
 
     if (existingCategory && existingCategory.name === req.body.name) {
-       res.render('editcategory', { message: 'Category name already exists' });
+       res.render('editcategory', { message: 'Category name already exists',data:existingCategory });
     }
 
     await categoryModel.findByIdAndUpdate(

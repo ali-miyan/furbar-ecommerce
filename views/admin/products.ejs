@@ -167,7 +167,7 @@
                                     <div class="card-body">
                                         <p class="text-center">Coupon Name: <br><b><%=offer.name%></b> <br>
                                         Discount: <br><b><%=offer.discountAmount%>%</b></p>
-                                        <button class="offer-btn" onclick="applyCoupon('<%=offer._id%>')">Apply</button>
+                                        <button class="offer-btn" onclick="applyOffer('<%=offer._id%>')">Apply</button>
                                     </div>
                                 </div>
                             <% }) %>
@@ -225,45 +225,50 @@
                                         </tr>
                                     </thead>
                                     <tbody >
-                                        <% for (let i = 0; i < products.length; i++) { %>
-                                                <tr>
-                                                    <td><%= i+1 %></td>
-                                                    <td>
-                                                        <img src="/sharpimages/<%=products[i].images.image1 %>" style="width: 70px;" alt="">
-                                                    </td>
-                                                    <td><%= products[i].name %></td>
-                                                    <td><%= products[i].quantity %></td>
-                                                    <td><%= products[i].categoryId.name %></td>
-                                                    <td><%if(!products[i].discountedPrice){%>
-                                                        <%= products[i].price %></td>
-                                                        <%}else{%>
-                                                           <del> <%= products[i].price %></del><br><%=products[i].discountedPrice%>
-                                                            <%}%>
-                                                    <td >
-                                                        <%if(!products[i].offer){%>
-                                                        <button type="button" onclick="passId('<%=products[i]._id%>')"  class="offer-btn" data-bs-toggle="modal" data-bs-target="#offerModal">
-                                                        Apply
-                                                    </button>
-                                                    <%}else{%>
-                                                        <button type="button" onclick="removeOffer('<%=products[i]._id%>')" class="remove-btn">
+                                        
+                                        <% products.forEach((product, index) => { %>
+                                            <tr>
+                                                <% console.log(product, 'ssssssssssssssss') %>
+                                                <td><%= index + 1 %></td>
+                                                <td>
+                                                    <img src="/sharpimages/<%= product.images.image1 %>" style="width: 70px;" alt="">
+                                                </td>
+                                                <td><%= product.name %></td>
+                                                <td><%= product.quantity %></td>
+                                                <td><%= product.categoryId.name %></td>
+                                                <td>
+                                                    <% if (!product.offer) { %>
+                                                        <%= product.price %>
+                                                    <% } else { %>
+                                                        <del>₹<%= product.price %></del><br>₹<%=product.discountedPrice  %>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (product.categoryId.offer) { %>
+                                                        <span>category offer</span><br>
+                                                        <p class="badge rounded-pill alert-success"><%= product.categoryId.offer.discountAmount %>% offer</p>
+                                                    <% } else if (product.offer) { %>
+                                                        <p>product offer</p>
+                                                        <button type="button" onclick="removeOffer('<%= product._id %>')" class="remove-btn">
                                                             Remove  
                                                         </button><br>
-                                                        <p><%=products[i].offer.discountAmount%>% offer</p>
-                                                        <%}%>
+                                                        <p>₹<%= product.offer.discountAmount %>% offer</p>
+                                                    <% } else { %>
+                                                        <button type="button" onclick="passId('<%= product._id %>')" class="offer-btn" data-bs-toggle="modal" data-bs-target="#offerModal">
+                                                            Apply
+                                                        </button>
+                                                    <% } %>
                                                 </td>
-                                                    <td><a href="/admin/editproducts?id=<%=products[i]._id%>">edit</a></td>
-                                                    <td>
-                                                    <% if (products[i].is_blocked) { %>
-                                                        <a class="unblock-user" data-user-id="<%= products[i]._id %>"><span
-                                                                class="badge rounded-pill alert-success">unblock</span></a>
-                                                        <% } else { %>
-                                                            <a class="block-user"
-                                                                data-user-id="<%= products[i]._id %>"><span
-                                                                    class="badge rounded-pill alert-warning">block</span></a>
-                                                        <% } %>
-                                                    </td>
-                                                </tr>
-                                        <% } %>
+                                                <td><a href="/admin/editproducts?id=<%= product._id %>">edit</a></td>
+                                                <td>
+                                                    <% if (product.is_blocked) { %>
+                                                        <a class="unblock-user" data-user-id="<%= product._id %>"><span class="badge rounded-pill alert-success">unblock</span></a>
+                                                    <% } else { %>
+                                                        <a class="block-user" data-user-id="<%= product._id %>"><span class="badge rounded-pill alert-warning">block</span></a>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
                                     </tbody>
                                 </table>
                             </div>
@@ -316,7 +321,7 @@
             productId = id
         }
         console.log(productId);
-        function applyCoupon(id) {
+        function applyOffer(id) {
             console.log(productId);
                     $.ajax({
                         url: `/admin/applyoffer`,
@@ -348,6 +353,7 @@
                         success: function(response) {
 
                             if (response.success) {
+                                
                                 location.reload()
                             } else {
                                 Swal.fire('Error', 'Error adding offer.', 'error');

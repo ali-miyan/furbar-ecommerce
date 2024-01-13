@@ -88,10 +88,43 @@ const removeOffer = async(req,res)=>{
         const product = await Product.findOneAndUpdate(
             { _id:id },
             { $unset: { offer:1,discountedPrice:1} },
+            { new:true }
+            );    
+        await categoryModel.updateMany({_id:product.categoryId},{ $unset: { offer: 1,}})
+
+        res.json({success:true})
+    } catch (error) {
+        console.log(error);
+    }
+}
+const applyCategoryOffer = async(req,res)=>{
+    try {
+        const {id,categoryId} = req.body; 
+        console.log(categoryId,'idddd');
+        const product = await categoryModel.findOneAndUpdate(
+            { _id:categoryId },
+            { $set: { offer: id } },
             { new: true }
         );    
+        console.log('gottt',product);
+        res.json({success:true})
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-        console.log(product);
+
+const removeCategoryOffer = async(req,res)=>{
+    try {
+        const id = req.body.id
+        console.log(id,'nuk');
+        const product = await categoryModel.findOneAndUpdate(
+            { _id:id },
+            { $unset: { offer:1} },
+            { new: true }
+        );    
+        await Product.updateMany({ categoryId: product._id }, { $unset: { offer: 1, discountedPrice: 1 } });
+
         res.json({success:true})
     } catch (error) {
         console.log(error);
@@ -104,5 +137,7 @@ module.exports={
     addOfferPost,
     deleteOffer,
     applyOffer,
-    removeOffer
+    removeOffer,
+    applyCategoryOffer,
+    removeCategoryOffer
 }

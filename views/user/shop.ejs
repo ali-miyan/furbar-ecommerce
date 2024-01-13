@@ -69,9 +69,15 @@
                                                 <div class="col-lg-4 col-sm-6">
                                                     <!-- Single Product Start -->
                                                     <div class="single-product">
-                                                        <a href="/detailshop?id=<%=product._id%>"><img
+                                                        <a href="/detailshop?id=<%=product._id%>"><img 
                                                                 src="sharpimages/<%=product.images.image1 %>"
-                                                                width="270" height="303" alt="product" /></a>
+                                                                width="270" height="303" alt="product" />
+                                                                <%=console.log(product.offer)%>
+                                                                <% if (product.offer) { %>
+                                                                    <div style="position: absolute; top: 0; left: 0; background-color: #ccff00; color: #ffffff; padding: 5px;">
+                                                                        <%= product.offer.discountAmount %>% Off
+                                                                    </div>
+                                                                <% } %></a>   
                                                         <div class="product-content">
                                                             <h4 class="title">
                                                                 <a href="product-details.html">
@@ -83,7 +89,7 @@
                                                                 <%if(!product.discountedPrice){%>
                                                                     <span class="sale-price">₹<%=product.price%></span>
                                                                 <%}else{%>
-                                                                    <del>₹<%=product.price%></del><span class="sale-price">₹<%=product.discountedPrice%></span>
+                                                                    <span class="old-price">₹<%=product.price%></span>&nbsp;&nbsp;<span class="sale-price">₹<%=product.discountedPrice%></span>
                                                                 <%}%>
                                                             </div>
                                                         </div>
@@ -99,7 +105,7 @@
                                                             </li>
                                                             <li>
                                                                 <a class="action" href="#"><i
-                                                                        class="pe-7s-like"></i></a>
+                                                                class="pe-7s-like"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>

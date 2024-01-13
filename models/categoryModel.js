@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Schema.Types.ObjectId
+
  const categorySchema = mongoose.Schema({
     name:{
         type:String,
@@ -9,6 +11,12 @@ const mongoose = require("mongoose");
         type:String,
         required:true
     },
+    offer: {
+        type: ObjectId,
+        ref:'offerModel',
+    },
+    discountedPrice:Number
+    ,
     is_list:{
         type:Boolean,
         default:false
