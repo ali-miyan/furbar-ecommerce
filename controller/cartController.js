@@ -23,7 +23,7 @@ const getCart=async(req,res)=>{
       const userid=req.session.user_id
       const productData = await Product.findById(product_id)
       const cartProduct = await cartModel.findOne({ user: userid ,'product.productId':product_id})
-      let productPrice= productData.price
+      let productPrice = productData.discountedPrice ? productData.discountedPrice : productData.price;
   
       if(productData.quantity>0){
         if(cartProduct){
@@ -65,7 +65,7 @@ const getCart=async(req,res)=>{
       
         
       if(cartData){
-        const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+        const subtotal = cartData.product.reduce((acc, val) => acc + (val.discountedPrice || val.price) * val.quantity, 0);
         console.log("cart");
         const total = subtotal+cartData.shippingAmount
         res.render('cart',{data:cartData,subtotal,id,total})
@@ -152,7 +152,6 @@ const getCart=async(req,res)=>{
   
     } catch (error) {
       console.log(error.message);
-      res.render('500Error')
     }
   }
 

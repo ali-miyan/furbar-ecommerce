@@ -29,26 +29,32 @@
                         Already have an account?
                         <a href="/login">Log in instead!</a>
                     </p>
-
-                    <% if (typeof message !== 'undefined') { %>
-                        <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" style="text-align: center;">
-                            <i class="bi-exclamation-octagon-fill"></i>
-                            <b class="text-center"><%- message %></b>
-                        </div>
-                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                        <script>
-                            $(document).ready(function () {
-                                setTimeout(function () {
-                                    $("#errorAlert").fadeOut(500); 
-                                }, 3000);
-                            });
-                        </script>
-                    <% } %>
                     
                     <form id="signupForm" action="" method="post">
 
+                        <div class="checkout-info">
+                            <p class="info-header">
+                                <i class="fa fa-exclamation-circle"></i> Have a referal code?
+                                <a data-bs-toggle="collapse" href="#coupon">Click here to enter your code</a>
+                            </p>
+                            <div class="collapse" id="coupon">
+                                <div class="card-body" id="reloadDiv">
+                                    <div class="row">
+                                        <div class="single-form">
+                                        <input type="text" id="referalCode" name="code" placeholder="referal code" />
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <% if (typeof message !== 'undefined') { %>
+                            <p class="text-center alert-danger" id="errorMessage" style="color: rgb(98, 9, 9);"><%- message %></p>
+                    <% } %>
+                        
+
                         <div class="single-form">
-                            <input type="text" id="name" name="name" placeholder="First Name" />
+                            <input type="text" id="name" name="name" placeholder="Name *" />
                             <div class="error-container">
                                 <div id="nameError" class="error-message"></div>
                             </div>
@@ -62,24 +68,25 @@
                         </div>
 
                         <div class="single-form">
-                            <input type="text" id="mobile" name="mobile" placeholder="Mobile" />
+                            <input type="text" id="mobile" name="mobile" placeholder="Mobile *" />
                             <div class="error-container">
                                 <div id="mobileError" class="error-message"></div>
                             </div>
                         </div>
 
                         <div class="single-form">
-                            <input type="password" id="password" name="password" placeholder="Password" />
+                            <input type="password" id="password" name="password" placeholder="Password *" />
                             <div class="error-container">
                                 <div id="passwordError" class="error-message"></div>
                             </div>
                         </div>
                         <div class="single-form">
-                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" />
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password *" />
                             <div class="error-container">
                                 <div id="confirmPasswordError" class="error-message"></div>
                             </div>
                         </div>
+                        
                     
                         <div class="single-form">
                             <button type="button" id="registerButton" class="btn btn-primary btn-hover-dark">
@@ -139,6 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mobile === "") {
             displayError('mobile', 'mobile cannot be empty');
             isValid = false;
+        }else if(!/^\d{10}$/.test(mobile)){
+            displayError('mobile','invalid mobile number')
+            isValid = false
         }
 
         if (password === "") {
@@ -167,6 +177,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function clearErrorMessages() {
         const errorMessages = document.querySelectorAll('.error-message');
         errorMessages.forEach(error => error.textContent = '');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var errorMessageElement = document.getElementById('errorMessage');
+    if (errorMessageElement) {
+        setTimeout(function() {
+            errorMessageElement.style.display = 'none';
+        }, 3000);
     }
 });
 

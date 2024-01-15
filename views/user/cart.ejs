@@ -41,6 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <%console.log(data)%>
                                 <% data.product.forEach(function(product, index) { %>
                                     <tr>
                                         <td class="product-thumb">
@@ -53,8 +54,10 @@
                                                 </a>
                                             </h6>
                                             <div class="product-prices">
-                                                <span class="old-price">₹35.90</span>
-                                                <span class="sale-price">₹<%= product.price %></span>
+                                                <span class="sale-price">₹<%= product.productId.discountedPrice ? product.productId.discountedPrice : product.productId.price %></span>
+                                                <span class="old-price">
+                                                    <%= product.productId.discountedPrice ? '₹' + product.productId.price : '' %>
+                                                </span>
                                             </div>
                                             <div class="product-size-color">
                                                 <p>Size <span>S</span></p>
@@ -77,7 +80,9 @@
 
                                         </td>
                                         <td class="product-total-price">
-                                            <span class="price">₹<%= product.totalPrice %></span>
+                                            <span class="price">
+                                                <%=product.totalPrice%>
+                                            </span>
                                         </td>
                                         <td class="product-action">
                                             <button class="remove" id="closeButton"
@@ -133,7 +138,7 @@
                                                     <label class="custom-control-label" for="free-shipping">Free Shipping</label>
                                                 </div>
                                             </td>
-                                            <td>0.00</td>
+                                            <td>₹0.00</td>
                                         </tr>               
                                         <tr class="summary-shipping-row">
                                             <td>
@@ -142,7 +147,7 @@
                                                     <label class="custom-control-label" for="standart-shipping">Standard:</label>
                                                 </div>
                                             </td>
-                                            <td>30.00</td>                                        
+                                            <td>₹30.00</td>                                        
                                          </tr>
                                         <tr class="summary-shipping-row">
                                             <td>
@@ -151,7 +156,7 @@
                                                     <label class="custom-control-label" for="standart-shipping">Express:</label>
                                                 </div>
                                             </td>
-                                            <td>60.00</td>                                        
+                                            <td>₹60.00</td>                                        
                                          </tr>
                                     <tr>
                                         <td>

@@ -1,429 +1,465 @@
 <%- include('../layouts/header.ejs') -%>
-<script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
 
 
 
-<!-- Page Banner Section Start -->
-<div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
-    <div class="container">
-        <!-- Page Banner Content End -->
-        <div class="page-banner-content">
-            <h2 class="title">Checkout</h2>
+    <!-- Page Banner Section Start -->
+    <div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
+        <div class="container">
+            <!-- Page Banner Content End -->
+            <div class="page-banner-content">
+                <h2 class="title">Checkout</h2>
 
-            <ul class="breadcrumb">
-                <li><a href="index.html">Home</a></li>
-                <li class="active">Checkout</li>
-            </ul>
-        </div>
-        <!-- Page Banner Content End -->
-    </div>
-</div>
-<!-- Page Banner Section End -->
-
-<!-- Checkout Section Start -->
-<div class="section section-padding">
-    <div class="container">
-        <div class="checkout-info">
-            <p class="info-header">
-                <i class="fa fa-exclamation-circle"></i> Have a coupon?
-                <a data-bs-toggle="collapse" href="#coupon">Click here to enter your code</a>
-            </p>
-            <%console.log(coupons)%>
-            <div class="collapse" id="coupon">
-                <div class="card-body" id="reloadDiv">
-                    <div class="row">
-                        <% for (let i = 0; i < coupons.length; i++) { %>
-                            <div class="col-lg-3 mb-4">
-                                <div class="card coupon-card">
-                                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                        <i class="fa fa-gift" aria-hidden="true"></i>
-                                        <h5 class="coupon-tag"><%= coupons[i].name %></h5>
-                                        <p class="coupon-text">
-                                            Code: <%= coupons[i].couponCode %> <br>
-                                            Discount Amount: <b> ₹<%= coupons[i].discountAmount %> </b> <br>
-                                            Only applicable if you <br> order above <b> ₹<%=coupons[i].criteriaAmount%></b>
-                                        </p>
-                                        <% if(subtotal>coupons[i].criteriaAmount) {%>
-                                            <% console.log('Coupon ID:', coupons[i]._id, 'Applied Coupon ID:', cartData.couponDiscount ? cartData.couponDiscount._id : 'No Coupon Applied') %>
-                                            <% if (discountAmount && coupons[i]._id.toString() !== (cartData.couponDiscount ? cartData.couponDiscount._id.toString() : null)) { %>
-                                                <button type="submit" onclick="applyCoupon('<%=coupons[i]._id%>')" class="apply-btn btn btn-primary">
-                                                    <span> Apply</span>
-                                                </button>
-                                            <% } else if (cartData.couponDiscount && coupons[i]._id.toString() === (cartData.couponDiscount._id ? cartData.couponDiscount._id.toString() : null)) { %>
-                                                <button type="submit" onclick="removeCoupon('<%=coupons[i]._id%>')" class="apply-btn btn btn-danger">
-                                                    <span> Remove</span>
-                                                </button>
-                                            <% } %>
-                                        <% } else { %>
-                                            <span class="badge not-applicable">Not Applicable</span>
-                                        <%}%>
-                                    </div>
-                                </div>
-                            </div>
-                        <% } %>
-                    </div>
-                </div>
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Checkout</li>
+                </ul>
             </div>
-            
+            <!-- Page Banner Content End -->
         </div>
+    </div>
+    <!-- Page Banner Section End -->
 
-                                <form id="form">
-                                    <div class="row">
-                                        <div class="col-lg-7">
-                                        <% if (address && address.address && address.address.length > 0) { %>
-                                            <div class="row">
-                                                <% address.address.forEach(function(address, index) { %>
-                                                    <div class="col-lg-6"><br><br>
-                                                        <div class="card card-dashboard">
-                                                            <div class="card-body">
-                                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <% if (index === 0) { %>checked<% } %> required>
-                                                                <h3 class="card-title">Address <%= index + 1 %></h3>
-                                                                <p>Name: <%= address.name %><br>
-                                                                Address: <%= address.address %><br>
-                                                                Landmark: <%= address.landmark %><br>
-                                                                State: <%= address.state %><br>
-                                                                City: <%= address.city %><br>
-                                                                Pincode: <%= address.pincode %><br>
-                                                                Phone: <%= address.phone %><br>
-                                                                Email: <%= address.email %><br>
-                                                                <a href="/editAddress?ind=<%= index %>" ><i class="fa fa-edit"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <% }); %>
-                                                </div>
-                                                </div>
-                                            <% } else { %>
-                                                    <div class="col-lg-6">
-                                                                        <!-- Checkout Form Start -->
-                                                                        <div class="checkout-form">
-                                                                            <div class="checkout-title">
-                                                                                <h4 class="title">Add Address</h4>
-                                                                            </div>
-                                                    
-                                                    
-                                                                            <div class="row" >
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="name" placeholder="Name *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <label class="form-label">address *</label>
-                                                                                        <input type="text" name="address" placeholder="Address" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="landmark" placeholder="Landmark *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="state" placeholder="State *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="city" placeholder="Town / City *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="pincode" placeholder="Pincode *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="phone" placeholder="Phone *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <div class="single-form">
-                                                                                        <input type="text" name="email" placeholder="Email address *" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                
-                                                                            </div>
-                                                                        </div>
-                                                                        <!-- Checkout Form End -->
-                                                                    </div>
-                                                                </div><!-- End .row -->                                   
+    <!-- Checkout Section Start -->
+    <div class="section section-padding">
+        <div class="container">
+            <div class="checkout-info">
+                <p class="info-header">
+                    <i class="fa fa-exclamation-circle"></i> Have a coupon?
+                    <a data-bs-toggle="collapse" href="#coupon">Click here to enter your code</a>
+                </p>
+                <%console.log(coupons)%>
+                    <div class="collapse" id="coupon">
+                        <div class="card-body" id="reloadDiv">
+                            <div class="row">
+                                <% for (let i=0; i < coupons.length; i++) { %>
+                                    <div class="col-lg-3 mb-4">
+                                        <div class="card coupon-card">
+                                            <div
+                                                class="card-body d-flex flex-column align-items-center justify-content-center">
+                                                <i class="fa fa-gift" aria-hidden="true"></i>
+                                                <h5 class="coupon-tag">
+                                                    <%= coupons[i].name %>
+                                                </h5>
+                                                <p class="coupon-text">
+                                                    Code: <%= coupons[i].couponCode %> <br>
+                                                        Discount Amount: <b> ₹<%= coupons[i].discountAmount %> </b> <br>
+                                                        Only applicable if you <br> order above <b> ₹
+                                                            <%=coupons[i].criteriaAmount%></b>
+                                                </p>
+                                                <% if(subtotal>coupons[i].criteriaAmount) {%>
+                                                    <% console.log('Coupon ID:', coupons[i]._id, 'Applied Coupon ID:' ,
+                                                        cartData.couponDiscount ? cartData.couponDiscount._id
+                                                        : 'No Coupon Applied' ) %>
+                                                        <% if (discountAmount && coupons[i]._id.toString()
+                                                            !==(cartData.couponDiscount ?
+                                                            cartData.couponDiscount._id.toString() : null)) { %>
+                                                            <button type="submit"
+                                                                onclick="applyCoupon('<%=coupons[i]._id%>')"
+                                                                class="apply-btn btn btn-primary">
+                                                                <span> Apply</span>
+                                                            </button>
+                                                            <% } else if (cartData.couponDiscount &&
+                                                                coupons[i]._id.toString()===(cartData.couponDiscount._id
+                                                                ? cartData.couponDiscount._id.toString() : null)) { %>
+                                                                <button type="submit"
+                                                                    onclick="removeCoupon('<%=coupons[i]._id%>')"
+                                                                    class="apply-btn btn btn-danger">
+                                                                    <span> Remove</span>
+                                                                </button>
                                                                 <% } %>
-                                    <div class="col-lg-5">
-                                        <div class="checkout-order">
-                                            <div class="checkout-title">
-                                                <h4 class="title">Your Order</h4>
-                                            </div>
-
-                                            <div class="checkout-order-table table-responsive" id="reloadAmount">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            
-                                                            <td class="Product-name">
-                                                                <p>Subtotal</p>
-                                                            </td>
-                                                            <td class="Product-price">
-                                                                <p>₹<%=subtotal%></p>                
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="Product-name">
-                                                                <p>Shipping</p>
-                                                            </td>
-                                                            <td class="Product-price">
-                                                                <ul class="shipping-list">
-                                                                    <li class="radio">
-                                                                        <input type="radio" name="payment" value="Cash on delivery" id="radio1" checked />
-                                                                        <label for="radio1"><span></span>Cash on delivery</label>
-                                                                    </li>
-                                                                    <li class="radio">
-                                                                        <input type="radio" name="payment" value="Razorpay" id="radio2" />
-                                                                        <label for="radio2"><span></span>Online paymet</label>
-                                                                    </li>
-                                                                    <li class="radio">
-                                                                        <% if (wallet.wallet < subtotal) { %>
-                                                                            <input type="radio" name="payment" value="Wallet" id="radio3" disabled />
-                                                                            <label for="radio3"><span></span>Wallet</label>
-                                                                            <p>Wallet Balance: ₹<%=wallet.wallet%> (Not enough balance)</p>
-                                                                        <% } else { %>
-                                                                            <input type="radio" name="payment" value="Wallet" id="radio3" />
-                                                                            <label for="radio3"><span></span>Wallet</label>
-                                                                            <p>Wallet Balance: ₹<%=wallet.wallet%></p>
-                                                                        <% } %>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="Product-name">
-                                                                <p>Total</p>
-                                                            </td>
-                                                            <td class="total-price">
-                                                                <% if (discountAmount !== subtotal ) { %>
-                                                                    Original Amount: ₹ <del><%= subtotal %></del> <br>       
-                                                                    Discounted Amount: ₹<%= discountAmount %>
-                                                                <% } else { %>
-                                                                    ₹<%= subtotal %>
-                                                                <% } %>
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-
-                                            <div class="checkout-payment">
-
-                                                <div class="single-form">
-                                                    <button type="submit" id="razorpayButton" class="btn btn-primary btn-hover-dark d-block">Place Order</button>
-                                                </div>
+                                                                    <% } else { %>
+                                                                        <span class="badge not-applicable">Not
+                                                                            Applicable</span>
+                                                                        <%}%>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <% } %>
+                            </div>
                         </div>
-                
+                    </div>
+
+            </div>
+
+            <form id="myForm" onsubmit="return validateForm()">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <% if (address && address.address && address.address.length> 0) { %>
+                            <div class="row">
+                                <% address.address.forEach(function(address, index) { %>
+                                    <div class="col-lg-6"><br><br>
+                                        <div class="card card-dashboard">
+                                            <div class="card-body">
+                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <%
+                                                    if (index===0) { %>checked<% } %> required>
+                                                    <h3 class="card-title">Address <%= index + 1 %>
+                                                    </h3>
+                                                    <p>Name: <%= address.name %><br>
+                                                            Address: <%= address.address %><br>
+                                                                Landmark: <%= address.landmark %><br>
+                                                                    State: <%= address.state %><br>
+                                                                        City: <%= address.city %><br>
+                                                                            Pincode: <%= address.pincode %><br>
+                                                                                Phone: <%= address.phone %><br>
+                                                                                    Email: <%= address.email %><br>
+                                                                                        <a
+                                                                                            href="/editAddress?ind=<%= index %>"><i
+                                                                                                class="fa fa-edit"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                    </div>
+                    <% } else { %>
+                        <div class="col-lg-12">
+                            <!-- Checkout Form Start -->
+                            <div class="checkout-form">
+                                <div class="checkout-title">
+                                    <h4 class="title">Add Address</h4>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="name" placeholder="Name" />
+                                            <p id="nameError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="address" placeholder="Address" />
+                                            <p id="addressError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="landmark" placeholder="Landmark" />
+                                            <p id="landmarkError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="state" placeholder="State" />
+                                            <p id="stateError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="city" placeholder="City" />
+                                            <p id="cityError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="pincode" placeholder="Pincode" />
+                                            <p id="pincodeError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="phone" placeholder="Phone" />
+                                            <p id="mobileError" class="error-message"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form">
+                                            <input type="text" name="email" placeholder="Email address" />
+                                            <p id="emailError" class="error-message"></p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Checkout Form End -->
+                        </div>
+                </div><!-- End .row -->
+                <% } %>
+                    <div class="col-lg-5">
+                        <div class="checkout-order">
+                            <div class="checkout-title">
+                                <h4 class="title">Your Order</h4>
+                            </div>
+
+                            <div class="checkout-order-table table-responsive" id="reloadAmount">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+
+                                            <td class="Product-name">
+                                                <p>Subtotal</p>
+                                            </td>
+                                            <td class="Product-price">
+                                                <p>₹<%=subtotal%>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="Product-name">
+                                                <p>Shipping</p>
+                                            </td>
+                                            <td class="Product-price">
+                                                <ul class="shipping-list">
+                                                    <li class="radio">
+                                                        <input type="radio" name="payment" value="Cash on delivery"
+                                                            id="radio1" checked />
+                                                        <label for="radio1"><span></span>Cash on delivery</label>
+                                                    </li>
+                                                    <li class="radio">
+                                                        <input type="radio" name="payment" value="Razorpay"
+                                                            id="radio2" />
+                                                        <label for="radio2"><span></span>Online paymet</label>
+                                                    </li>
+                                                    <li class="radio">
+                                                        <% if (wallet.wallet < subtotal) { %>
+                                                            <input type="radio" name="payment" value="Wallet"
+                                                                id="radio3" disabled />
+                                                            <label for="radio3"><span></span>Wallet</label>
+                                                            <p>Wallet Balance: ₹<%=wallet.wallet%> (Not enough balance)
+                                                            </p>
+                                                            <% } else { %>
+                                                                <input type="radio" name="payment" value="Wallet"
+                                                                    id="radio3" />
+                                                                <label for="radio3"><span></span>Wallet</label>
+                                                                <p>Wallet Balance: ₹<%=wallet.wallet%>
+                                                                </p>
+                                                                <% } %>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="Product-name">
+                                                <p>Total</p>
+                                            </td>
+                                            <td class="total-price">
+                                                <% if (discountAmount !==subtotal ) { %>
+                                                    Original Amount: ₹ <del>
+                                                        <%= subtotal %>
+                                                    </del> <br>
+                                                    Discounted Amount: ₹<%= discountAmount %>
+                                                        <% } else { %>
+                                                            ₹<%= subtotal %>
+                                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="checkout-payment">
+
+                                <div class="single-form">
+                                    <button type="submit" id="razorpayButton"
+                                        class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        </form>
+    </div>
+
     </div><br><br>
-<!-- Checkout Section End -->
+    <!-- Checkout Section End -->
 
 
 
-<script>
-$(document).ready(function() {
-    $("#form").submit(function(event) {
-        event.preventDefault();
+    <script>
+        $(document).ready(function () {
+            $("#form").submit(function (event) {
+                event.preventDefault();
 
-        var formData = $(this).serialize();
+                var formData = $(this).serialize();
 
-        $.ajax({
-            type: "POST",
-            url: "/checkoutform", 
-            data: formData,
-            success: function(response) {
-                console.log("AJAX Success:", response);
-                if(response.success){
-                let orderId = response.orderId;
-                location.href=`/successpage?id=${orderId}`
-            }else if(response.success == false){      
-                console.log("reaaaaaacccccehjddddddddddddd");                  
-               razorpayPayment(response.order)
-            }
-                
-        },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
-});
+                $.ajax({
+                    type: "POST",
+                    url: "/checkoutform",
+                    data: formData,
+                    success: function (response) {
+                        console.log("AJAX Success:", response);
+                        if (response.success) {
+                            let orderId = response.orderId;
+                            location.href = `/successpage?id=${orderId}`
+                        } else if (response.success == false) {
+                            console.log("reaaaaaacccccehjddddddddddddd");
+                            razorpayPayment(response.order)
+                        }
 
-function razorpayPayment(order){
-    console.log("function called",order);
-let options = {
-    "key": "rzp_test_7MqCdAHp4YDLwZ", 
-    "amount": order.amount,
-    "currency": "INR",
-    "name": "furbar",
-    "description": "Test Transaction",
-    "image": "",
-    "order_id": order.id, 
-    "handler": function (response){
-        verifyPayment(response, order)
-    },
-    "prefill": {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-    let raz = new Razorpay(options);
-    raz.open();
-
-    function verifyPayment(payment, order) {
-      $.ajax({
-        url: "/verifypayment",
-        method: 'post',
-        data: {
-          payment,
-          order
-        },
-        success: (response) => {
-            console.log("aaaaaaaaajaaaxx",response);
-          if(response.success) {
-            let orderId=response.orderId
-            window.location.href = `/successpage?id=${orderId}`;
-          } 
-         else if (response.onlineSuccess) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Payment has done',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }
-    }
-
-      })
-    }
-    
-} 
-</script>
-<script>
-function applyCoupon(id) {
-    console.log('heloooo');
-    $.ajax({
-        url: "/applycoupon",
-        method: 'post',
-        data: {
-            id,
-        },
-        success: (response) => {
-            console.log(response);
-            if (response.coupon === false) {
-                Swal.fire({
-                    title: "No Coupon Available",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            }else if (response.coupon === 'alreadyApplied') {
-                Swal.fire({
-                    title: "One coupon is already Active",
-                    icon: "info",
-                    confirmButtonText: "OK",
-                });
-            }else if (response.coupon === 'alreadyUsed') {
-                Swal.fire({
-                    title: "You already used this coupon",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            } else if (response.coupon === 'expired') {
-                Swal.fire({
-                    title: "Oops",
-                    text: "This coupon has expired",
-                    icon: "info",
-                    confirmButtonText: "OK",
-                });
-           
-            } else if (response.coupon) {
-                Swal.fire({
-                    title: "Success",
-                    text: "Coupon added successfully!",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                }).then((result) => { 
-                    if (result.isConfirmed) {
-                        $('#reloadDiv').load('/checkout #reloadDiv'); 
-                        $('#reloadAmount').load('/checkout #reloadAmount'); 
+                    },
+                    error: function (error) {
+                        console.log(error);
                     }
                 });
-            } else {
-                Swal.fire({
-                    title: "Something Wrong",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            }
-        }
-    });
-}
-</script>
-
-<script>
-    function removeCoupon(id) {
-        console.log('heloooo');
-        $.ajax({
-            url: "/removecoupon",
-            method: 'post',
-            data: {
-                id,
-            },
-            success: (response) => {
-                if (response.success) {
-                    Swal.fire({
-                        title: "Coupon removed",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#reloadDiv').load('/checkout #reloadDiv'); 
-                            $('#reloadAmount').load('/checkout #reloadAmount'); 
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Error removing coupon",
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    });
-                }
-            }
+            });
         });
-    }
-</script>
+
+        function razorpayPayment(order) {
+            console.log("function called", order);
+            let options = {
+                "key": "rzp_test_7MqCdAHp4YDLwZ",
+                "amount": order.amount,
+                "currency": "INR",
+                "name": "furbar",
+                "description": "Test Transaction",
+                "image": "",
+                "order_id": order.id,
+                "handler": function (response) {
+                    verifyPayment(response, order)
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            let raz = new Razorpay(options);
+            raz.open();
+
+            function verifyPayment(payment, order) {
+                $.ajax({
+                    url: "/verifypayment",
+                    method: 'post',
+                    data: {
+                        payment,
+                        order
+                    },
+                    success: (response) => {
+                        console.log("aaaaaaaaajaaaxx", response);
+                        if (response.success) {
+                            let orderId = response.orderId
+                            window.location.href = `/successpage?id=${orderId}`;
+                        }
+                        else if (response.onlineSuccess) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Payment has done',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    }
+
+                })
+            }
+
+        } 
+    </script>
+    <script>
+        function applyCoupon(id) {
+            console.log('heloooo');
+            $.ajax({
+                url: "/applycoupon",
+                method: 'post',
+                data: {
+                    id,
+                },
+                success: (response) => {
+                    console.log(response);
+                    if (response.coupon === false) {
+                        Swal.fire({
+                            title: "No Coupon Available",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    } else if (response.coupon === 'alreadyApplied') {
+                        Swal.fire({
+                            title: "One coupon is already Active",
+                            icon: "info",
+                            confirmButtonText: "OK",
+                        });
+                    } else if (response.coupon === 'alreadyUsed') {
+                        Swal.fire({
+                            title: "You already used this coupon",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    } else if (response.coupon === 'expired') {
+                        Swal.fire({
+                            title: "Oops",
+                            text: "This coupon has expired",
+                            icon: "info",
+                            confirmButtonText: "OK",
+                        });
+
+                    } else if (response.coupon) {
+                        Swal.fire({
+                            title: "Success",
+                            text: "Coupon added successfully!",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#reloadDiv').load('/checkout #reloadDiv');
+                                $('#reloadAmount').load('/checkout #reloadAmount');
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Something Wrong",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function removeCoupon(id) {
+            console.log('heloooo');
+            $.ajax({
+                url: "/removecoupon",
+                method: 'post',
+                data: {
+                    id,
+                },
+                success: (response) => {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Coupon removed",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#reloadDiv').load('/checkout #reloadDiv');
+                                $('#reloadAmount').load('/checkout #reloadAmount');
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error removing coupon",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    }
+                }
+            });
+        }
+    </script>
 
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>   
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 
-<%- include('../layouts/footer.ejs') -%>
+    <%- include('../layouts/footer.ejs') -%>

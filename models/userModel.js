@@ -40,7 +40,10 @@ const userSchema= new mongoose.Schema({
         amount:{
             type:Number,
         },
-    }]
+    }],
+    referalCode:{
+        type:String
+    }
 });
 
 const User =mongoose.model('User',userSchema);

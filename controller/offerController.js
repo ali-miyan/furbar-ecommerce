@@ -97,6 +97,8 @@ const removeOffer = async(req,res)=>{
         console.log(error);
     }
 }
+
+
 const applyCategoryOffer = async(req,res)=>{
     try {
         const {id,categoryId} = req.body; 

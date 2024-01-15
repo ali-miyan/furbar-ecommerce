@@ -18,7 +18,8 @@ const Product=require("../models/productModel");
 const addressModel = require('../models/addressModel');
 const orderModel = require('../models/orderModal');
 const categoryModel = require('../models/categoryModel');
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer');
+const { generateKey } = require('crypto');
 
 
 //route to home page
@@ -101,7 +102,20 @@ const loadLogin=async(req,res)=>{
 //signup and storing data to database
 const signupPost = async (req, res) => {
     try {
-        let { name, email,mobile,password } = req.body;
+        let { name, email,mobile,password,code } = req.body;
+        console.log(code,'code');
+        let data;
+        const referalCheck = await User.find({referalCode:code})
+        console.log('helooooooooooooooo');
+        if(referalCheck.length === 0){
+            console.log('helooooooooo');
+            res.render('signup', { message: 'Invalid referal code'});
+        }else{
+             data ={
+                amount:1000,
+                date:new Date()
+              }
+        }
             const userExists = await User.findOne({ email });
             if (userExists) {
                 res.render('signup', { message: 'User with provided email already exists' });
@@ -114,9 +128,14 @@ const signupPost = async (req, res) => {
                     mobile: mobile,
                     password: hashedPassword,
                     verified: false,
-                    isAdmin:0
+                    isAdmin:0,
+                    referalCode:await generateCode()
                 });
                 const result = await newUser.save();
+                console.log(data,'dataaaaaaaaa');
+                if (data && result) {
+                    await User.findByIdAndUpdate(result._id, { $push: { walletHistory: data } }, { new: true });
+                }
                 console.log(result);
                 sendOTPverification(result, res);
             }
@@ -154,7 +173,7 @@ const verifyPost=async(req,res)=>{
                 const hashedOTP=userOTPVerificationrecord[0].otp;
 
                 if(expiresAt<Date.now()){
-                    await userOTPVerificationrecord.deleteMany({userId});
+                    await userOTPVerificationrecord.deleteOne({userId});
                     res.render('otp',{message:"your otp has been expired"})                    
                 }else{
                     const validOTP=await bcrypt.compare(otp,hashedOTP);
@@ -163,7 +182,7 @@ const verifyPost=async(req,res)=>{
 
                     }else{
                        await User.updateOne({_id:userId},{verfied:true});
-                       await userVerification.deleteMany({userId});
+                       await userVerification.deleteOne({userId});
                        req.session.user_id=userId
                     res.redirect(`/`)
                     }
@@ -412,6 +431,18 @@ const detailShop=async(req,res)=>{
     } catch (error) {
         console.log(error.message);
     }
+  }
+  
+  function generateCode(){
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code = '';
+
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters.charAt(randomIndex);
+  }
+
+  return code;
   }
 
 module.exports={

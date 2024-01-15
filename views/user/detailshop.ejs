@@ -85,8 +85,10 @@
                             <%=data.name%>
                         </h4>
                         <div class="price">
-                            <span class="sale-price">₹<%=data.price%></span>
-                            <span class="old-price">$290.00</span>
+                            <span class="sale-price">₹<%= data.discountedPrice ? data.discountedPrice : data.price %></span>
+                            <span class="old-price">
+                                <%= data.discountedPrice ? '₹' + data.price : '' %>
+                            </span>
                         </div>
                         <div class="review-wrapper">
                             <div class="review-star">

@@ -19,14 +19,15 @@
 
     <!-- My Account Section Start -->
     <div class="section section-padding">
-        <div class="container"  >
+        <div class="container">
             <div class="row gy-4">
                 <div class="col-xl-3 col-md-4">
                     <!-- My Account Menu Start -->
                     <div class="my-account-menu">
                         <ul class="nav account-menu-list flex-column">
                             <li>
-                                <a class="active" data-bs-toggle="pill" href="#pills-dashboard"><i class="fa fa-tachometer"></i>
+                                <a class="active" data-bs-toggle="pill" href="#pills-dashboard"><i
+                                        class="fa fa-tachometer"></i>
                                     Dashboard</a>
                             </li>
                             <li>
@@ -38,16 +39,11 @@
                                     Wallet</a>
                             </li>
                             <li>
-                                <a data-bs-toggle="pill" href="#pills-payment"><i class="fa fa-credit-card"></i>
-                                    Payment Method</a>
-                            </li>
-                            <li>
                                 <a data-bs-toggle="pill" href="#pills-address"><i class="fa fa-map-marker"></i>
                                     Address</a>
                             </li>
                             <li>
-                                <a data-bs-toggle="pill" href="#pills-account"><i class="fa fa-user"></i> Account
-                                    Details</a>
+                                <a data-bs-toggle="pill" href="#pills-account"><i class="fa fa-user"></i>Password</a>
                             </li>
                             <li>
                                 <a href="/logout"><i class="fa fa-sign-out"></i>
@@ -62,19 +58,25 @@
                     <div class="tab-content my-account-tab">
                         <div class="tab-pane fade show active" id="pills-dashboard">
                             <div class="my-account-dashboard account-wrapper">
-                                <h4 class="account-title">Dashboard</h4>
+                                <h4 class="account-title">User Dashboard</h4>
                                 <div class="account-card card">
                                     <div class="card-body text-center">
-                                        <!-- User profile image -->
-                                        <img src="assets/imgs/icons/stars-active.svg" alt="User Profile" id="uploadedImage" class="profile-image">
-                                        <h5 class="card-title">Hello, <strong><%=user.name%></strong></h5>
-                                        <h5 class="card-title"> <strong><%=user.email%></strong></h5>
-                                        <h5 class="card-title"><strong><%=user.mobile%></strong></h5>
-                                        <p class="card-text">
-                                            From your account dashboard, you can easily check & view your recent orders,
-                                            manage your shipping and billing addresses, and edit your password and account details.
-                                        </p>
-                                        <button type="button" onclick="showusereditmodal()" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
+                                        <img src="asset/images/banner-menu-01.jpg" alt="User Profile" id="uploadedImage"
+                                            class="profile-image">
+                                            <div class="card user-info-card">
+                                                <div class="card-body">
+                                                    <p class="user-info">
+                                                        <span class="info-label">Name:</span><%=user.name%> <br>
+                                                        <span class="info-label">Email:</span><%=user.email%> <br>
+                                                        <span class="info-label">Phone:</span><%=user.mobile%> <br>
+                                                        <span class="info-label">Referral Code:</span><%=user.referalCode%>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                        <button type="button" onclick="showusereditmodal()" class="user-btn"
+                                            data-toggle="modal" data-target="#editProfileModal">
                                             Edit Profile
                                         </button>
                                     </div>
@@ -82,43 +84,46 @@
                             </div>
                         </div>
 
-                        <script>
-                        function showusereditmodal() {            
-                            $('#editProfileModal').modal('show');
-                        }</script>
 
-                                                <!-- user editmodal start-->
+                        <!-- user editmodal start-->
 
-                                                <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document" style="position: relative; top: 250px;" >
-                                                      <div class="modal-content">
-                                                        <div class="modal-header">
-                                                          <p class="modal-title" id="editProfileModalLabel">Edit Profile</p>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                          <form action="/edituser" method="post" id="editProfileForm">
-                                                            <div class="form-group ">
-                                                              <label for="editName">Name:</label>
-                                                              <input type="text" class="form-control" value="<%= user.name %>" id="editName" name="editname" placeholder="Enter your name">
-                                                            </div>
-                                                            <div class="form-group">
-                                                              <label for="editPhone mt-4">Phone:</label>
-                                                              <input type="tel" class="form-control" value="<%= user.mobile %>" id="editPhone" name="editmobile" placeholder="Enter your phone number">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary mt-4 text-centered">Save Changes</button>
-                                                          </form>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                        
-                                                <!-- user editmodal end-->
+                        <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog"
+                            aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document" style="position: relative; top: 250px;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <p class="modal-title" id="editProfileModalLabel">Edit Profile</p>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <form action="/edituser" method="post" id="editProfileForm"
+                                            onsubmit="return validateEditProfileForm()">
+                                            <div class="single-form">
+                                                <input type="text" id="editName" name="editname"
+                                                    value="<%= user.name %>" placeholder="Enter your name" />
+                                                <div class="error-container">
+                                                    <div id="usernameError" class="error-message"></div>
+                                                </div>
+                                            </div>
+                                            <div class="single-form">
+                                                <input type="tel" id="editPhone" name="editmobile"
+                                                    value="<%= user.mobile %>" placeholder="Enter your phone number" />
+                                                <div class="error-container">
+                                                    <div id="phoneError" class="error-message"></div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="user-btn mt-5">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- user editmodal end-->
 
                         <div class="tab-pane fade" id="pills-order">
                             <div class="my-account-order account-wrapper">
                                 <h4 class="account-title">Orders</h4>
                                 <div class="account-table text-center table-responsive">
-                                    <% if (order && order.length > 0) { %>
+                                    <% if (order && order.length> 0) { %>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -131,24 +136,36 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for (let i = 0; i < order.length; i++) { %>  
+                                                <% for (let i=0; i < order.length; i++) { %>
                                                     <tr>
-                                                        <td><%= i + 1 %></td>
-                                                        <td><%= order[i].orderDate.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
-                                                        <td><%= order[i].subtotal %></td>
-                                                        <td><%= order[i].payment %></td>
-                                                        <td><a href="/generatepdf?id=<%=order[i]._id%>"><i class="fa fa-download" aria-hidden="true"></a></i></td>
+                                                        <td>
+                                                            <%= i + 1 %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i].orderDate.toLocaleDateString('en-US', {
+                                                                weekday: 'short' , year: 'numeric' , month: 'short' ,
+                                                                day: 'numeric' }) %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i].subtotal %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i].payment %>
+                                                        </td>
+                                                        <td><a href="/generatepdf?id=<%=order[i]._id%>"><i
+                                                                    class="fa fa-download" aria-hidden="true"></a></i>
+                                                        </td>
                                                         <td>
                                                             <a href="/detailorder?id=<%=order[i]._id%>">View</a>
                                                         </td>
                                                     </tr>
-                                                <% } %>
+                                                    <% } %>
                                             </tbody>
                                         </table>
-                                    <% } else { %>
-                                    
-                                        <p>No orders yet.</p>
-                                    <% } %>
+                                        <% } else { %>
+
+                                            <p>No orders yet.</p>
+                                            <% } %>
                                 </div>
                             </div>
                         </div>
@@ -156,8 +173,13 @@
                             <div class="my-account-download account-wrapper">
                                 <div class="card">
                                     <div class="card-body d-flex justify-content-between">
-                                    <div><h2 class="account-title">Wallet Balance</h2></div>
-                                    <div><h2 class="account-title">₹<%=user.wallet%></h2></div>
+                                        <div>
+                                            <h2 class="account-title">Wallet Balance</h2>
+                                        </div>
+                                        <div>
+                                            <h2 class="account-title">₹<%=user.wallet%>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="account-table text-center table-responsive">
@@ -175,43 +197,34 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% if (user.walletHistory && user.walletHistory.length > 0) { %>
+                                            <% if (user.walletHistory && user.walletHistory.length> 0) { %>
                                                 <% user.walletHistory.forEach(function(item) { %>
-                                            <tr>
-                                                <td><%=item.date.toISOString().split('T')[0]%></td>
-                                                <% if(item.amount > 0 ) {%>
-                                                    <td style="background: greenyellow;">Credited</td>
-                                                    <% }else{ %>
-                                                    <td style="background: red;">Debited</td>
-                                                    <%}%>
-                                                    <td>₹<%=item.amount%></td>
+                                                    <tr>
+                                                        <td>
+                                                            <%=item.date.toISOString().split('T')[0]%>
+                                                        </td>
+                                                        <% if(item.amount> 0 ) {%>
+                                                            <td style="background: greenyellow;">Credited</td>
+                                                            <% }else{ %>
+                                                                <td style="background: red;">Debited</td>
+                                                                <%}%>
+                                                                    <td>₹<%=item.amount%>
+                                                                    </td>
 
-                                                <%})%>   
-                                            </tr>
-                                            <%}%>   
+                                                                    <%})%>
+                                                    </tr>
+                                                    <%}%>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-
-                        
-                        <div class="tab-pane fade" id="pills-payment">
-                            <div class="my-account-payment account-wrapper">
-                                <h4 class="account-title">
-                                    Payment Method
-                                </h4>
-                                <p>
-                                    You Can't Saved Your Payment Method yet.
-                                </p>
-                            </div>
-                        </div>
                         <div class="tab-pane fade" id="pills-address">
                             <button class="btn btn-primary btn-hover-dark" id="showModalButton">ADD +</button><br><br>
-                        
+
                             <div class="row" id="addrassArea">
-                                <% if (address && address.address && address.address.length > 0) { %>
-                                    <% address.address.forEach((data, index) => { %>
+                                <% if (address && address.address && address.address.length> 0) { %>
+                                    <% address.address.forEach((data, index)=> { %>
                                         <div class="col-md-6">
                                             <br>
                                             <div class="card card-dashboard">
@@ -225,29 +238,33 @@
                                                     </h6>
                                                     <p>
                                                         Address: <%= data.address %><br>
-                                                        Landmark: <%= data.landmark %><br>
-                                                        State: <%= data.state %><br>
-                                                        City: <%= data.city %><br>
-                                                        Pincode: <%= data.pincode %><br>
-                                                        Phone: <%= data.phone %><br>
-                                                        Email: <%= data.email %><br>
+                                                            Landmark: <%= data.landmark %><br>
+                                                                State: <%= data.state %><br>
+                                                                    City: <%= data.city %><br>
+                                                                        Pincode: <%= data.pincode %><br>
+                                                                            Phone: <%= data.phone %><br>
+                                                                                Email: <%= data.email %><br>
                                                     </p>
-                                                    <a class="btn-primary btn-hover-dark" onclick="openEditModal('<%= data._id %>', '<%= data.name %>', '<%= data.address %>', '<%= data.landmark %>', '<%= data.state %>', '<%= data.city %>', '<%= data.pincode %>', '<%= data.phone %>', '<%= data.email %>')"><i class="fa fa-edit"></i></a>
-                                                    <a class="btn-primary btn-hover-dark" onclick="deleteAddress('<%= data._id %>')"><i class="fa fa-trash"></i></a>
+                                                    <a class="btn-primary btn-hover-dark"
+                                                        onclick="openEditModal('<%= data._id %>', '<%= data.name %>', '<%= data.address %>', '<%= data.landmark %>', '<%= data.state %>', '<%= data.city %>', '<%= data.pincode %>', '<%= data.phone %>', '<%= data.email %>')"><i
+                                                            class="fa fa-edit"></i></a>
+                                                    <a class="btn-primary btn-hover-dark"
+                                                        onclick="deleteAddress('<%= data._id %>')"><i
+                                                            class="fa fa-trash"></i></a>
                                                 </div>
                                             </div>
                                         </div>
-                                    <% }) %>
-                                <% } else { %>  
-                                    <div class="col-md-12 my-account-address account-wrapper">
-                                        <p>No Addresses found</p>
-                                    </div>
-                                <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <div class="col-md-12 my-account-address account-wrapper">
+                                                    <p>No Addresses found</p>
+                                                </div>
+                                                <% } %>
                             </div>
                         </div>
-                        
 
-                    <!-- user modal  -->  
+
+                        <!-- user modal  -->
 
                         <div id="addAddressModal" class="modal">
                             <div class="modal-content">
@@ -256,13 +273,13 @@
                                 <!-- Your form goes here -->
                                 <form id="myForm" action='/addressform' method="post" onsubmit="return validateForm()">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="name" placeholder="Name" />
                                                 <p id="nameError" class="error-message"></p>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="address" placeholder="Address" />
                                                 <p id="addressError" class="error-message"></p>
@@ -295,7 +312,7 @@
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <input type="text" name="phone" placeholder="Phone" />
-                                                <p id="phoneError" class="error-message"></p>
+                                                <p id="mobileError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -321,7 +338,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="single-form">
-                                                <input type="text" name="editName"/>
+                                                <input type="text" name="editName" />
                                                 <p id="editNameError" class="error-message"></p>
                                             </div>
                                         </div>
@@ -333,7 +350,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editLandmark"/>
+                                                <input type="text" name="editLandmark" />
                                                 <p id="editLandmarkError" class="error-message"></p>
                                             </div>
                                         </div>
@@ -345,19 +362,19 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editCity"  />
+                                                <input type="text" name="editCity" />
                                                 <p id="editCityError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editPincode"/>
+                                                <input type="text" name="editPincode" />
                                                 <p id="editPincodeError" class="error-message"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="text" name="editPhone"  />
+                                                <input type="text" name="editPhone" />
                                                 <p id="editPhoneError" class="error-message"></p>
                                             </div>
                                         </div>
@@ -368,49 +385,28 @@
                                             </div>
                                         </div>
                                         <!-- Add other fields as needed for editing -->
-                        
+
                                         <!-- Add hidden input for address ID -->
-                                        <input type="hidden" name="editAddressId" id="editAddressId" />                        
+                                        <input type="hidden" name="editAddressId" id="editAddressId" />
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <button type="submit" class="btn btn-primary btn-hover-dark">Save Changes</button>
+                                                <button type="submit" class="btn btn-primary btn-hover-dark">Save
+                                                    Changes</button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        
+
                         <!-- editmodal end -->
 
                         <div class="tab-pane fade" id="pills-account">
                             <div class="my-account-details account-wrapper">
-                                <h4 class="account-title">
-                                    Account Details
-                                </h4>
 
                                 <div class="account-details">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="single-form">
-                                                <input type="text" placeholder="First Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="single-form">
-                                                <input type="text" placeholder="Last Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" placeholder="Display Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="single-form">
-                                                <input type="text" placeholder="Email address" />
-                                            </div>
-                                        </div>
+
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <h5 class="title">
@@ -444,448 +440,17 @@
                                 </div>
                             </div>
                         </div>
-                            </div>
-                        </div>
                     </div>
-                    <!-- Tab content End -->
                 </div>
             </div>
+            <!-- Tab content End -->
         </div>
+    </div>
+    </div>
     </div>
     <!-- My Account Section End -->
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
-        function deleteAddress(addressId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'This product will be removed',
-                icon: 'question',
-                reverseButtons: true,
-                confirmButtonText: 'Yes',
-                showCancelButton: true,
-                confirmButtonColor: '#1e6e2c',
-                cancelButtonColor: '#97a399',
-            }).then((result) => {
-                // If the user clicks "Yes"
-                if (result.isConfirmed) {
-                    // Make the fetch request
-                fetch('/deleteaddress', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ addressId: addressId }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        $('#addrassArea').load('/profile #addrassArea');
-                    } else {
-                        alert('Error deleting address. Please try again.');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            }
-        })
-    }
-    </script>
-<!-- Place this script outside the loop -->
 
-<script>
-    
-    const editForm = document.getElementById('editForm');
-    editForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (editValidate()) {
-            editAddress();
-        }
-    });
-        const editAddressModal = document.getElementById('editAddressModal');
-        const closeEditModalButton = document.getElementById('closeEditModal');
-        
-        
-        function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
-            document.querySelector('[name="editName"]').value = name;
-            document.querySelector('[name="editAddress"]').value = address;
-            document.querySelector('[name="editLandmark"]').value = landmark;
-            document.querySelector('[name="editState"]').value = state;
-            document.querySelector('[name="editCity"]').value = city;
-            document.querySelector('[name="editPincode"]').value = pincode;
-            document.querySelector('[name="editPhone"]').value = phone;
-            document.querySelector('[name="editEmail"]').value = email;
-
-            document.getElementById('editAddressId').value = addressId;
-
-            editAddressModal.style.display = 'block';
-        }
-
-        closeEditModalButton.addEventListener('click', function () {
-            editAddressModal.style.display = 'none';
-        });
-
-        function editAddress() {
-        const formData = $('#editForm').serialize();
-
-        // Event listener to submit the Edit Address form via Ajax
-        $('#editForm').submit(function (event) {
-            event.preventDefault(); // Prevent the form from submitting normally
-            console.log("hiiiii");
-
-            const formData = $(this).serialize();
-            console.log("nnnnnnnnnnnnnnnnnnnn",formData);
-
-            // Send the Ajax request
-            $.ajax({
-                type: 'POST',
-                url: '/editaddress', // Update with your server endpoint
-                data: formData,
-                success: function (data) {
-                    if (data.success==true) {
-                        console.log(data);
-                    $('#addrassArea').load('/profile #addrassArea')
-                    editAddressModal.style.display = 'none';
-                    $('.modal-backdrop').remove();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Address Added Successfully',
-                        text: 'Your address has been added successfully.',
-                    });
-                
-                    } else {
-                        // Handle failure, display an error message, etc.
-                        console.error('Error updating address');
-                        // You may want to display an error message to the user
-                    }
-                },
-                error: function (error) {
-                    // Handle Ajax error, display an error message, etc.
-                    console.error('Ajax error:', error);
-                    // You may want to display an error message to the user
-                }
-            });
-        });
-    }
-</script>
-
-
-<!-- Place this script outside the loop -->
-<script>
-    function updateAddress() {
-        const formData = $('#myForm').serialize();
-        console.log("gggggggggggggggggggggg",formData);
-
-        $.ajax({
-        url: '/addressform',
-        type: 'POST',
-        data: formData,
-        success: function (data) {
-            if (data.add === true) {
-                $('#addrassArea').load('/profile #addrassArea', function () {
-                    $('#addAddressModal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Address Added Successfully',
-                        text: 'Your address has been added successfully.',
-                    });
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'There was a problem adding your address!',
-                });
-            }
-
-            const modal = document.getElementById('addAddressModal');
-            modal.style.display = 'none';
-        },
-        error: function (error) {
-            // Handle errors
-            console.error('Error:', error);
-        }
-    });
-}
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const showModalButton = document.getElementById('showModalButton');
-        const modal = document.getElementById('addAddressModal');
-        const closeModalButton = document.getElementById('closeModal');
-
-        showModalButton.addEventListener('click', function () {
-            modal.style.display = 'block';
-        });
-
-        closeModalButton.addEventListener('click', function () {
-            modal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-    });
-
-    // function openForm() {
-    //     const modal = document.getElementById('addAddressModal');
-    //     modal.style.display = 'block';
-    // }
-
-    const myForm = document.getElementById('myForm');
-    myForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (validateForm()) {
-            updateAddress();
-        }
-    });
-
-
-    function validateForm() {
-        const name = validateField('name', 'Name must contain only letters');
-        const address = validateField('address', 'Address is required');
-        const landmark = validateField('landmark', 'Landmark must contain only letters and numbers');
-        const state = validateField('state', 'State is required');
-        const city = validateField('city', 'City is required');
-        const pincode = validatePincode();
-        const phone = validatePhone();
-        const email = validateEmail();
-
-        return name && address && landmark && state && city && pincode && phone && email;
-    }
-
-    function validateField(fieldName, errorMessage) {
-        const field = document.querySelector(`[name="${fieldName}"]`);
-        const value = field.value.trim();
-        const errorTag = document.getElementById(`${fieldName}Error`);
-
-        if (!value) {
-            showError(errorTag, errorMessage);
-            return false;
-        }
-
-        if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
-            showError(errorTag, 'Name must contain only letters');
-            return false;
-        }
-
-        if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
-            showError(errorTag, 'Landmark must contain only letters and numbers');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function validatePincode() {
-        const pincodeField = document.querySelector('[name="pincode"]');
-        const pincode = pincodeField.value.trim();
-        const errorTag = document.getElementById('pincodeError');
-
-        if (!pincode) {
-            showError(errorTag, 'Pincode is required');
-            return false;
-        }
-
-        if (!/^\d{6}$/.test(pincode)) {
-            showError(errorTag, 'Pincode must be a 6-digit number');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function validatePhone() {
-        const phoneField = document.querySelector('[name="phone"]');
-        const phone = phoneField.value.trim();
-        const errorTag = document.getElementById('phoneError');
-
-        if (!phone) {
-            showError(errorTag, 'Phone is required');
-            return false;
-        }
-
-        if (!/^\d{10}$/.test(phone)) {
-            showError(errorTag, 'Phone must be a 10-digit number');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function validateEmail() {
-        const emailField = document.querySelector('[name="email"]');
-        const email = emailField.value.trim();
-        const errorTag = document.getElementById('emailError');
-
-        if (!email) {
-            showError(errorTag, 'Email is required');
-            return false;
-        }
-
-        if (!/^\S+@\S+\.\S+$/.test(email)) {
-            showError(errorTag, 'Invalid email address');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function showError(errorTag, errorMessage) {
-        if (!errorTag) {
-            const fieldName = errorTag.id.replace('Error', '');
-            const field = document.querySelector(`[name="${fieldName}"]`);
-            const errorTag = document.createElement('p');
-            errorTag.id = `${fieldName}Error`;
-            errorTag.classList.add('error-message');
-            field.parentNode.appendChild(errorTag);
-        }
-
-        errorTag.innerText = errorMessage;
-    }
-
-    function hideError(errorTag) {
-        if (errorTag) {
-            errorTag.innerText = '';
-        }
-    }
-
-    
-</script>
-
-
-
-
-
-
-<script>
-    
-    function editValidate() {
-        const name = validateField('editName', 'Name must contain only letters');
-        const address = validateField('editAddress', 'Address is required');
-        const landmark = validateField('editLandmark', 'Landmark must contain only letters and numbers');
-        const state = validateField('editState', 'State is required');
-        const city = validateField('editCity', 'City is required');
-        const pincode = editValidatePincode();
-        const phone = editValidatePhone();
-        const email = editValidateEmail();
-
-        return name && address && landmark && state && city && pincode && phone && email;
-    }
-
-    function validateField(fieldName, errorMessage) {
-        const field = document.querySelector(`[name="${fieldName}"]`);
-        const value = field.value.trim();
-        const errorTag = document.getElementById(`${fieldName}Error`);
-
-        if (!value) {
-            showError(errorTag, errorMessage);
-            return false;
-        }
-
-        if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
-            showError(errorTag, 'Name must contain only letters');
-            return false;
-        }
-
-        if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
-            showError(errorTag, 'Landmark must contain only letters and numbers');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function editValidatePincode() {
-        const pincodeField = document.querySelector('[name="editPincode"]');
-        const pincode = pincodeField.value.trim();
-        const errorTag = document.getElementById('editPincodeError');
-
-        if (!pincode) {
-            showError(errorTag, 'Pincode is required');
-            return false;
-        }
-
-        if (!/^\d{6}$/.test(pincode)) {
-            showError(errorTag, 'Pincode must be a 6-digit number');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function editValidatePhone() {
-        const phoneField = document.querySelector('[name="editPhone"]');
-        const phone = phoneField.value.trim();
-        const errorTag = document.getElementById('editPhoneError');
-
-        if (!phone) {
-            showError(errorTag, 'Phone is required');
-            return false;
-        }
-
-        if (!/^\d{10}$/.test(phone)) {
-            showError(errorTag, 'Phone must be a 10-digit number');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function editValidateEmail() {
-        const emailField = document.querySelector('[name="editEmail"]');
-        const email = emailField.value.trim();
-        const errorTag = document.getElementById('editEmailError');
-
-        if (!email) {
-            showError(errorTag, 'Email is required');
-            return false;
-        }
-
-        if (!/^\S+@\S+\.\S+$/.test(email)) {
-            showError(errorTag, 'Invalid email address');
-            return false;
-        }
-
-        hideError(errorTag);
-        return true;
-    }
-
-    function showError(errorTag, errorMessage) {
-        if (!errorTag) {
-            const fieldName = errorTag.id.replace('Error', '');
-            const field = document.querySelector(`[name="${fieldName}"]`);
-            const errorTag = document.createElement('p');
-            errorTag.id = `${fieldName}Error`;
-            errorTag.classList.add('error-message');
-            field.parentNode.appendChild(errorTag);
-        }
-
-        errorTag.innerText = errorMessage;
-    }
-
-    function hideError(errorTag) {
-        if (errorTag) {
-            errorTag.innerText = '';
-        }
-    }
-
-    
-</script>
-
-
-
-<%- include('../layouts/footer.ejs') -%>
+    <%- include('../layouts/footer.ejs') -%>
