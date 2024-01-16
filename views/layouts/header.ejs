@@ -75,25 +75,6 @@
                     <!-- Header Meta Start -->
                     <div class="header-meta">
                         <div class="dropdown">
-                            <a class="action" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="pe-7s-search"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-search">
-                                <!-- Header Search Start -->
-                                <div class="header-search">
-                                    <form action="#">
-                                        <input type="text" placeholder="Enter your search key ... " />
-                                        <button>
-                                            <i class="pe-7s-search"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                                <!-- Header Search End -->
-                            </div>
-                        </div>
-
-                        <div class="dropdown">
                             <%if(locals.user){%>
                             <a class="action" href="/profile" role="button" ><i class="pe-7s-user"></i></a>
                             <%}else{%>
@@ -149,13 +130,12 @@
 
                             <ul class="dropdown-menu dropdown-profile">
                                 <li>
-                                    <a href="my-account.html">My Account</a>
+                                    <a href="/profile">My Account</a>
                                 </li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="login.html">Sign In</a></li>
+                                <li><a href="/login">Sign In</a></li>
                             </ul>
                         </div>
-                        <a class="action" href="cart.html">
+                        <a class="action" href="/cart">
                             <i class="pe-7s-shopbag"></i>
                             <span class="number">3</span>
                         </a>
@@ -166,21 +146,6 @@
         </div>
     </div>
     <!-- Header Mobile top End -->
-
-    <!-- Header Mobile Bottom End -->
-    <div class="header-mobile-bottom">
-        <div class="container">
-            <!-- Header Search Start -->
-            <div class="header-search">
-                <form action="#">
-                    <input type="text"  placeholder="Enter your search key ... " />
-                    <button><i class="pe-7s-search"></i></button>
-                </form>
-            </div>
-            <!-- Header Search End -->
-        </div>
-    </div>
-    <!-- Header Mobile Bottom End -->
 </div>
 <!-- Header Mobile End -->
 

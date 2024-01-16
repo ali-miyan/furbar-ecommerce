@@ -1,25 +1,11 @@
 <%- include('../layouts/header.ejs') -%>
 
-    <!-- Page Banner Section Start -->
-    <div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
-        <div class="container">
-            <!-- Page Banner Content End -->
-            <div class="page-banner-content">
-                <h2 class="title">Shop Page</h2>
 
-                <ul class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Shop Page</li>
-                </ul>
-            </div>
-            <!-- Page Banner Content End -->
-        </div>
-    </div>
-    <!-- Page Banner Section End -->
-
-    <!-- Shop Section Start -->
+    <br>
+    <!-- Shop Section Start --> 
     <div class="section section-padding">
-        <div class="container">
+        
+        <div class="container"><hr><br><br><br>
             <!-- Product Section Wrapper Start -->
             <div class="product-section-wrapper">
                 <div class="row flex-row-reverse">
@@ -64,6 +50,8 @@
                                 <!-- Shop Product Wrapper Start -->
                                 <div class="shop-product-wrapper" id="reloadDiv">
                                     <div class="row">
+                                        <p class="text-center mt-5"><%= typeof totalPages === 'string' ? totalPages : '' %></p>
+                                        <%console.log(totalPages,'ssss')%>
                                         <% product.forEach(product=> { %>
                                             <% if (!product.is_blocked) { %>
                                                 <div class="col-lg-4 col-sm-6">
@@ -122,16 +110,18 @@
 
                         <!-- Page pagination Start -->
                         <div class="page-pagination">
+                            <!-- Assuming you have a variable hasNextPage from your backend -->
                             <ul class="pagination justify-content-center">
-                                <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link active" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#"><i
-                                            class="fa fa-angle-right"></i></a></li>
-                            </ul>
-                        </div>
+                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                  <li class="page-item <%= i === page ? 'active' : '' %>">
+                                    <a class="page-link" href="/shop?page=<%= i %>&pageSize=<%= pageSize %>">
+                                      <%= i %>
+                                    </a>
+                                  </li>
+                                <% } %>
+                              </ul>
+
+                          </div>
                         <!-- Page pagination End -->
                     </div>
                     <div class="col-lg-3">
@@ -153,22 +143,22 @@
                                 <h4 class="widget-title">Filter By Categories</h4>
 
                                 <div class="widget-checkbox widget-categories">
-                                    <ul class="checkbox-items">
-                                        <% category.forEach((data, index) => { %>
-                                          <li>
-                                            <input type="checkbox" id="checkbox<%= index + 1 %>"
-                                              class="category-checkbox" data-category="<%= data._id %>"
-                                              <% if (selectedCategories.includes(String(data._id))) { %>checked<% } %>
-                                            >
-                                            <label for="checkbox<%= index + 1 %>">
-                                              <span></span>
-                                              <%= data.name %>
-                                            </label>
-                                          </li>
-                                        <% }) %>
-                                      </ul>
-                                      
-                                      
+                                    <form id="categoryFilterForm" action="/shop" method="GET">
+                                        <ul class="checkbox-items">
+                                          <% category.forEach((data, index) => { %>
+                                            <li>
+                                              <input type="checkbox" id="checkbox<%= index + 1 %>"
+                                                class="category-checkbox" name="category" value="<%= data._id %>"
+                                                <% if (selectedCategory && selectedCategory.includes(String(data._id))) { %>checked<% } %>>
+                                              <label for="checkbox<%= index + 1 %>">
+                                                <span></span>
+                                                <%= data.name %>
+                                              </label>
+                                            </li>
+                                          <% }) %>
+                                        </ul>
+                                        <button class="user-btn mt-5" style="margin-left: 75px;" type="submit">Apply</button>
+                                      </form>                                      
                                 </div>
                             </div>
                             <!-- Sidebar Widget End -->
@@ -195,54 +185,49 @@
     </div>
     <!-- Shop Section End -->
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilterForm = document.getElementById('categoryFilterForm');
 
 
+
+  categoryFilterForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+      .map((checkbox) => checkbox.value);
+
+    categoryFilterForm.action = `/shop?category=${selectedCategories.join(',')}`;
+    categoryFilterForm.submit();
+  });
+
+})
+    </script>
 
     <script>
-$(document).ready(function () {
-  console.log('heloooooo');
-  var selectedCategories = [];
+document.addEventListener('DOMContentLoaded', () => {
+    const searchForm = document.querySelector('.widget-search form');
+    const searchInput = searchForm.querySelector('input');
 
-  // Event handler for checkbox change
-  $(".category-checkbox").change(function () {
-    console.log('heloooooo22');
-    var categoryId = $(this).data("category");
-    var isChecked = $(this).prop("checked");
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
 
-    if (isChecked) {
-      console.log('checl');
-      selectedCategories.push(categoryId);
-    } else {
-      console.log('checl3');
-      selectedCategories = selectedCategories.filter(id => id !== categoryId);
+    if (searchQuery !== null) {
+        searchInput.value = searchQuery;
     }
 
-    $.ajax({
-      url: '/categoryfilter',
-      method: 'POST',
-      data: { category: selectedCategories },
-      success: function (response) {
-        console.log(response);
-        if (response.products.length === 0) {
-          history.pushState(null, '', '/shop');
-        } else {
-          history.pushState(null, '', '/shop?filteredProducts=' + encodeURIComponent(JSON.stringify(response.products)) + '&categories=' + encodeURIComponent(JSON.stringify(selectedCategories)));
-        }
-        location.reload();
-      },
-      error: function (error) {
-        console.error('Error:', error);
-      }
+    searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const enteredSearchQuery = searchInput.value.trim();
+
+        const newUrlParams = new URLSearchParams(window.location.search);
+        newUrlParams.set('search', enteredSearchQuery);
+        const newUrl = `/shop?${newUrlParams.toString()}`;
+
+        window.location.href = newUrl;
     });
-  });
-
-  window.addEventListener('popstate', function (event) {
-   
-    location.reload();
-  });
-});
-
+}); 
 
     </script>
+
 
     <%- include('../layouts/footer.ejs') -%>

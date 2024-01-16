@@ -103,7 +103,4 @@ routeUser.post('/applycoupon', couponController.applyCoupon);
 
 routeUser.post('/removecoupon',couponController.removeCoupon);
 
-
-routeUser.post('/categoryfilter',userController.categoryFilter)
-
 module.exports = routeUser;
