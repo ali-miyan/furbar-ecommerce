@@ -161,6 +161,6 @@ const getCart=async(req,res)=>{
     showCart,
     updateCart,
     removeCart,
-    shippingAmount
+    shippingAmount  
   }
 

@@ -55,7 +55,7 @@ routeUser.post("/signup", auth.isLogout, userController.signupPost);
 
 routeUser.get("/verifyOTP", userController.verifyOTP);
 
-routeUser.post("/verifyOTP", userController.verifyPost);
+routeUser.post("/otp", userController.verifyPost);
 
 routeUser.get("/login", auth.isLogout, userController.loadLogin);
 
@@ -102,5 +102,7 @@ routeUser.post('/verifypayment', orderController.verifypayment)
 routeUser.post('/applycoupon', couponController.applyCoupon);
 
 routeUser.post('/removecoupon',couponController.removeCoupon);
+
+routeUser.get('/resendotp',userController.resendOtp)
 
 module.exports = routeUser;

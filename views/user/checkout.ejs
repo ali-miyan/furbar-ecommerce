@@ -1,5 +1,5 @@
 <%- include('../layouts/header.ejs') -%>
-    <script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
 
 
 
@@ -233,7 +233,7 @@
                                                     Discounted Amount: ₹<%= discountAmount %>
                                                         <% } else { %>
                                                             ₹<%= subtotal %>
-                                                                <% } %>
+                                                         <% } %>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -260,7 +260,8 @@
 
     <script>
         $(document).ready(function () {
-            $("#form").submit(function (event) {
+            console.log('ddddddddddddd');
+            $("#myForm  ").submit(function (event) {
                 event.preventDefault();
 
                 var formData = $(this).serialize();
@@ -275,7 +276,7 @@
                             let orderId = response.orderId;
                             location.href = `/successpage?id=${orderId}`
                         } else if (response.success == false) {
-                            console.log("reaaaaaacccccehjddddddddddddd");
+                            console.log("reaaaaaacccccehjssssssssssssssddddddddddddd");
                             razorpayPayment(response.order)
                         }
 

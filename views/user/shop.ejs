@@ -33,13 +33,11 @@
                                 </ul>
                             </div>
                             <div class="shop-sort">
-                                <span class="title">Sort By :</span>
-                                <select class="select2-2">
-                                    <option value="featured">
-                                        Featured
-                                    </option>
-                                    <option value="rating">Rating</option>
-                                    <option value="price">Price</option>
+                                <span class="title">Sort By price:</span>
+                                <select class="select2-2" onchange="updateSort()">
+                                    <option><i class="fa-solid fa-arrow-down"></i></option>
+                                    <option value="low-to-high" <%= sort === 'low-to-high' ? 'selected' : '' %>>Low to High</option>
+                                    <option value="high-to-low" <%= sort === 'high-to-low' ? 'selected' : '' %>>High to Low</option>
                                 </select>
                             </div>
                         </div>
@@ -218,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const enteredSearchQuery = searchInput.value.trim();
+        const currentUrl = window.location.search 
 
         const newUrlParams = new URLSearchParams(window.location.search);
         newUrlParams.set('search', enteredSearchQuery);
@@ -228,6 +227,24 @@ document.addEventListener('DOMContentLoaded', () => {
 }); 
 
     </script>
+
+
+    <script>
+function updateSort() {
+    const selectedOption = document.querySelector(".select2-2").value;
+    const baseUrl = "/shop";
+    const existingParams = new URLSearchParams(window.location.search);
+
+    // Remove existing 'sort' parameter
+    existingParams.delete('sort');
+
+    const queryParams = existingParams.toString() ? `${existingParams.toString()}&sort=${selectedOption}` : `?sort=${selectedOption}`;
+    const newUrl = `${baseUrl}?${queryParams}`;
+
+    window.location.href = newUrl;
+}
+
+</script>
 
 
     <%- include('../layouts/footer.ejs') -%>

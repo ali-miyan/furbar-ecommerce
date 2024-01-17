@@ -49,7 +49,8 @@
                     </div>
                 <% } %>
 
-                <form action="" method="post">
+            <form id="otpForm">
+                <p id="resendMessage"></p>
                     <div class="otp-input-wrapper">
                         <input type="text" maxlength="4" name="otp" pattern="[0-9]*" autocomplete="off" class="form-control mb-3">
                         <svg viewBox="0 0 240 1" xmlns="http://www.w3.org/2000/svg" class="mb-3">
@@ -57,12 +58,97 @@
                         </svg>
                         <input type="text" name="id" value="<%=id%>" hidden>
                     </div>
-                    <button class="btn btn-primary btn-hover-dark mt-4 verify-btn" type="submit">Verify OTP</button>
-                </form>
+                    <button class="btn btn-primary btn-hover-dark mt-4 verify-btn" onclick="otpCheck()" type="button">Verify OTP</button>
+                <button id="myButton" onclick="startTimer()" disabled>Click Me</button>
+                <div id="timerDisplay"></div>
+            </form>
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function startTimer() {
+        const id = '<%=id%>';
+        $.ajax({
+        url: `/resendotp?id=${id}`,
+        type: 'GET',
+        success: function (data) {
+            if (data.user) {
+                console.log('sentedddddddddddddd');
+                setTimeout(() => {
+                    document.getElementById('resendMessage').value = 'new otp has been sented to your mail'
+                }, 3000);
+
+            }     
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        }
+    });
+
+        var secondsRemaining = 60;
+
+        document.getElementById('myButton').disabled = true;
+
+        var timerInterval = setInterval(function () {
+            document.getElementById('timerDisplay').innerText = 'resend otp in: ' + secondsRemaining + ' seconds';
+
+            if (secondsRemaining <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('myButton').disabled = false;
+                document.getElementById('timerDisplay').innerText = '';
+            } else {
+                secondsRemaining--;
+            }
+        }, 1000);
+    }
+    window.onload = startTimer;
+
+function otpCheck() {
+    const formData = $('#otpForm').serialize();
+    console.log('otppppppppppppp');
+
+    $.ajax({
+        url: '/otp',
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            if (data.otp === false) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'oops...',
+                        text: data.message,
+                    });
+                    return;
+            } else if(data.otp == 'expired'){
+                Swal.fire({
+                    icon: 'info',
+                    title: 'has expired',
+                    text: data.message,
+                });
+                return;
+            }else if(data.otp == 'invalid'){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'invalid otp',
+                    text: data.message,
+                });
+                return;
+            }else if(data.otp){
+                window.location.href = `/`;
+            }
+            
+        },
+        error: function (error) {
+            // Handle errors
+            console.error('Error:', error);
+        }
+    });
+}
+
+</script>
 <!-- Modernizer & jQuery JS -->
 <script src="asset/js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="asset/js/vendor/jquery-3.5.1.min.js"></script>

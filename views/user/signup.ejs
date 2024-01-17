@@ -13,7 +13,7 @@
                         <a href="/login">Log in instead!</a>
                     </p>
                     
-                    <form id="signupForm" action="" method="post">
+                    <form id="signupForm" >
 
                         <div class="checkout-info">
                             <p class="info-header">
@@ -72,7 +72,7 @@
                         
                     
                         <div class="single-form">
-                            <button type="button" id="registerButton" class="btn btn-primary btn-hover-dark">
+                            <button id="registerButton" type="button" class="btn btn-primary btn-hover-dark">
                                 Register
                             </button>
                         </div>
@@ -89,16 +89,20 @@
 <!-- Register Section End -->
 
 
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded',function () {
+    console.log('hiiiiiiiiiiiiiiii');
     const form = document.getElementById('signupForm');
+
     const registerButton = document.getElementById('registerButton');
 
-    registerButton.addEventListener('click', function () {
-        clearErrorMessages(); // Clear previous error messages
+    registerButton.addEventListener('click',async function () {
+        clearErrorMessages();
 
-        if (validateForm()) {
-            form.submit(); // Submit the form if validation passes
+        if (await validateForm()) {
+            userSignUp();
         }
     });
 
@@ -171,6 +175,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 });
+
+</script>
+<script>
+
+function userSignUp() {
+    const formData = $('#signupForm').serialize();
+    console.log('hiiiiiiiiiiiiiiiiii');
+
+    $.ajax({
+        url: '/signup',
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            if (data.referal === false) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'invalid code',
+                        text:data.message
+                    });
+                    return;
+            } else if(data.user == false){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'already a user',
+                    text:data.message
+                });
+                return;
+            }
+            window.location.href = `/verifyOtp?id=${data._id}`;
+            
+        },
+        error: function (error) {
+            // Handle errors
+            console.error('Error:', error);
+        }
+    });
+}
 
 </script>
 <%- include('../layouts/footer.ejs') -%>

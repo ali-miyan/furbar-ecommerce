@@ -20,6 +20,8 @@ const orderModel = require('../models/orderModal');
 const categoryModel = require('../models/categoryModel');
 const puppeteer = require('puppeteer');
 const { generateKey } = require('crypto');
+const { error } = require('console');
+
 
 
 //route to home page
@@ -42,6 +44,7 @@ const loadShop = async (req, res) => {
         const page = parseInt(req.query.page) || orgPage;
         const pageSize = parseInt(req.query.pageSize) || perPage;
         const searchQuery = req.query.search;
+        const sort = req.query.sort 
 
 
         const skip = (page - 1) * pageSize;
@@ -58,7 +61,7 @@ const loadShop = async (req, res) => {
             product = await Product.find({ categoryId: selectedCategory , is_blocked:false }).populate('offer').skip(skip).limit(limit);
             console.log(product.length,'ddddddd');
             console.log(selectedCategory,'cat');
-            totalPages = Math.ceil(product.length/perPage)+1;
+            totalPages = product.length<6?1: Math.ceil(product.length/perPage)+1;
 
             if(searchQuery){
                 product = await Product.find({ categoryId: selectedCategory , is_blocked:false ,name:{$regex:searchQuery,$options:'i'}})
@@ -71,7 +74,7 @@ const loadShop = async (req, res) => {
         } else {
             product = await Product.find({is_blocked:false}).populate('offer').skip(skip).limit(limit);
             console.log(product.length,'ddddddd');
-            totalPages = Math.ceil(product.length/perPage)+1;
+            totalPages = product.length<6?1: Math.ceil(product.length/perPage)+1
 
             if(searchQuery){
                 product = await Product.find({is_blocked:false,name:{$regex:searchQuery,$options:'i'}})
@@ -84,7 +87,23 @@ const loadShop = async (req, res) => {
                 
             }
         }
-        res.render('shop', { product, category, selectedCategory ,totalPages,page,pageSize});
+
+        //sortting////////////////
+        
+        switch (sort) {
+            case 'high-to-low':
+                product = product.slice().sort((a, b) => b.price - a.price);
+                break;
+            case 'low-to-high':
+                product = product.slice().sort((a, b) => a.price - b.price);
+                break;
+            default:
+                product = product
+                break
+        }
+
+
+        res.render('shop', { product, category, selectedCategory ,totalPages,page,pageSize,sort});
     } catch (error) {
         console.log(error);
     }
@@ -128,22 +147,26 @@ const loadLogin = async (req, res) => {
 //signup and storing data to database
 const signupPost = async (req, res) => {
     try {
+        console.log('ethiiiiiiiiiiiiiiiiiiii');
         let { name, email, mobile, password, code } = req.body;
+        console.log(req.body);
         console.log(code, 'code');
         let data;
+        if(code){
         const referalCheck = await User.find({ referalCode: code })
         if (referalCheck.length === 0) {
             console.log('helooooooooo');
-            res.render('signup', { message: 'Invalid referal code' });
+            return res.json({referal:false})
         } else {
             data = {
                 amount: 1000,
                 date: new Date()
             }
         }
+    }
         const userExists = await User.findOne({ email });
         if (userExists) {
-            res.render('signup', { message: 'User with provided email already exists' });
+            res.json({user:false, message: 'User with provided email already exists' });
             console.log(userExists);
         } else {
             const hashedPassword = await securePassword(password);
@@ -166,7 +189,6 @@ const signupPost = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
     }
 };
 
@@ -175,7 +197,8 @@ const signupPost = async (req, res) => {
 const verifyOTP = async (req, res) => {
     try {
         const id = req.query.id
-        res.render('otp', { id });
+        console.log(id,'th id');
+        res.render('otp', {id});
     } catch (error) {
         console.log("Error setting session:", error.message);
     }
@@ -184,40 +207,37 @@ const verifyOTP = async (req, res) => {
 //verifying otp
 const verifyPost = async (req, res) => {
     try {
-        const otp = req.body.otp
-        const userId = req.body.id
-        console.log("Session ID:", userId);
+        const { id: userId } = req.body;
+        const userOtp = req.body.otp
 
-        const userOTPVerificationrecord = await userVerification.find({ user_id: userId })
-        console.log(userOTPVerificationrecord);
+        const userOTPVerificationrecord = await userVerification.findOne({ user_id: userId });
+        console.log(userOTPVerificationrecord,'reccccccccc');
 
-        if (userOTPVerificationrecord.length == 0) {
-            res.render('otp', { message: "record doesn't exist or has been verified already" })
-        } else {
-            const { expiresAt } = userOTPVerificationrecord[0];
-            const hashedOTP = userOTPVerificationrecord[0].otp;
-
-            if (expiresAt < Date.now()) {
-                await userOTPVerificationrecord.deleteOne({ userId });
-                res.render('otp', { message: "your otp has been expired" })
-            } else {
-                const validOTP = await bcrypt.compare(otp, hashedOTP);
-                if (!validOTP) {
-                    res.render('otp', { message: "Invalid code" })
-
-                } else {
-                    await User.updateOne({ _id: userId }, { verfied: true });
-                    await userVerification.deleteOne({ userId });
-                    req.session.user_id = userId
-                    res.redirect(`/`)
-                }
-            }
+        if (!userOTPVerificationrecord) {
+            res.json({ otp: false, message: "Record doesn't exist or has been verified already" });
+            return;
         }
 
+        const { expiresAt , otp } = userOTPVerificationrecord;
+
+        if (expiresAt < Date.now()) {
+            await userVerification.deleteOne({ user_id: userId });
+            res.json({ otp: 'expired', message: "Your OTP has expired" });
+        } else {
+            const validOTP = await bcrypt.compare(userOtp, otp);
+            if (!validOTP) {
+                res.json({ otp: 'invalid', message: "Invalid code, try again..." });
+            } else {
+                await User.updateOne({ _id: userId }, { verified: true });
+                await userVerification.deleteOne({ user_id: userId });
+                req.session.user_id = userId;
+                res.json({ otp: true });
+            }
+        }
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
 
 //hashing password
@@ -230,9 +250,25 @@ const securePassword = async (password) => {
     }
 }
 
+
+//resend otp
+const resendOtp = async(req,res)=>{
+    try {
+      console.log("siuuuuuuuuuuuuuu");
+        const id = req.query.id;
+        const userData = await User.findOne({ _id: id });
+        const email = userData.email
+        const _id = userData._id
+        await sendOTPverification({_id,email}, res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 //sending otp
 const sendOTPverification = async ({ _id, email }, res) => {
     try {
+        console.log('heloooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
         const mailOption = {
             from: process.env.user_email,
@@ -242,23 +278,23 @@ const sendOTPverification = async ({ _id, email }, res) => {
             this code will expires in 1 hour`
         }
 
-        //hashing the otp
         const hashedOTP = await bcrypt.hash(otp, 10);
 
         const newOTP = await new userOTP({
             user_id: _id,
             otp: hashedOTP,
             createAt: Date.now(),
-            expiresAt: Date.now() + 36000,
+            expiresAt: Date.now() + 60000,
         })
+        console.log('vanuuuuuuuuuuuuuuuuuuuu');
 
         //save otp records
+        res.json({user:true,_id})
         await newOTP.save();
         await transporter.sendMail(mailOption);
-        res.redirect(`/verifyOTP?id=${_id}`);
 
     } catch (error) {
-        throw new Error;
+        console.log(error.message);
     }
 }
 
@@ -484,5 +520,6 @@ module.exports = {
     editAddress,
     deleteAddress,
     editUser,
-    generatePdf
+    generatePdf,
+    resendOtp
 }

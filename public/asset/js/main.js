@@ -1074,3 +1074,18 @@ function validateEditProfileForm() {
 
 
     
+function copyToClipboard() {
+  // Select the referral code text
+  var referralCodeElement = document.getElementById('referralCode');
+  var range = document.createRange();
+  range.selectNode(referralCodeElement);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  // Copy the text to clipboard
+  document.execCommand('copy');
+
+  window.getSelection().removeAllRanges();
+  document.getElementById("copyLink").querySelector("i").classList.replace("bi-clipboard", "bi-check-circle");
+
+}

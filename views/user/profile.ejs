@@ -1,4 +1,6 @@
 <%- include('../layouts/header.ejs') -%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
 
     <!-- Page Banner Section Start -->
     <div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
@@ -69,7 +71,7 @@
                                                         <span class="info-label">Name:</span><%=user.name%> <br>
                                                         <span class="info-label">Email:</span><%=user.email%> <br>
                                                         <span class="info-label">Phone:</span><%=user.mobile%> <br>
-                                                        <span class="info-label">Referral Code:</span><%=user.referalCode%>
+                                                        <span class="info-label">Referral Code:</span><span id="referralCode"><%=user.referalCode%></span>&nbsp;&nbsp;<a id="copyLink"><i  onclick="copyToClipboard()" class="bi bi-clipboard link-primary"></i></a>
                                                     </p>
                                                 </div>
                                             </div>

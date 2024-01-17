@@ -53,6 +53,7 @@ const checkout = async (req, res) => {
 
 const checkoutPost = async (req, res) => {
     try {
+      console.log('helo checktttttttttttttt');
       console.log("hrloooooooo",req.body);
       const userId = req.session.user_id;
       const user=await User.findOne({_id:userId})
@@ -126,7 +127,7 @@ const checkoutPost = async (req, res) => {
           );
         }
         await cartData.deleteOne({ user: user._id });
-        return res.json({orderId,success:true})
+        res.json({orderId,success:true})
       }else if (paymentMethod == "Wallet") {
 
         const data ={
