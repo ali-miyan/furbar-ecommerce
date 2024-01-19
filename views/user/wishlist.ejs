@@ -1,0 +1,88 @@
+<%- include('../layouts/header.ejs') -%>
+
+
+    <!-- Shopping Cart Section Start -->
+    <div class="section section-padding"><br><hr><br><br><br><br>
+        <div class="container">
+            <div class="cart-wrapper">
+                <!-- Cart Wrapper Start -->
+                <%console.log(data)%>
+                <% if (data == null || data.product==0) { %>
+                    <div class="container">
+                        <div class="cart-wrapper">
+                            <!-- empty cart Start -->
+                            <div class="empty-cart text-center">
+                                <h2 class="empty-cart-title">
+                                    Wishlist is empty!
+                                </h2>
+                                    <i style="font-size: 150px;"  class="fa-solid fa-hand-holding-heart mt-4 mb-3"></i>
+                                <p>Your wishlist is currently empty!</p>
+                                <a href="/shop" class="btn btn-primary btn-hover-dark"><i class="fa fa-angle-left"></i> Continue
+                                    browsing</a>
+                            </div>
+                            <!-- empty cart End -->
+                        </div>
+                    </div>                    
+                    <% }else { %>
+                <div class="cart-table table-responsive ">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumb">Image</th>
+                                <th class="product-info">
+                                    product Information
+                                </th>
+                                <th class="product-total-price">
+                                    status
+                                </th>
+                                <th class="product-add-to-cart">
+                                    Add to Cart
+                                </th>
+                                <th class="product-action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% data.product.forEach(function(product, index) { %>
+                            <tr>
+                                <td class="product-thumb">
+                                   <a href="/detailshop?id=<%=product.productId._id%>"> <img src="sharpimages/<%= product.productId.images.image1 %>" alt="" /></a>
+                                </td>
+                                <td class="product-info">
+                                    <h6 class="name">
+                                        <a class="text-center"><%= product.productId.name %></a>
+                                    </h6>
+                                    <div class="product-prices">
+                                        <span class="sale-price">₹<%= product.productId.discountedPrice ? product.productId.discountedPrice : product.productId.price %></span>
+                                        <span class="old-price">
+                                            <%= product.productId.discountedPrice ? '₹' + product.productId.price : '' %>
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td class="sale-price">
+                                    <span class="price">
+                                        <p class="text-center"><%= (product.productId.quantity === 0) ? 'Out of Stock' : 'In Stock' %></p>
+                                    </span>
+                                </td>
+                                <td class="product-add-to-cart">
+                                    <a href="#" class="btn btn-dark btn-hover-primary">Add to Cart</a>
+                                </td>
+                                <td class="product-action">
+                                    <button class="remove" id="closeButton"
+                                        onclick="removeWishlist('<%= product.productId._id %>','<%=data.user%>')">
+                                        <i class="pe-7s-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Cart Wrapper End -->
+                <%}%>
+            </div>
+        </div>
+    </div>
+    <!-- Shopping Cart Section End -->
+
+    <%- include('../layouts/footer.ejs') -%>

@@ -19,8 +19,10 @@ const addressModel = require('../models/addressModel');
 const orderModel = require('../models/orderModal');
 const categoryModel = require('../models/categoryModel');
 const puppeteer = require('puppeteer');
+const crypto = require('crypto')
 const { generateKey } = require('crypto');
 const { error } = require('console');
+const { truncate } = require('fs');
 
 
 
@@ -44,52 +46,52 @@ const loadShop = async (req, res) => {
         const page = parseInt(req.query.page) || orgPage;
         const pageSize = parseInt(req.query.pageSize) || perPage;
         const searchQuery = req.query.search;
-        const sort = req.query.sort 
+        const sort = req.query.sort
 
 
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
         let totalPages;
-        
+
         const selectedCategory = req.query.category;
         const category = await categoryModel.find({ _id: { $in: await Product.distinct("categoryId") } });
-        
+
         let product;
 
         if (selectedCategory) {
-            product = await Product.find({ categoryId: selectedCategory , is_blocked:false }).populate('offer').skip(skip).limit(limit);
-            console.log(product.length,'ddddddd');
-            console.log(selectedCategory,'cat');
-            totalPages = product.length<6?1: Math.ceil(product.length/perPage)+1;
+            product = await Product.find({ categoryId: selectedCategory, is_blocked: false }).populate('offer').skip(skip).limit(limit);
+            console.log(product.length, 'ddddddd');
+            console.log(selectedCategory, 'cat');
+            totalPages = product.length < 6 ? 1 : Math.ceil(product.length / perPage) + 1;
 
-            if(searchQuery){
-                product = await Product.find({ categoryId: selectedCategory , is_blocked:false ,name:{$regex:searchQuery,$options:'i'}})
-                if(product.length == 0){
-                    totalPages='no products available in specified category'
-                 }else{
-                    totalPages = Math.ceil(product.length/perPage);
-                 }
+            if (searchQuery) {
+                product = await Product.find({ categoryId: selectedCategory, is_blocked: false, name: { $regex: searchQuery, $options: 'i' } })
+                if (product.length == 0) {
+                    totalPages = 'no products available in specified category'
+                } else {
+                    totalPages = Math.ceil(product.length / perPage);
+                }
             }
         } else {
-            product = await Product.find({is_blocked:false}).populate('offer').skip(skip).limit(limit);
-            console.log(product.length,'ddddddd');
-            totalPages = product.length<6?1: Math.ceil(product.length/perPage)+1
+            product = await Product.find({ is_blocked: false }).populate('offer').skip(skip).limit(limit);
+            console.log(product.length, 'ddddddd');
+            totalPages = product.length < 6 ? 1 : Math.ceil(product.length / perPage) + 1
 
-            if(searchQuery){
-                product = await Product.find({is_blocked:false,name:{$regex:searchQuery,$options:'i'}})
-                 if(product.length == 0){
-                    totalPages='no products available'
-                 }else{
-                    totalPages = Math.ceil(product.length/perPage);
-                 }
-                console.log(product,totalPages,'ffffffffffffffffffffffff');
-                
+            if (searchQuery) {
+                product = await Product.find({ is_blocked: false, name: { $regex: searchQuery, $options: 'i' } })
+                if (product.length == 0) {
+                    totalPages = 'no products available'
+                } else {
+                    totalPages = Math.ceil(product.length / perPage);
+                }
+                console.log(product, totalPages, 'ffffffffffffffffffffffff');
+
             }
         }
 
         //sortting////////////////
-        
+
         switch (sort) {
             case 'high-to-low':
                 product = product.slice().sort((a, b) => b.price - a.price);
@@ -103,7 +105,7 @@ const loadShop = async (req, res) => {
         }
 
 
-        res.render('shop', { product, category, selectedCategory ,totalPages,page,pageSize,sort});
+        res.render('shop', { product, category, selectedCategory, totalPages, page, pageSize, sort });
     } catch (error) {
         console.log(error);
     }
@@ -123,8 +125,7 @@ const loadProfile = async (req, res) => {
         console.log("profile session" + req.session.user_id);
         const user = await User.findOne({ _id: req.session.user_id });
         const address = await addressModel.findOne({ user: req.session.user_id });
-        const order = await orderModel.find({ user: req.session.user_id })
-            .populate('products.productId')
+        const order = await orderModel.find({ user: req.session.user_id }).populate('products.productId')
         res.render('profile', { user, address, order });
 
     } catch (error) {
@@ -152,22 +153,22 @@ const signupPost = async (req, res) => {
         console.log(req.body);
         console.log(code, 'code');
         let data;
-        if(code){
-        const referalCheck = await User.find({ referalCode: code })
-        if (referalCheck.length === 0) {
-            console.log('helooooooooo');
-            return res.json({referal:false})
-        } else {
-            data = {
-                amount: 1000,
-                date: new Date()
+        if (code) {
+            const referalCheck = await User.find({ referalCode: code })
+            if (referalCheck.length === 0) {
+                console.log('helooooooooo');
+                return res.json({ referal: false })
+            } else {
+                data = {
+                    amount: 1000,
+                    date: new Date()
+                }
             }
         }
-    }
         const userExists = await User.findOne({ email });
         if (userExists) {
-            res.json({user:false, message: 'User with provided email already exists' });
-            console.log(userExists);
+            console.log('exists');
+            return res.json({ user: false, message: 'User with provided email already exists,try logging in' });
         } else {
             const hashedPassword = await securePassword(password);
             const newUser = new User({
@@ -197,8 +198,9 @@ const signupPost = async (req, res) => {
 const verifyOTP = async (req, res) => {
     try {
         const id = req.query.id
-        console.log(id,'th id');
-        res.render('otp', {id});
+        const message = req.query.id2
+        console.log(id, 'th id');
+        res.render('otp', { id,message});
     } catch (error) {
         console.log("Error setting session:", error.message);
     }
@@ -211,27 +213,28 @@ const verifyPost = async (req, res) => {
         const userOtp = req.body.otp
 
         const userOTPVerificationrecord = await userVerification.findOne({ user_id: userId });
-        console.log(userOTPVerificationrecord,'reccccccccc');
+        console.log(userOTPVerificationrecord, 'reccccccccc');
 
         if (!userOTPVerificationrecord) {
-            res.json({ otp: false, message: "Record doesn't exist or has been verified already" });
-            return;
+           return res.json({ otp: false, message: "Record doesn't exist or has been verified already" });
         }
 
-        const { expiresAt , otp } = userOTPVerificationrecord;
+        const { expiresAt, otp } = userOTPVerificationrecord;
 
         if (expiresAt < Date.now()) {
             await userVerification.deleteOne({ user_id: userId });
-            res.json({ otp: 'expired', message: "Your OTP has expired" });
+            return res.json({ otp: 'expired', message: "Your OTP has expired" });
         } else {
             const validOTP = await bcrypt.compare(userOtp, otp);
             if (!validOTP) {
+                console.log('invaallidddddddd verify');
                 res.json({ otp: 'invalid', message: "Invalid code, try again..." });
             } else {
-                await User.updateOne({ _id: userId }, { verified: true });
+                console.log('trueeeeeeeeee verify');
+                await User.updateOne({ _id: userId }, {$set:{ verfied: true }});
                 await userVerification.deleteOne({ user_id: userId });
                 req.session.user_id = userId;
-                res.json({ otp: true });
+                return res.json({ otp: true });
             }
         }
     } catch (error) {
@@ -252,21 +255,19 @@ const securePassword = async (password) => {
 
 
 //resend otp
-const resendOtp = async(req,res)=>{
+const resendOtp = async (req, res) => {
     try {
-      console.log("siuuuuuuuuuuuuuu");
+        console.log("siuuuuuuuuuuuuuu");
         const id = req.query.id;
         const userData = await User.findOne({ _id: id });
-        const email = userData.email
-        const _id = userData._id
-        await sendOTPverification({_id,email}, res);
+        await sendOTPverification(userData, res);
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  }
+}
 
 //sending otp
-const sendOTPverification = async ({ _id, email }, res) => {
+const sendOTPverification = async ({ _id, email }, res,message) => {
     try {
         console.log('heloooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
@@ -289,7 +290,10 @@ const sendOTPverification = async ({ _id, email }, res) => {
         console.log('vanuuuuuuuuuuuuuuuuuuuu');
 
         //save otp records
-        res.json({user:true,_id})
+        if(message){
+           return res.json({_id,message })
+        }
+        res.json({ user: true, _id })
         await newOTP.save();
         await transporter.sendMail(mailOption);
 
@@ -313,20 +317,29 @@ let loginPost = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-
         const validUser = await User.findOne({ email: email })
-        console.log(validUser);
-        if (validUser) {
-            const passwordMatch = await bcrypt.compare(password, validUser.password)
-            if (passwordMatch) {
-                req.session.user_id = validUser._id;
-                res.redirect('/')
+        if (validUser) { 
+        const passwordMatch = await bcrypt.compare(password, validUser.password)
+        if (passwordMatch) { 
+            console.log(validUser.verfied);
+            if (validUser.verfied === true) {
+            console.log('brooooooooooooooo');
+                if (validUser.is_blocked == false) {
+            console.log('brooooooooo2222222222oooooo');
+                    req.session.user_id = validUser._id;
+                    res.json({ redirect: '/', _id: validUser._id, message: 'success' });
+                } else {
+                   return res.json({block:true,message:'you have been bloacked by admin'})
+                }
             } else {
-                res.render('login', { message: 'incorrect password' })
+                const message = `Please verify your account by entering the OTP first.`
+                await sendOTPverification(validUser, res,message);
             }
         } else {
-            res.render('login', { message: 'ivalid email or password' })
-
+            return res.json({ user: true, message: 'incorrect password' })
+        }
+        } else {
+            return res.json({ user: true, message: 'you are not a user' })
         }
     } catch (error) {
         console.log(error);
@@ -423,7 +436,6 @@ const editAddress = async (req, res) => {
 
     } catch (error) {
         console.error('Error updating address:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
 
@@ -438,7 +450,6 @@ const deleteAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.render('500Error')
     }
 }
 
@@ -504,6 +515,133 @@ function generateCode() {
     return code;
 }
 
+const forgetPassword = async(req,res)=>{
+    try {
+        res.render('forgetpassword')
+    } catch (error) {
+        console.log(error);
+    }
+}
+const forgetPasswordPost = async(req,res)=>{
+    try {
+        const user = await User.findOne({email:req.body.email})
+        if(!user){
+            console.log('ttttttt');
+           return res.json({user:true,message:`can't find your email`})
+        }else if(!user.verfied){
+           return res.json({user:true,message:`sorry,you are a blocked user`})
+        }else{
+        res.json({success:true})
+        await sendResetLink(user,res);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const sendResetLink = async (user,res) => {
+    try {
+        const token = crypto.randomBytes(32).toString('hex')
+        user.tokenExpire = Date.now()+10 *60*1000
+        user.resetToken = token;
+        await user.save();
+
+        const reset = `http://localhost:3000/resetpassword?id=${token}`;
+        const resetMail = {
+            from: process.env.user_email,
+            to: user.email,
+            subject: 'Password Reset',
+            html: `
+                <div style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
+                    <h2 style="color: #333;">Password Reset</h2>
+                    <p style="color: #555;">Dear User,</p>
+                    <p style="color: #555;">You have requested to reset your password. Click the button below to reset:</p>
+                    <p>
+                        <a href="${reset}" style="display: inline-block; padding: 10px 20px; background-color: #4caf50; color: #fff; text-decoration: none; border-radius: 5px;">Reset Password</a>
+                    </p>
+                    <p style="color: #555;">If you didn't request this, please ignore this email.</p>
+                    <p style="color: #555;">Best regards,<br/>furbar</p>
+                </div>
+            `,
+        };
+        
+
+        await transporter.sendMail(resetMail);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+const resetPassword = async(req,res)=>{
+    try {        
+    const token = req.query.id;
+    console.log('queryyyyyyyy');
+    res.render('resetpassword',{token})   
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const resetPasswordPost = async(req,res)=>{
+    try {
+        const {token,password} = req.body;
+        console.log(req.body);
+        const user = await User.findOne({
+            resetToken: token,
+            tokenExpire: { $gt: Date.now() }
+        });
+        console.log(user,'ddddddddddddddddddd');
+
+        if (!user) {
+            return res.json({ok:true,message:`Invalid or expired token`});
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        user.password = hashedPassword;
+        user.resetToken = undefined;
+        user.tokenCreate = undefined;
+        user.tokenExpire = undefined;
+
+        await user.save();
+
+        return res.json({success:true});
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const changePassword = async(req,res)=>{
+    try {
+        const { current , newPass } = req.body;
+        console.log(req.body,'ddddddddddd');
+        const id = req.session.user_id
+        const user = await User.findById(id)
+        console.log(user,'ffffffffffffffff');
+        if (!user) {
+            return res.json({ success: false, message: 'User not found.' });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(current, user.password);
+
+        if (!isPasswordMatch) {
+            return res.json({ success: false, message: 'current password is not matching' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPass, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.json({ success: true, message: 'Password changed successfully.' });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     verifyOTP,
     verifyPost,
@@ -521,5 +659,10 @@ module.exports = {
     deleteAddress,
     editUser,
     generatePdf,
-    resendOtp
+    resendOtp,
+    forgetPassword,
+    forgetPasswordPost,
+    resetPassword,
+    resetPasswordPost,
+    changePassword
 }

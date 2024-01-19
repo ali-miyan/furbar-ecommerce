@@ -8,25 +8,10 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <!-- Login & Register Start -->
-                <% if (typeof message !== 'undefined') { %>
-                    <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" style="text-align: center;">
-                        <i class="bi-exclamation-octagon-fill"></i>
-                        <b class="text-center"><%- message %></b>
-                    </div>
-                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                    <script>
-                        // Add a script to hide the alert after 5 seconds
-                        $(document).ready(function () {
-                            setTimeout(function () {
-                                $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                            }, 3000); // 3000 milliseconds = 3 seconds
-                        });
-                    </script>
-                <% } %>
+
                 <div class="login-register-wrapper">
                     <h4 class="title">Login to Your Account</h4>
-                    <form action="" method="post" onsubmit="return validateForm()">
+                    <form id="loginForm">
                         <div class="single-form">
                             <input type="text" name="email" id="email" placeholder="email" />
                             <p id="email-error" class="error-message"></p>
@@ -40,12 +25,12 @@
                             <label for="remember"><span></span> Remember me</label>
                         </div>
                         <div class="single-form">
-                            <button type="submit" class="btn btn-primary btn-hover-dark">
+                            <button type="button" onclick="loginForm()" class="btn btn-primary btn-hover-dark">
                                 Login
                             </button>
                         </div>
                     </form>
-                    <p><a href="#">Lost your password?</a></p>
+                    <p><a href="/forgetpassword">Forget your password?</a></p>
                     <p>
                         No account?
                         <a href="/signup">Create one here.</a>
@@ -59,36 +44,80 @@
 <!-- Login Section End -->
 
 <script>
-    function validateForm() {
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        var isValid = true;
-
-        // Simple email validation
-        if (!isValidEmail(email)) {
-            document.getElementById('email-error').innerText = 'Please enter a valid email address.';
-            isValid = false;
-        } else {
-            document.getElementById('email-error').innerText = '';
-        }
-
-        // Simple password validation (you can add more complex rules as needed)
-        if (password.length < 6) {
-            document.getElementById('password-error').innerText = 'Password must be at least 6 characters long.';
-            isValid = false;
-        } else {
-            document.getElementById('password-error').innerText = '';
-        }
-
-        return isValid;
-    }
+function loginForm() {
+    console.log('value error');
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
 
     function isValidEmail(email) {
         // Basic email validation using a regular expression
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
+
+    // Empty email validation
+    if (email.trim() === '') {
+        document.getElementById('email-error').innerText = 'Please enter your email address.';
+        return false;
+    } else {
+        document.getElementById('email-error').innerText = '';
+    }
+
+    // Empty password validation
+    if (password.trim() === '') {
+        document.getElementById('password-error').innerText = 'Please enter your password.';
+        return false;
+    } else if (password.length < 6) {
+        document.getElementById('password-error').innerText = 'Password must be at least 6 characters long.';
+        return false;
+    } else {
+        document.getElementById('password-error').innerText = '';
+    }
+
+
+    callAjax()
+    return false
+
+    }
+
+
+    function callAjax() {
+        const formData = $('#loginForm').serialize();
+        console.log('login form data' , formData);
+        const otpError = document.getElementById('password-error')
+        
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data:formData,
+            success: function (data) {
+                if(data.user){
+                    otpError.textContent = data.message
+                }else if(data.block){
+                    Swal.fire({
+                    icon: 'warning',
+                    title: 'you are a blocked user',
+                    text:data.message
+                });
+                return;
+                }else if(data.message === 'success'){
+                    window.location.href = data.redirect;
+                }else{
+                    window.location.href = `/verifyOtp?id=${data._id}&id2=${data.message}`;
+                }
+            },
+            error: function (error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+        setTimeout(function () {
+            otpError.textContent = '';
+        }, 3000);
+}
+
+    
 </script>
+
 
 
 <%- include('../layouts/footer.ejs') -%>

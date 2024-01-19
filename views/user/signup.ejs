@@ -30,11 +30,7 @@
                                 </div>
                             </div>
                             
-                        </div>
-                        <% if (typeof message !== 'undefined') { %>
-                            <p class="text-center alert-danger" id="errorMessage" style="color: rgb(98, 9, 9);"><%- message %></p>
-                    <% } %>
-                        
+                        </div>                        
 
                         <div class="single-form">
                             <input type="text" id="name" name="name" placeholder="Name *" />
@@ -70,7 +66,7 @@
                             </div>
                         </div>
                         
-                    
+                        <a class="link-danger"><p id="signupError" class="text-center"></p></a>
                         <div class="single-form">
                             <button id="registerButton" type="button" class="btn btn-primary btn-hover-dark">
                                 Register
@@ -182,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function userSignUp() {
     const formData = $('#signupForm').serialize();
     console.log('hiiiiiiiiiiiiiiiiii');
+    const signupError = document.getElementById('signupError')
 
     $.ajax({
         url: '/signup',
@@ -189,21 +186,12 @@ function userSignUp() {
         data: formData,
         success: function (data) {
             if (data.referal === false) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'invalid code',
-                        text:data.message
-                    });
-                    return;
+                signupError.textContent = data.message
             } else if(data.user == false){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'already a user',
-                    text:data.message
-                });
-                return;
+                signupError.textContent = data.message
+            }else{
+                window.location.href = `/verifyOtp?id=${data._id}`;
             }
-            window.location.href = `/verifyOtp?id=${data._id}`;
             
         },
         error: function (error) {
@@ -211,6 +199,9 @@ function userSignUp() {
             console.error('Error:', error);
         }
     });
+    setTimeout(function () {
+        signupError.textContent = '';
+    }, 3000);
 }
 
 </script>

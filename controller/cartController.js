@@ -15,6 +15,7 @@ const cartModel=require('../models/cartModel')
 const addressModel=require('../models/addressModel')
 const cartController=require('../controller/cartController')
 const orderModel=require('../models/orderModal')
+const wishlistModel = require('../models/wishlistModel')
 
 const getCart=async(req,res)=>{
     try {
@@ -156,11 +157,71 @@ const getCart=async(req,res)=>{
   }
 
 
+  const getWishlist = async (req, res) => {
+    try {
+        const product_id = req.body.id;
+        const userId = req.session.user_id;
+        const wishListProducts = await wishlistModel.findOne({ user: userId, 'product.productId': product_id });
+  
+        if (wishListProducts) {
+          await wishlistModel.findOneAndUpdate(
+            { user: userId, 'product.productId': product_id },
+            { $pull: { 'product': { 'productId': product_id } } }
+          );
+          res.json({ remove: true, message: 'Product removed from wishlist' });
+        } else {
+          const data = {
+            productId: product_id,
+          };
+
+          await wishlistModel.findOneAndUpdate(
+            { user: userId },
+            { $addToSet: { product: data } },
+            { upsert: true, new: true }
+          );
+          res.json({ add: true, message: 'Product added to wishlist' });
+        }
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const wishlist = async(req,res)=>{
+    try {
+      const data = await wishlistModel.findOne({}).populate('product.productId');
+      res.render('wishlist',{data})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+
+  const removeWishlist=async (req, res) => {
+    try {
+      const { productId,userId } = req.body;
+      console.log(req.body,'ddddddddddddddddddd');
+      const wishlist = await wishlistModel.findOneAndUpdate({ 'user': userId},{ $pull: { 'product': { 'productId': productId } } },{ new: true });
+      console.log(wishlist);
+      if (wishlist) {
+        res.json({success:true});
+      } else {
+        res.json({ error: 'Product not found in the cart' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
   module.exports={
     getCart,
     showCart,
     updateCart,
     removeCart,
-    shippingAmount  
+    shippingAmount,
+    getWishlist,
+    wishlist,
+    removeWishlist
   }
 

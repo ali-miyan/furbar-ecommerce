@@ -65,7 +65,7 @@
                                                                 <% } %></a>   
                                                         <div class="product-content">
                                                             <h4 class="title">
-                                                                <a href="product-details.html">
+                                                                <a href="/detailshop?id=<%=product._id%>">
                                                                     <%= product.name %>
                                                                 </a>
                                                                 <% if (product.quantity==0){ %>Out of Stock<%}%>
@@ -80,22 +80,29 @@
                                                         </div>
                                                         <ul class="product-meta">
                                                             <li>
-                                                                <a class="action" data-bs-toggle="modal"
-                                                                    data-bs-target="#quickView" href="#"><i
-                                                                        class="pe-7s-search"></i></a>
+                                                                <a class="action" onclick="addToCart('<%= product._id%>')" ><i
+                                                                class="pe-7s-shopbag"></i></a>
                                                             </li>
                                                             <li>
-                                                                <a class="action" href="#"><i
-                                                                        class="pe-7s-shopbag"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="action" href="#"><i
-                                                                class="pe-7s-like"></i></a>
-                                                            </li>
+                                                                <a id="wishlist-icon" class="action" onclick="addToWishlist('<%= product._id %>')">
+                                                                  <i class="pe-7s-like"></i>
+                                                                </a>
+                                                              </li>
                                                         </ul>
                                                     </div>
 
                                                     <!-- Single Product End -->
+                                                    <style>
+                                                        .blink {
+                                                          animation: blink-animation 1s steps(5, start) infinite;
+                                                        }
+                                                      
+                                                        @keyframes blink-animation {
+                                                          to {
+                                                            visibility: hidden;
+                                                          }
+                                                        }
+                                                      </style>
                                                 </div>
                                                 <%}%>
                                             <% }); %>

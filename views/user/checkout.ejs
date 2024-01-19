@@ -1,11 +1,12 @@
 <%- include('../layouts/header.ejs') -%>
-<script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/14093101a5.js" crossorigin="anonymous"></script>
 
 
 
     <!-- Checkout Section Start -->
     <div class="section section-padding">
-        <div class="container"><br><hr><br><br>
+        <div class="container" ><br>
+            <hr><br><br>
             <div class="checkout-info">
                 <p class="info-header">
                     <i class="fa fa-exclamation-circle"></i> Have a coupon?
@@ -28,7 +29,8 @@
                                                     Code: <%= coupons[i].couponCode %> <br>
                                                         Discount Amount: <b> ₹<%= coupons[i].discountAmount %> </b> <br>
                                                         Only applicable if you <br> order above <b> ₹
-                                                            <%=coupons[i].criteriaAmount%></b>
+                                                            <%=coupons[i].criteriaAmount%>
+                                                        </b>
                                                 </p>
                                                 <% if(subtotal>coupons[i].criteriaAmount) {%>
                                                     <% console.log('Coupon ID:', coupons[i]._id, 'Applied Coupon ID:' ,
@@ -64,7 +66,7 @@
                     </div>
 
             </div>
-
+            <div id="addrassArea">
             <form id="myForm" onsubmit="return validateForm()">
                 <div class="row">
                     <div class="col-lg-7">
@@ -79,22 +81,20 @@
                                                     <h3 class="card-title">Address <%= index + 1 %>
                                                     </h3>
                                                     <p>Name: <%= address.name %><br>
-                                                            Address: <%= address.address %><br>
-                                                                Landmark: <%= address.landmark %><br>
-                                                                    State: <%= address.state %><br>
-                                                                        City: <%= address.city %><br>
-                                                                            Pincode: <%= address.pincode %><br>
-                                                                                Phone: <%= address.phone %><br>
-                                                                                    Email: <%= address.email %><br>
-                                                                                        <a
-                                                                                            href="/editAddress?ind=<%= index %>"><i
-                                                                                                class="fa fa-edit"></i></a>
+                                                    Address: <%= address.address %><br>
+                                                    Landmark: <%= address.landmark %><br>
+                                                    State: <%= address.state %><br>
+                                                    City: <%= address.city %><br>
+                                                    Pincode: <%= address.pincode %><br>
+                                                    Phone: <%= address.phone %><br>
+                                                    Email: <%= address.email %><br>
+                                                    <a onclick="openEditModal('<%= address._id %>', '<%= address.name %>', '<%= address.address %>', '<%= address.landmark %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>')"><i class="fa fa-edit"></i></a>
                                             </div>
                                         </div>
                                     </div>
-                                    <% }); %>
+                                <% }); %>
                             </div>
-                    </div>
+                        </div>
                     <% } else { %>
                         <div class="col-lg-12">
                             <!-- Checkout Form Start -->
@@ -233,7 +233,7 @@
                                                     Discounted Amount: ₹<%= discountAmount %>
                                                         <% } else { %>
                                                             ₹<%= subtotal %>
-                                                         <% } %>
+                                                                <% } %>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -249,14 +249,85 @@
                             </div>
                         </div>
                     </div>
-        </div>
-        </form>
+                </form>
+            </div>
     </div>
 
     </div><br><br>
     <!-- Checkout Section End -->
 
 
+    <!-- edit address modal -->
+    <div id="editAddressModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeEditModal">&times;</span>
+            <h4 class="account-title">Edit Address</h4>
+            <!-- Your form goes here -->
+            <form id="editForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="single-form">
+                            <input type="text" name="editName" />
+                            <p id="editNameError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="single-form">
+                            <input type="text" name="editAddress" />
+                            <p id="editAddressError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editLandmark" />
+                            <p id="editLandmarkError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editState" />
+                            <p id="editStateError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editCity" />
+                            <p id="editCityError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editPincode" />
+                            <p id="editPincodeError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editPhone" />
+                            <p id="editPhoneError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <input type="text" name="editEmail" />
+                            <p id="editEmailError" class="error-message"></p>
+                        </div>
+                    </div>
+                    <!-- Add other fields as needed for editing -->
+
+                    <!-- Add hidden input for address ID -->
+                    <input type="hidden" name="editAddressId" id="editAddressId" />
+                    <div class="col-md-12">
+                        <div class="single-form">
+                            <button type="submit" class="btn btn-primary btn-hover-dark">Save
+                                Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- edit modal end -->
 
     <script>
         $(document).ready(function () {

@@ -53,9 +53,9 @@ routeUser.get("/signup", auth.isLogout, userController.loadSignup);
 
 routeUser.post("/signup", auth.isLogout, userController.signupPost);
 
-routeUser.get("/verifyOTP", userController.verifyOTP);
+routeUser.get("/verifyOTP",auth.isLogout, userController.verifyOTP);
 
-routeUser.post("/otp", userController.verifyPost);
+routeUser.post("/otp",auth.isLogout,userController.verifyPost);
 
 routeUser.get("/login", auth.isLogout, userController.loadLogin);
 
@@ -66,6 +66,12 @@ routeUser.get("/logout", auth.isLogin, userController.userLogout);
 routeUser.get('/detailshop', userController.detailShop)
 
 routeUser.post('/getcart', cartController.getCart)
+
+routeUser.post('/getwishlist', cartController.getWishlist)
+
+routeUser.get('/wishlist', cartController.wishlist)
+
+routeUser.post('/removewishlist', cartController.removeWishlist)
 
 routeUser.get('/showcart', auth.isLogin, cartController.showCart)
 
@@ -104,5 +110,15 @@ routeUser.post('/applycoupon', couponController.applyCoupon);
 routeUser.post('/removecoupon',couponController.removeCoupon);
 
 routeUser.get('/resendotp',userController.resendOtp)
+
+routeUser.get('/forgetpassword',userController.forgetPassword)
+
+routeUser.post('/forgetpassword',userController.forgetPasswordPost)
+
+routeUser.get('/resetpassword',userController.resetPassword)
+
+routeUser.post('/resetpassword',userController.resetPasswordPost)
+
+routeUser.post('/changepassword',userController.changePassword)
 
 module.exports = routeUser;

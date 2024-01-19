@@ -48,8 +48,7 @@
                                 <a data-bs-toggle="pill" href="#pills-account"><i class="fa fa-user"></i>Password</a>
                             </li>
                             <li>
-                                <a href="/logout"><i class="fa fa-sign-out"></i>
-                                    Logout</a>
+                                <a href="/logout"><i class="fa fa-sign-out"></i>Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -209,13 +208,12 @@
                                                             <td style="background: greenyellow;">Credited</td>
                                                             <% }else{ %>
                                                                 <td style="background: red;">Debited</td>
-                                                                <%}%>
-                                                                    <td>₹<%=item.amount%>
-                                                                    </td>
-
-                                                                    <%})%>
+                                                            <%}%>
+                                                                <td>₹<%=item.amount%>
+                                                                </td>
+                                                        <%})%>
                                                     </tr>
-                                                    <%}%>
+                                                <%}%>
                                         </tbody>
                                     </table>
                                 </div>
@@ -227,30 +225,28 @@
                             <div class="row" id="addrassArea">
                                 <% if (address && address.address && address.address.length> 0) { %>
                                     <% address.address.forEach((data, index)=> { %>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4 text-start">
                                             <br>
                                             <div class="card card-dashboard">
                                                 <div class="card-body">
                                                     <!-- <div class="account-address" id="address<%= index %>"> -->
-                                                    <h4 class="account-title">
-                                                        Address <%= index + 1 %>
+                                                    <h4 class="account-title text-center">
+                                                        Address <%= index + 1 %><hr>
                                                     </h4>
-                                                    <h6 class="name">
-                                                        Name: <%= data.name %>
-                                                    </h6>
                                                     <p>
+                                                        Name: <%= data.name %> <br>
                                                         Address: <%= data.address %><br>
-                                                            Landmark: <%= data.landmark %><br>
-                                                                State: <%= data.state %><br>
-                                                                    City: <%= data.city %><br>
-                                                                        Pincode: <%= data.pincode %><br>
-                                                                            Phone: <%= data.phone %><br>
-                                                                                Email: <%= data.email %><br>
+                                                        Landmark: <%= data.landmark %><br>
+                                                        State: <%= data.state %><br>
+                                                        City: <%= data.city %><br>
+                                                        Pincode: <%= data.pincode %><br>
+                                                        Phone: <%= data.phone %><br>
+                                                        Email: <%= data.email %><br>
                                                     </p>
-                                                    <a class="btn-primary btn-hover-dark"
+                                                    <a
                                                         onclick="openEditModal('<%= data._id %>', '<%= data.name %>', '<%= data.address %>', '<%= data.landmark %>', '<%= data.state %>', '<%= data.city %>', '<%= data.pincode %>', '<%= data.phone %>', '<%= data.email %>')"><i
-                                                            class="fa fa-edit"></i></a>
-                                                    <a class="btn-primary btn-hover-dark"
+                                                            class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                                    <a
                                                         onclick="deleteAddress('<%= data._id %>')"><i
                                                             class="fa fa-trash"></i></a>
                                                 </div>
@@ -261,7 +257,7 @@
                                                 <div class="col-md-12 my-account-address account-wrapper">
                                                     <p>No Addresses found</p>
                                                 </div>
-                                                <% } %>
+                                        <% } %>
                             </div>
                         </div>
 
@@ -324,7 +320,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-hover-dark">Save Change</button>
+                                    <button type="submit" class="btn btn-primary btn-hover-dark mt-4 text-center">Save Change</button>
                                 </form>
                             </div>
                         </div>
@@ -412,28 +408,29 @@
                                         <div class="col-md-12">
                                             <div class="single-form">
                                                 <h5 class="title">
-                                                    Password change
+                                                    Change password
                                                 </h5>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="password" placeholder="Current Password" />
+                                                <input type="password" id="oldPassword" placeholder="Current Password" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="password" placeholder="New Password" />
+                                                <input type="password" id="freshPassword" placeholder="New Password" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="single-form">
-                                                <input type="password" placeholder="Confirm Password" />
+                                                <input type="password" id="freshConfirmation" placeholder="Confirm Password" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="single-form">
-                                                <button class="btn btn-primary btn-hover-dark">
+                                        <div class="col-md-6  mx-auto text-center">
+                                            <div class="single-form ">
+                                                <p id="change-error" class="error-message text-center"></p>
+                                                <button onclick="validateAndSubmit()" class="btn btn-primary btn-hover-dark">
                                                     Save Change
                                                 </button>
                                             </div>
@@ -454,5 +451,69 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+
+
+
+
+
+
+    <script>
+    function validateAndSubmit() {
+    const currentPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('freshPassword').value;
+    const confirmPassword = document.getElementById('freshConfirmation').value;
+    const errorElement = document.getElementById('change-error');
+
+    errorElement.innerText = '';
+
+    if (!currentPassword) {
+        errorElement.innerText = 'Please enter your current password.';
+        return;
+    }
+
+    if (!newPassword) {
+        errorElement.innerText = 'Please enter a new password.';
+        return;
+    }
+
+    if (!confirmPassword) {
+        errorElement.innerText = 'Please confirm your new password.';
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        errorElement.innerText = 'Passwords do not match.';
+        return;
+    }
+
+    callChangePassword(currentPassword, newPassword);
+}
+    function callChangePassword(current,newPass){
+        $.ajax({
+            url:'/changepassword',
+            method:'POST',
+            data:{current,newPass},
+            success:function(data){
+                if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message
+                }).then(()=>{
+                    location.reload()
+                })
+            } else {
+                console.log('eroooooorrrrrrrrrrrrrrr');
+                document.getElementById('change-error').innerText = data.message;
+            }
+            },
+            error:function(err){
+
+            }
+        })
+    }
+    </script>
+
+    
 
     <%- include('../layouts/footer.ejs') -%>

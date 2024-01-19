@@ -410,7 +410,7 @@
         // saves the new position for iteration.
         scrollPos = document.body.getBoundingClientRect().top
     })
-
+    
     /*--
         select2
     -----------------------------------*/
@@ -704,6 +704,11 @@ function editAddress() {
 
         const formData = $(this).serialize();
         console.log("nnnnnnnnnnnnnnnnnnnn", formData);
+        const currentRoute = window.location.pathname;
+        let dynamicURL = '/profile #addrassArea';
+        if (currentRoute === '/checkout') {
+            dynamicURL = '/checkout #addrassArea';
+        }
 
         // Send the Ajax request
         $.ajax({
@@ -713,12 +718,12 @@ function editAddress() {
             success: function (data) {
                 if (data.success == true) {
                     console.log(data);
-                    $('#addrassArea').load('/profile #addrassArea')
+                    $('#addrassArea').load(dynamicURL)
                     editAddressModal.style.display = 'none';
                     $('.modal-backdrop').remove();
                     Swal.fire({
                         icon: 'success',
-                        title: 'Address Added Successfully',
+                        title: 'Address Successfully Edited',
                         text: 'Your address has been added successfully.',
                     });
 
@@ -1073,6 +1078,8 @@ function validateEditProfileForm() {
 }
 
 
+
+
     
 function copyToClipboard() {
   // Select the referral code text
@@ -1089,3 +1096,121 @@ function copyToClipboard() {
   document.getElementById("copyLink").querySelector("i").classList.replace("bi-clipboard", "bi-check-circle");
 
 }
+
+
+//add to cart
+
+
+        function addToCart(id){
+        $.ajax({
+            url:'/getcart',
+            method:'POST',
+            data:{id:id},
+            success:function(response){
+                console.log(response);
+                    if(response.success){
+                    Swal.fire({
+                    title: 'Item Added to Cart',
+                    text: 'Do you want to see cart?',
+                    icon: 'success',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                    
+                }).then((result)=>{
+                    if (result.isConfirmed) {
+                        window.location.href = '/showcart';
+                    }    
+                    
+                })
+
+                }
+                else if(response.status=='alreadyAdded'){
+                    Swal.fire({
+                    title: 'Already added',
+                    text: 'Do you want to see cart?',
+                    icon: 'info',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                
+                }).then((result)=>{
+                    if (result.isConfirmed) {
+                        window.location.href = '/showcart';
+                    }    
+                    
+                })
+
+                }
+                else if (response.failed) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Please Login",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "Login",
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "/login";
+                        }
+                    });
+                }
+                    
+            }
+    })	
+    }
+
+    //wishlist management
+
+    function addToWishlist(id) {
+        $.ajax({
+          url: '/getwishlist',
+          method: 'POST',
+          data: { id },
+          success: function (response) {
+            let heartIcon = $('#wishlist-icon i');
+            if (response.add) {
+                console.log('sucees');
+                heartIcon.addClass('blink');
+            } else if (response.remove) {
+                heartIcon.removeClass('blink');
+            }
+          },
+        });
+      }
+      
+
+      function removeWishlist(productId, userId) {
+          const data = { productId, userId };
+
+          Swal.fire({
+              title: 'Are you sure?',
+              text: 'This product will be removed',
+              icon: 'question',
+              reverseButtons: true,
+              confirmButtonText: 'Yes',
+              showCancelButton: true,
+              confirmButtonColor: '#1e6e2c',
+              cancelButtonColor: '#97a399',
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  fetch('/removewishlist', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                  })
+                      .then(response => response.json())
+                      .then(response => {
+                          if (response.success) {
+                              location.reload();
+                          }
+                      })
+                      .catch(error => console.error('Fetch error:', error));
+              }
+          });
+      }
+
+
