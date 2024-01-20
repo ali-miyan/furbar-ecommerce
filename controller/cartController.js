@@ -20,6 +20,7 @@ const wishlistModel = require('../models/wishlistModel')
 const getCart=async(req,res)=>{
     try {
       if(req.session.user_id){
+      console.log('reachedd');
       const product_id=req.body.id
       const userid=req.session.user_id
       const productData = await Product.findById(product_id)
@@ -159,7 +160,9 @@ const getCart=async(req,res)=>{
 
   const getWishlist = async (req, res) => {
     try {
+      if(req.session.user_id){
         const product_id = req.body.id;
+        console.log(product_id);
         const userId = req.session.user_id;
         const wishListProducts = await wishlistModel.findOne({ user: userId, 'product.productId': product_id });
   
@@ -168,7 +171,11 @@ const getCart=async(req,res)=>{
             { user: userId, 'product.productId': product_id },
             { $pull: { 'product': { 'productId': product_id } } }
           );
-          res.json({ remove: true, message: 'Product removed from wishlist' });
+
+          console.log('FALAWS');
+
+          res.json({ remove: true, productId: product_id});
+
         } else {
           const data = {
             productId: product_id,
@@ -179,8 +186,14 @@ const getCart=async(req,res)=>{
             { $addToSet: { product: data } },
             { upsert: true, new: true }
           );
-          res.json({ add: true, message: 'Product added to wishlist' });
+
+          console.log('truwweee');
+
+          res.json({ add: true, productId:product_id});
         }
+      }else{
+        res.json({user:true})
+      }
 
     } catch (error) {
       console.log(error.message);

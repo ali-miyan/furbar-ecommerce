@@ -1102,6 +1102,7 @@ function copyToClipboard() {
 
 
         function addToCart(id){
+            console.log('helooooooooooooooo');
         $.ajax({
             url:'/getcart',
             method:'POST',
@@ -1163,23 +1164,53 @@ function copyToClipboard() {
 
     //wishlist management
 
-    function addToWishlist(id) {
+
+function addToWishlist(id) {
+    
+
         $.ajax({
           url: '/getwishlist',
           method: 'POST',
           data: { id },
           success: function (response) {
-            let heartIcon = $('#wishlist-icon i');
             if (response.add) {
-                console.log('sucees');
-                heartIcon.addClass('blink');
+                console.log('added');
+                let productId = response.productId;
+            
+                $('#reloadWishlist_' + productId).fadeOut(300, function() {
+                    $(this).load('/shop #reloadWishlist_' + productId, function() {
+                        $(this).fadeIn(300);
+                    });
+                });
             } else if (response.remove) {
-                heartIcon.removeClass('blink');
+                console.log('removed');
+                let productId = response.productId;
+            
+                $('#reloadWishlist_' + productId).fadeOut(300, function() {
+                    $(this).load('/shop #reloadWishlist_' + productId, function() {
+                        $(this).fadeIn(300);
+                    });
+                });
+            }
+            else if(response.user){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Please Login",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Login",
+                    showCancelButton: true,
+                    cancelButtonColor: "#d33",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.href = "/login";
+                    }
+                });
             }
           },
         });
-      }
-      
+        
+        $('#wishlist-icon-i').toggleClass('fa-solid fa-heart', localStorage.getItem('wishlistState') !== 'true');
+}
 
       function removeWishlist(productId, userId) {
           const data = { productId, userId };

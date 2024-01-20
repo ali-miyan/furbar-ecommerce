@@ -23,6 +23,7 @@ const crypto = require('crypto')
 const { generateKey } = require('crypto');
 const { error } = require('console');
 const { truncate } = require('fs');
+const wishlistModel = require('../models/wishlistModel');
 
 
 
@@ -102,10 +103,13 @@ const loadShop = async (req, res) => {
             default:
                 product = product
                 break
-        }
+        }   
+
+    const wishData = await wishlistModel.findOne({user:req.session.user_id})
+    const wishlistData = wishData ? wishData.product.map((val) => val.productId) : [];
 
 
-        res.render('shop', { product, category, selectedCategory, totalPages, page, pageSize, sort });
+        res.render('shop', { product, category, selectedCategory, totalPages, page, pageSize, sort,wishlistData });
     } catch (error) {
         console.log(error);
     }

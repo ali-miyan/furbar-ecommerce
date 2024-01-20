@@ -65,13 +65,13 @@ routeUser.get("/logout", auth.isLogin, userController.userLogout);
 
 routeUser.get('/detailshop', userController.detailShop)
 
-routeUser.post('/getcart', cartController.getCart)
-
 routeUser.post('/getwishlist', cartController.getWishlist)
 
-routeUser.get('/wishlist', cartController.wishlist)
+routeUser.get('/wishlist', auth.isLogin, cartController.wishlist)
 
 routeUser.post('/removewishlist', cartController.removeWishlist)
+
+routeUser.post('/getcart', cartController.getCart)
 
 routeUser.get('/showcart', auth.isLogin, cartController.showCart)
 

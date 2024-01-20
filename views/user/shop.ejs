@@ -46,13 +46,13 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="grid">
                                 <!-- Shop Product Wrapper Start -->
-                                <div class="shop-product-wrapper" id="reloadDiv">
+                                <div class="shop-product-wrapper" >
                                     <div class="row">
                                         <p class="text-center mt-5"><%= typeof totalPages === 'string' ? totalPages : '' %></p>
                                         <%console.log(totalPages,'ssss')%>
                                         <% product.forEach(product=> { %>
                                             <% if (!product.is_blocked) { %>
-                                                <div class="col-lg-4 col-sm-6">
+                                                <div class="col-lg-4 col-sm-6" >
                                                     <!-- Single Product Start -->
                                                     <div class="single-product">
                                                         <a href="/detailshop?id=<%=product._id%>"><img 
@@ -78,41 +78,30 @@
                                                                 <%}%>
                                                             </div>
                                                         </div>
-                                                        <ul class="product-meta">
-                                                            <li>
-                                                                <a class="action" onclick="addToCart('<%= product._id%>')" ><i
-                                                                class="pe-7s-shopbag"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a id="wishlist-icon" class="action" onclick="addToWishlist('<%= product._id %>')">
-                                                                  <i class="pe-7s-like"></i>
-                                                                </a>
-                                                              </li>
-                                                        </ul>
+                                                        <div id="reloadWishlist_<%= product._id %>">
+                                                            <ul class="product-meta">
+                                                                <li>
+                                                                    <a class="action" style="color: #000000;" onclick="addToCart('<%= product._id %>')">
+                                                                        <i class="pe-7s-shopbag"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="action" onclick="addToWishlist('<%= product._id %>')">
+                                                                        <i id="wishlist-icon_<%= product._id %>" class=" <%= wishlistData.includes(product._id.toString()) ? 'fa-solid' : 'fa-regular' %> fa-heart"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
-
                                                     <!-- Single Product End -->
-                                                    <style>
-                                                        .blink {
-                                                          animation: blink-animation 1s steps(5, start) infinite;
-                                                        }
-                                                      
-                                                        @keyframes blink-animation {
-                                                          to {
-                                                            visibility: hidden;
-                                                          }
-                                                        }
-                                                      </style>
                                                 </div>
-                                                <%}%>
-                                            <% }); %>
+                                            <% } %>
+                                        <% }); %>
                                     </div>
                                 </div>
                                 <!-- Shop Product Wrapper End -->
                             </div>
-
                         </div>
-
                         <!-- Page pagination Start -->
                         <div class="page-pagination">
                             <!-- Assuming you have a variable hasNextPage from your backend -->
@@ -253,5 +242,10 @@ function updateSort() {
 
 </script>
 
+
+
+<script>
+    
+</script>
 
     <%- include('../layouts/footer.ejs') -%>
