@@ -45,7 +45,7 @@
                                     <div class="product-card d-flex">
                                         <div class="product-image">
                                             <a href="/detailshop?id=<%= product.productId._id %>">
-                                                <img src="sharpimages/<%= product.productId.images.image1 %>" alt=""
+                                                <img src="multerimages/<%= product.productId.images.image1 %>" alt=""
                                                     class="img-thumbnail" style="max-height: 250px; max-width: 230px;">
                                             </a>
                                         </div>
@@ -109,7 +109,7 @@
                                             <div class="cancelled-product-image ">
                                                 <a
                                                     href="/detailshop?id=<%= cancelledProduct.productDetails._id %>">
-                                                    <img src="sharpimages/<%= cancelledProduct.productDetails.images.image1 %>"
+                                                    <img src="multerimages/<%= cancelledProduct.productDetails.images.image1 %>"
                                                         alt="" class="img-thumbnail"
                                                         style="max-height: 250px; max-width: 150px;">
                                                 </a>
@@ -143,6 +143,7 @@
                             <% }); %>
                         <% } %>
                         <br><br>
+                        <%console.log(orderData,'fsssssssssssssss')%>
                         <% if (orderData.returnedProduct && orderData.returnedProduct.length > 0) { %>
                             <div class="container mt-5">
                                 <h3 class="mb-4">Returned Products</h3>
@@ -153,7 +154,7 @@
                                                 <div class="cancelled-product-image ">
                                                     <a
                                                         href="/detailshop?id=<%= returnedProduct.productDetails._id %>">
-                                                        <img src="sharpimages/<%= returnedProduct.productDetails.images.image1 %>"
+                                                        <img src="multerimages/<%= returnedProduct.productDetails.images.image1 %>"
                                                             alt="" class="img-thumbnail"
                                                             style="max-height: 250px; max-width: 150px;">
                                                     </a>

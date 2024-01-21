@@ -25,7 +25,7 @@ routeAdmin.patch('/blockusers/:id',adminController.blockUser)
 
 routeAdmin.get("/users",auth.isAdminLogin,adminController.loadUser);
 
-routeAdmin.get("/dashboard",auth.isAdminLogin,adminController.loadDashboard);
+routeAdmin.get("/dashboard",adminController.loadDashboard);
 
 routeAdmin.post("/",auth.isAdminLogout,adminController.loadSignin);
 

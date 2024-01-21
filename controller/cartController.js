@@ -202,7 +202,7 @@ const getCart=async(req,res)=>{
 
   const wishlist = async(req,res)=>{
     try {
-      const data = await wishlistModel.findOne({}).populate('product.productId');
+      const data = await wishlistModel.findOne({user:req.session.user_id}).populate('product.productId');
       res.render('wishlist',{data})
     } catch (error) {
       console.log(error);

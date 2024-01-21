@@ -55,7 +55,7 @@
                         <i class="icon material-icons md-store"></i>
                         <span class="text">products</span>
                     </a>
-                    
+
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/orders">
@@ -75,9 +75,9 @@
                         <span class="text">offer</span>
                     </a>
                 </li>
-                
-            <br />
-            <br />
+
+                <br />
+                <br />
         </nav>
     </aside>
     <main class="main-wrap">
@@ -154,42 +154,34 @@
         <section class="content-main">
             <div class="container-fluid">
                 <div class="card mt-4">
-                    
+
                     <div class="card-body">
                         <div class="container">
                             <h3>Add Category</h3>
                         </div>
                         <!-- Category Form -->
-                        <form action="/admin/addcategory" method="post">
+                        <form action="/admin/addcategory" id="categoryForm" method="post">
                             <% if (typeof message !=='undefined' ) { %>
                                 <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
                                     <i class="bi-exclamation-octagon-fill"></i>
                                     <strong class="mx-auto"><%- message %></strong>
                                 </div>
-                                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                                <script>
-                                    // Add a script to hide the alert after 5 seconds
-                                    $(document).ready(function () {
-                                        setTimeout(function () {
-                                            $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                        }, 3000); // 3000 milliseconds = 3 seconds
-                                    });
-                                </script>
                                 <% } %>
                                     <!-- Category Name -->
                                     <div class="form-group">
                                         <label for="name">Name:</label>
-                                        <input type="text" class="form-control" id="categoryName" name="name" required>
+                                        <input type="text" class="form-control" id="categoryName" name="name" >
+                                        <div class="error-message" id="nameError"></div>
                                     </div>
 
                                     <!-- Category Description -->
                                     <div class="form-group">
                                         <label for="description">Description:</label>
-                                        <textarea class="form-control" id="categoryDescription" name="description"
-                                            rows="4" required></textarea>
+                                        <textarea class="form-control" id="categoryDescription" name="description" rows="4" ></textarea>
+                                        <div class="error-message" id="descriptionError"></div>
                                     </div>
                                     <div class="container">
-                                        <button type="submit" class="btn btn-primary">Add Category</button>
+                                        <button type="button"  onclick="validateCategoryForm()" class="btn btn-primary">Add Category</button>
                                         <a href="/admin/category" type="submit" class="btn btn-primary">Back</a>
                                     </div>
                         </form>
@@ -222,6 +214,7 @@
     <script src="/assets/js/vendors/chart.js"></script>
     <!-- Main Script -->
     <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="/assets/js/adminValidation.js" type="text/javascript"></script>
     <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
      
 </body>

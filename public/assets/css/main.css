@@ -4346,6 +4346,9 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
   border-color: #ffffff;
 }
   
+.error-message {
+  color: red;
+}
 
 
 /*# sourceMappingURL=main.css.map */

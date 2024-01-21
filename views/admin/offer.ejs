@@ -155,7 +155,6 @@
                 <div>
                     <div class="container">
                     <h2>Offer</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                     <% if (typeof message !=='undefined' ) { %>
                         <div class="alert alert-success alert-dismissible fade show" id="errorAlert">
@@ -236,48 +235,11 @@
                 <!-- Main Script -->
                 <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
                 <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
+                <script src="/assets/js/adminFetch.js" type="text/javascript"></script>
 
                 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-                <script>
-                    function deleteOffer(id) {
-                        console.log(id);
-                
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'This Offer will be deleted',
-                            icon: 'question',
-                            reverseButtons: true,
-                            showCancelButton: true,
-                            confirmButtonText: 'Yes',
-                            confirmButtonColor: '#1e6e2c',
-                            cancelButtonColor: '#97a399',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    url: `/admin/deleteoffer`,
-                                    method: 'PATCH',
-                                    data: { id: id },
-                                    success: function(response) {
-                                        if (response.success) {
-                                            Swal.fire('Success succes', 'successfully deleted offer.', 'success');
-                                            $("#reloadDiv").load("/showcart #reloadDiv");
-                                        } else {
-                                            Swal.fire('Error', 'Error deleting offer.', 'error');
-                                        }
-                                    },
-                                    error: function(error) {
-                                        console.log(error);
-                                    }
-                                });
-                            } else {
-                                console.log('cancelled');
-                            }
-                        });
-                    }
-                </script>
 
 
 </body>

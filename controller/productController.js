@@ -64,22 +64,21 @@ const addProductsPost = async (req, res) => {
       files && files.image4 ? files.image4[0].filename : null,
     ];
 
-    for (let i = 0; i < img.length; i++) {
-      if (img[i]) {
-        await sharp(`public/multerimages/${img[i]}`)
-          .resize(500, 500)
-          .toFile(`public/sharpimages/${img[i]}`);
-      }
-    }
+    // for (let i = 0; i < img.length; i++) {
+    //   if (img[i]) {
+    //     await sharp(`public/multerimages/${img[i]}`)
+    //       .resize(500, 500)
+    //       .toFile(`public/sharpimages/${img[i]}`);
+    //   }
+    // }
 
-    if (details.quantity > 0 && details.price > 0) {
       const product = new Product({
         name: details.name,
         quantity: details.quantity,
         categoryId: details.category,
         price: details.price,
         description: details.description,
-        images: {
+        images: { 
           image1: img[0],
           image2: img[1],
           image3: img[2],
@@ -89,7 +88,7 @@ const addProductsPost = async (req, res) => {
 
       const result = await product.save();
       res.redirect('/admin/products');
-    }
+    
   } catch (error) {
     console.log(error.message);
   }
@@ -99,7 +98,7 @@ const editProducts = async (req, res) => {
   try {
     const id = req.query.id;
     const product = await Product.findOne({ _id: id }).populate('categoryId');
-    const categories = await categoryModel.find({ is_list: false })
+    const categories = await categoryModel.find({ is_blocked: false })
 
     res.render('editproducts', { data: product, data1: categories });
   } catch (error) {
@@ -122,15 +121,14 @@ const editProductsPost = async (req, res) => {
       files?.image4 ? (files.image4[0]?.filename || existingData.images.image4) : existingData.images.image4,
     ];
 
-    for (let i = 0; i < img.length; i++) {
-      if (img[i]) {
-        await sharp(`public/multerimages/${img[i]}`)
-          .resize(500, 500)
-          .toFile(`public/sharpimages/${img[i]}`);
-      }
-    }
+    // for (let i = 0; i < img.length; i++) {
+    //   if (img[i]) {
+    //     await sharp(`public/multerimages/${img[i]}`)
+    //       .resize(500, 500)
+    //       .toFile(`public/sharpimages/${img[i]}`);
+    //   }
+    // }
 
-    if (details.quantity > 0 && details.price > 0) {
       const product = {
         name: details.name,
         quantity: details.quantity,
@@ -147,7 +145,7 @@ const editProductsPost = async (req, res) => {
 
       const result = await Product.findOneAndUpdate({ _id: id }, product, { new: true });
       res.redirect('/admin/products');
-    }
+
   } catch (error) {
     console.log(error.message);
   }

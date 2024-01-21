@@ -55,7 +55,7 @@
                         <i class="icon material-icons md-store"></i>
                         <span class="text">products</span>
                     </a>
-                    
+
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/orders">
@@ -75,9 +75,9 @@
                         <span class="text">offer</span>
                     </a>
                 </li>
-                
-            <br />
-            <br />
+
+                <br />
+                <br />
         </nav>
     </aside>
     <main class="main-wrap">
@@ -150,59 +150,52 @@
                 </ul>
             </div>
         </header>
-            <section class="content-main">
+        <section class="content-main">
 
-            <div class="card mb-4">
-                
+
             <section class="content-main py-4">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="container">
-                            <h2>Add New Coupon</h2>
-                            <% if (typeof message !=='undefined' ) { %>
-                                <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
-                                    <i class="bi-exclamation-octagon-fill"></i>
-                                    <strong class="mx-auto"><%= message %></strong>
-                                </div>
-                                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                                <script>
-                                    // Add a script to hide the alert after 5 seconds
-                                    $(document).ready(function () {
-                                        setTimeout(function () {
-                                            $("#errorAlert").fadeOut(500); // Fade out over 500 milliseconds
-                                        }, 3000); // 3000 milliseconds = 3 seconds
-                                    });
-                                </script>
-                                <% } %>
-                        </div>
+                        <h2 class="text-center">Add New Coupon</h2>
                         <div class="col-12 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="" method="post" >
+                                    <form action="" method="post" id="couponForm"
+                                        onsubmit="return validateCouponForm()">
                                         <div class="form-group">
-                                            <label for="product_title">Coupon name</label>
-                                            <input type="text" class="form-control" id="name" name="couponame" placeholder="Type here" required>
+                                            <label for="name">Coupon name</label>
+                                            <input type="text" class="form-control" id="name" name="couponame"
+                                                placeholder="Type here">
+                                            <div id="nameError" class="error-message"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="quantity">Coupon code</label>
-                                            <input type="text" class="form-control" id="code" name="couponcode" placeholder="Type here" required>
+                                            <label for="code">Coupon code</label>
+                                            <input type="text" class="form-control" id="code" name="couponcode"
+                                                placeholder="Type here">
+                                            <div id="codeError" class="error-message"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="quantity">Discount Amount</label>
-                                            <input type="number" class="form-control" id="discount" name="discount" placeholder="Type here" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Activation Date</label>
-                                            <input type="date" class="form-control" id="activationdate" name="activationdate" placeholder="Type here" required>
+                                            <label for="discount">Discount Amount</label>
+                                            <input type="number" class="form-control" id="discount" name="discount"
+                                                placeholder="Type here">
+                                            <div id="discountError" class="error-message"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Expire Date</label>
-                                            <input type="date" class="form-control" id="expirydate" name="expirydate" placeholder="Type here" required>
+                                            <label for="activationdate">Activation Date</label>
+                                            <input type="date" class="form-control" id="activationdate"
+                                                name="activationdate">
+                                            <div id="activationdateError" class="error-message"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Criteria Amount</label>
-                                            <input type="number" class="form-control"  name="criteriamount" placeholder="Type here" required>
+                                            <label for="expirydate">Expire Date</label>
+                                            <input type="date" class="form-control" id="expirydate" name="expirydate">
+                                            <div id="expirydateError" class="error-message"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="criteriamount">Criteria Amount</label>
+                                            <input type="number" class="form-control" id="criteriamount"
+                                                name="criteriamount" placeholder="Type here">
+                                            <div id="criteriamountError" class="error-message"></div>
                                         </div>
                                         <div class="container">
                                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -214,7 +207,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">
                     <div class="col-sm-6">
@@ -228,15 +221,18 @@
                     </div>
                 </div>
             </footer>
-        </main>
-        <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
-        <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
-        <script src="/assets/js/vendors/select2.min.js"></script>
-        <script src="/assets/js/vendors/perfect-scrollbar.js"></script>
-        <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
-        <script src="/assets/js/vendors/chart.js"></script>
-        <!-- Main Script -->
-        <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
-        <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
-    </body>
+    </main>
+    <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/vendors/select2.min.js"></script>
+    <script src="/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/assets/js/adminValidation.js" type="text/javascript"></script>
+    <script src="/assets/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
+     
+</body>
+
 </html>

@@ -17,7 +17,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId
     },
     discountedPrice:Number
     ,
-    is_list:{
+    is_blocked:{
         type:Boolean,
         default:false
     }

@@ -5,35 +5,71 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
 const adminController = require("../controller/adminConroller");
-const orderModel=require('../models/orderModal');
+const orderModel = require('../models/orderModal');
 const offerModel = require("../models/offerModel");
 const Product = require("../models/productModel");
 
 
-const adminLogin=async(req,res)=>{
-    try {
-        res.render('adminlogin')
+const adminLogin = async (req, res) => {
+  try {
+    res.render('adminlogin')
 
-    } catch (error) {
-        console.log(error.message);
-    }
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 const loadDashboard = async (req, res) => {
   try {
-    res.render("adminhome");
+    const totalOrders = await orderModel.countDocuments();
+    const totalProducts = await Product.countDocuments();
+    // const totalCategory = await categoryModel.countDocuments();
+
+    const revenue = await orderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          revenue: { $sum: "$subtotal" }
+        }
+      }
+    ]);
+
+    const currentMonth = new Date();
+    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+    const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    endOfMonth.setMilliseconds(endOfMonth.getMilliseconds() - 1);
+    const currentMonthName = (new Date()).toLocaleString('default', { month: 'long' });
+
+    const monthlyRevenue = await orderModel.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: startOfMonth,
+            $lt: endOfMonth
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          monthlyRevenue: { $sum: "$subtotal" }
+        }
+      }
+    ]);
+
+    res.render("adminhome", { totalOrders, totalProducts, revenue, monthlyRevenue,currentMonthName });
   } catch (error) {
     console.log(error);
   }
 };
 
-const loadUser=async(req,res)=>{
-    try {
-        const userData=await User.find({})
-        res.render('users',{users:userData})
-    } catch (error) {
-        console.log(error);
-    }
+const loadUser = async (req, res) => {
+  try {
+    const userData = await User.find({})
+    res.render('users', { users: userData })
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const loadSignin = async (req, res) => {
@@ -46,7 +82,7 @@ const loadSignin = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, validAdmin.password);
       console.log(passwordMatch);
       if (passwordMatch) {
-        req.session.admin_id=validAdmin._id;
+        req.session.admin_id = validAdmin._id;
         res.redirect("/admin/dashboard");
       } else {
         res.render("adminlogin", { message: "incorrect password" });
@@ -77,19 +113,19 @@ const blockUser = async (req, res) => {
   }
 };
 //load category
-const loadCategory=async(req,res)=>{
+const loadCategory = async (req, res) => {
   try {
-    const message=req.query.message
+    const message = req.query.message
     const offer = await offerModel.find({})
-    const users=await categoryModel.find({}).populate('offer')
-      res.render('category',{users,message,offer})
+    const category = await categoryModel.find({}).populate('offer')
+    res.render('category', { category, message, offer })
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 
 //add category
-const addCategory=(req,res)=>{
+const addCategory = (req, res) => {
   try {
     res.render('addcategory')
   } catch (error) {
@@ -98,132 +134,133 @@ const addCategory=(req,res)=>{
 }
 
 //add category post
-const addCategoryPost=async(req,res)=>{
+const addCategoryPost = async (req, res) => {
   try {
-  const name=req.body.name.trim();
-  const description=req.body.description.trim();
-  const validData=await categoryModel.findOne({name:name})
+    const name = req.body.name.trim();
+    const description = req.body.description.trim();
+    const validData = await categoryModel.findOne({ name: name })
 
-  if(validData){
-      res.render('addcategory',{message:'you cant add category with same name'})
-  }else{
+    if (validData) {
+      res.render('addcategory', { message: 'you cant add category with same name' })
+    } else {
 
-  const newUser = new categoryModel({
-      name: name,
-      description:description,
-  });
+      const newUser = new categoryModel({
+        name: name,
+        description: description,
+      });
 
-  await newUser.save()
-  res.redirect('/admin/category')
-}
+      await newUser.save()
+      res.redirect('/admin/category')
+    }
 
-  } catch (error) {    
-  console.log(error.message);
-  } 
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 //edit categoty 
-const editCategory=async(req,res)=>{
+const editCategory = async (req, res) => {
   try {
 
     const id = req.query.id;
     const userData = await categoryModel.findById({ _id: id });
-        if (userData) {
-            res.render('editcategory', { data: userData });
-        }
+    if (userData) {
+      res.render('editcategory', { data: userData });
+    }
   } catch (error) {
     console.log(error.message);
   }
 }
 
 //block category(patch)
-const blockCategory=async (req, res) => {
+const blockCategory = async (req, res) => {
   try {
-    const user = req.params.id; 
+    const user = req.params.id;
+    console.log(user, 'user');
     const userValue = await categoryModel.findOne({ _id: user });
-    if (userValue.is_list) {
-      await categoryModel.updateOne({ _id: user }, { $set: { is_list: false } });
+    console.log(userValue);
+    if (userValue.is_blocked) {
+      await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: false } });
     } else {
-      await categoryModel.updateOne({ _id: user }, { $set: { is_list: true } });
+      await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: true } });
     }
-    res.json({ block: true });
+    console.log(userValue);
+    res.json({ blocked: true });
   } catch (error) {
     console.log(error.message);
   }
 }
 //edit category post
-const editCategoryPost=async(req,res)=>{
+const editCategoryPost = async (req, res) => {
   try {
-
     const existingCategory = await categoryModel.findOne({ name: req.body.name });
-    
-    console.log(existingCategory.name);
-    console.log(req.body.name);
 
     if (existingCategory && existingCategory.name === req.body.name) {
-       res.render('editcategory', { message: 'Category name already exists',data:existingCategory });
+      return res.render('editcategory', { message: 'Category name already exists', data: existingCategory });
     }
 
     await categoryModel.findByIdAndUpdate(
-        { _id: req.body.id },
-        { $set: { name: req.body.name, description: req.body.description } }
+      { _id: req.body.id },
+      { $set: { name: req.body.name, description: req.body.description } }
     );
-    res.redirect(`/admin/category?message=${'successfully added'}`)
-}  catch (error) {
+
+    return res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+
+const showOrders = async (req, res) => {
+  try {
+    const orderData = await orderModel.find({})
+    res.render('order', { orderData })
+  } catch (error) {
     console.log(error.message);
   }
 }
 
-const showOrders=async(req,res)=>{
+
+const updateStatus = async (req, res) => {
   try {
-      const orderData=await orderModel.find({})
-      res.render('order',{orderData})
+    console.log("helooq");
+    const { newStatus, productId } = req.body;
+    console.log(req.body, "body");
+    console.log(productId, 'stat1');
+    console.log(newStatus, 'stat');
+
+    const updatedOrder = await orderModel.findOneAndUpdate(
+      {
+        'products._id': productId
+      },
+      {
+        $set: {
+          'products.$.productStatus': newStatus
+        }
+      },
+      { new: true }
+    );
+
+
+    res.json({ success: true })
+
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 
 
-const updateStatus = async(req,res)=>{
+const detailOrder = async (req, res) => {
   try {
-      console.log("helooq");
-      const {newStatus,productId} = req.body;
-      console.log(req.body,"body");
-      console.log(productId,'stat1');
-      console.log(newStatus,'stat');
-
-      const updatedOrder = await orderModel.findOneAndUpdate(
-          { 
-              'products._id': productId
-          },
-          {
-              $set: {
-                  'products.$.productStatus': newStatus
-              }
-          },
-          { new: true }
-      );
-
-
-      res.json({success:true})
+    const id = req.query.id
+    const orderData = await orderModel.findById(id).populate('products.productId')
+    const address = orderData.delivery_address
+    const cancelled = await orderData.cancelledProduct
+    const returned = await orderData.returnedProduct
+    res.render('showorder', { address, orderData, cancelled, returned })
 
   } catch (error) {
-      console.log(error.message);
-  }
-}
-
-
-const detailOrder = async(req,res)=>{
-  try {
-      const id=req.query.id
-      const orderData=await orderModel.findById(id).populate('products.productId')
-      const address=orderData.delivery_address
-      const cancelled=await orderData.cancelledProduct
-      const returned = await orderData.returnedProduct
-      res.render('showorder',{address,orderData,cancelled,returned})
-
-  } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 

@@ -152,19 +152,21 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="container">
-                                <h2 class="content-title">edit Product</h2>
+                                <h2 class="content-title">edit Product</h2>     
                         </div>
                         <div class="col-12 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="/admin/editproducts?id=<%=data._id%>" method="post" enctype="multipart/form-data">
+                                    <form action="/admin/editproducts?id=<%=data._id%>" id="editProductForm" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="product_title">Product title</label>
-                                            <input type="text" value="<%= data.name%>" class="form-control" id="product_title" name="name" placeholder="Type here" required>
+                                            <input type="text" value="<%= data.name%>" class="form-control" id="product_title" name="name" placeholder="Type here" >
+                                            <div class="error-message text-center" id="productTitleError"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="quantity">Quantity</label>
-                                            <input type="number" class="form-control" value="<%= data.quantity%>" id="quantity" name="quantity" placeholder="Type here" required>
+                                            <input type="number" class="form-control" value="<%= data.quantity%>" id="quantity" name="quantity" placeholder="Type here">
+                                            <div class="error-message text-center" id="quantityError"></div>
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
@@ -177,31 +179,33 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input type="text" class="form-control" value="<%= data.price%>" name="price" placeholder="Type here" required>
+                                            <input type="text" class="form-control" value="<%= data.price%>" name="price" placeholder="Type here" >
+                                            <div class="error-message text-center" id="priceError"></div>
                                         </div>
                                         <div class="form-group">
                                             <label>Description</label>
-                                            <input class="form-control" rows="4" name="description" placeholder="Type here" value="<%= data.description%>" required>
+                                            <input class="form-control" rows="4" name="description" placeholder="Type here" value="<%= data.description%>" >
+                                            <div class="error-message text-center" id="descriptionError"></div>
                                         </div>
                                         <div class="row d-flex justify-content-center ">
                                             <div class="row d-flex justify-content-between ">
                                                 <div class="col-lg-3 col-md-6 rounded-image-preview">
                                                     <label for="imageInput1" class="image-label">Image 1    
-                                                        <img src="/sharpimages/<%=data.images.image1 %>" style="width: 50px;" alt="">
+                                                        <img src="/multerimages/<%=data.images.image1 %>" style="width: 50px;" alt="">
                                                     </label>
                                                     <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" >
                                                 </div>
 
                                                 <div class="col-lg-3 col-md-6 rounded-image-preview">
                                                     <label for="imageInput2" class="image-label">Image 2
-                                                        <img src="/sharpimages/<%=data.images.image2 %>" style="width: 50px;" alt="">
+                                                        <img src="/multerimages/<%=data.images.image2 %>" style="width: 50px;" alt="">
                                                     </label>
                                                     <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" >
                                                 </div>
             
                                                 <div class="col-lg-3 col-md-6 rounded-image-preview">
                                                     <label for="imageInput3" class="image-label">Image 3
-                                                        <img src="/sharpimages/<%=data.images.image3 %>" style="width: 50px;" alt="">
+                                                        <img src="/multerimages/<%=data.images.image3 %>" style="width: 50px;" alt="">
                                                     </label>
                                                     <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" >
                                                 </div>
@@ -209,12 +213,13 @@
                                                 <div class="col-lg-3 col-md-6 rounded-image-preview">
                                                     <label for="imageInput4" class="image-label">Image 4
                                                         
-                                                        <img src="/sharpimages/<%=data.images.image4 %>" style="width: 50px;" alt="">
+                                                        <img src="/multerimages/<%=data.images.image4 %>" style="width: 50px;" alt="">
                                                     </label>
                                                     <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput" >
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="error-message text-center mt-4" id="imageError"></div>
                                         <div class="container">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
@@ -246,6 +251,8 @@
         <script src="/assets/js/vendors/perfect-scrollbar.js"></script>
         <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
         <script src="/assets/js/vendors/chart.js"></script>
+        <script src="/assets/js/adminValidation.js" type="text/javascript"></script>
+
         <!-- Main Script -->
         <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
