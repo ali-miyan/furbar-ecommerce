@@ -696,10 +696,8 @@ closeEditModalButton.addEventListener('click', function () {
 
 function editAddress() {
     const formData = $('#editForm').serialize();
-
-    // Event listener to submit the Edit Address form via Ajax
     $('#editForm').submit(function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+        event.preventDefault(); 
         console.log("hiiiii");
 
         const formData = $(this).serialize();
@@ -710,10 +708,9 @@ function editAddress() {
             dynamicURL = '/checkout #addrassArea';
         }
 
-        // Send the Ajax request
         $.ajax({
             type: 'POST',
-            url: '/editaddress', // Update with your server endpoint
+            url: '/editaddress', 
             data: formData,
             success: function (data) {
                 if (data.success == true) {
@@ -922,8 +919,10 @@ function hideError(errorTag) {
 }
 
 
-
-
+var loader = document.getElementById('preloader');
+window.addEventListener("load",function(){
+    loader.style.display = "none"; 
+})
 
 
 
@@ -1141,7 +1140,17 @@ function copyToClipboard() {
                     }    
                     
                 })
-
+                }
+                else if(response.stock){
+                    Swal.fire({
+                    title: 'Out of Stock',
+                    text: 'come again later',
+                    icon: 'error',
+                    confirmButtonText: 'ok',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                
+                })
                 }
                 else if (response.failed) {
                     Swal.fire({

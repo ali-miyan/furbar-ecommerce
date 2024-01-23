@@ -24,6 +24,7 @@ const offer = async (req,res)=>{
         res.render('offer',{offerData})
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 const addOffer = async (req,res)=>{
@@ -31,6 +32,7 @@ const addOffer = async (req,res)=>{
         res.render('addoffer')
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 
@@ -49,6 +51,7 @@ const addOfferPost = async (req,res)=>{
 
     } catch (error) {       
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 
@@ -61,6 +64,7 @@ const deleteOffer = async (req,res) =>{
         res.json({ success: true });
       } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
       }
 }
 
@@ -76,6 +80,7 @@ const applyOffer = async(req,res)=>{
         res.json({success:true})
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -95,6 +100,7 @@ const removeOffer = async(req,res)=>{
         res.json({success:true})
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -112,6 +118,7 @@ const applyCategoryOffer = async(req,res)=>{
         res.json({success:true})
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -130,6 +137,7 @@ const removeCategoryOffer = async(req,res)=>{
         res.json({success:true})
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 

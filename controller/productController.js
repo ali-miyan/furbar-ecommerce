@@ -39,7 +39,8 @@ const getProduct=async(req,res)=>{
 
       res.render('products',{products,offer})
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -48,7 +49,8 @@ const addProducts = async (req, res) => {
     const datas = await categoryModel.find();
     res.render('addproducts', { datas });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -90,7 +92,8 @@ const addProductsPost = async (req, res) => {
       res.redirect('/admin/products');
     
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -102,7 +105,8 @@ const editProducts = async (req, res) => {
 
     res.render('editproducts', { data: product, data1: categories });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -147,7 +151,8 @@ const editProductsPost = async (req, res) => {
       res.redirect('/admin/products');
 
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -163,7 +168,8 @@ const blockProducts=async(req,res)=>{
       }
       res.json({ block: true });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      res.status(500).render('500');
     }
   }
 

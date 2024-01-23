@@ -42,7 +42,7 @@ const applyCoupon = async (req, res) => {
           }
     } catch (error) {
       console.error(error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).render('500');
     }
   }
 
@@ -58,7 +58,7 @@ const applyCoupon = async (req, res) => {
       res.json({success:true})  
     } catch (error) {
       console.error(error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).render('500');
     }
   }
 
@@ -69,6 +69,7 @@ const applyCoupon = async (req, res) => {
       
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 
@@ -77,6 +78,7 @@ const addCoupon = async(req,res)=>{
       res.render("addcoupon")
   } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
   }
 }
 
@@ -103,6 +105,7 @@ const addCouponPost = async (req,res)=>{
      
   } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
   }
 }
 
@@ -116,6 +119,7 @@ const deleteCoupon = async(req,res)=>{
     res.json({ success: true });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 

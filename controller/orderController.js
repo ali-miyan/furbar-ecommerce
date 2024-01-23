@@ -48,6 +48,7 @@ const checkout = async (req, res) => {
 
   } catch (error) {
       console.log(error);
+      res.status(500).render('500');
   }
 }
 
@@ -60,31 +61,43 @@ const checkoutPost = async (req, res) => {
       let addressObject;
       const selectedAddress = req.body.selectedAddress;
       const paymentMethod = req.body.payment;
-      const cartData = await cartModel.findOne({ user: userId });
+      const cartData = await cartModel.findOne({ user: userId }).populate('couponDiscount');
 
       let status=paymentMethod=="Cash on delivery"?"placed":"pending"
       const orderItems = [];
 
       for (const product of cartData.product) {
         const { productId, quantity, price } = product;
+
+
       
         for (let i = 0; i < quantity; i++) {
           const item = {
             productId,
             quantity: 1,
-            price,
-            totalPrice: price,
+            price:price,
+            totalPrice:price,
             productStatus: status,
           };
+
+          if (cartData.couponDiscount) {
+            const discountPerItem = cartData.couponDiscount.discountAmount / cartData.product.length;
+            item.totalPrice = price - discountPerItem;
+          } else {
+            item.totalPrice = price;
+          }
+          
           orderItems.push(item);
         }
-      }      
+      }
+
 
       const total = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);
-      const totalPrice = total + cartData.shippingAmount
+      let totalPrice = total + cartData.shippingAmount
+      console.log(totalPrice,'totallllllllllll');
+
       console.log(totalPrice,"totalprice");
       console.log("statuesssssssss",);
-  
         if (selectedAddress === undefined || selectedAddress === null) {
           const { name, address, landmark, state, city, pincode, phone, email } = req.body;
           const newAddress = { name, address, landmark, state, city, pincode, phone, email };
@@ -159,23 +172,22 @@ const checkoutPost = async (req, res) => {
             console.log(err);
           }
           console.log("errorrr",order);
-          res.json({success:false, order });
+          res.json({success:false, order,totalPrice });
         });
       }
       // res.redirect(`/successpage?id=${orderId}`);
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+      console.log(error);
+      res.status(500).render('500');
     }
   };
 
 
   const verifypayment=async(req,res)=>{
     try {
-
       const id = req.session.user_id;
       const Data = req.body
-      console.log(Data);
+      console.log(Data,'razorpayyyyyyyy');
       const cartData = await cartModel.findOne({ user: id });
   
       const hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
@@ -214,7 +226,8 @@ const checkoutPost = async (req, res) => {
       console.log("iddddddddddd"+orderId);
       res.json({orderId, success: true });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      res.status(500).render('500');
     }
   }
 
@@ -225,7 +238,8 @@ const checkoutPost = async (req, res) => {
       const orderData = await orderModel.findOne({ _id: orderID })
       res.render('successpage', { orderData })
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      res.status(500).render('500');
     }
   }
 
@@ -237,10 +251,15 @@ const checkoutPost = async (req, res) => {
         const id = req.body.id
         const returnReason = req.body.returnReason;
         const productDetails = await Product.findById(productId).populate('categoryId');
+        const updatedOrders = await orderModel.findById(orderId)
+        const product = updatedOrders.products.find((product) => product.productId.toString() === productId);
 
-            
+        const walletAmount = product.totalPrice
+            const data = {
+              amount:  walletAmount,
+              date: Date.now(),
+            }
 
-        
         const orderData = await orderModel.findOneAndUpdate(
           { _id: orderId, 'products._id': id },
           {
@@ -261,29 +280,20 @@ const checkoutPost = async (req, res) => {
         console.log("dtaaaaaa", orderData);
 
         if (orderData.products.length === 0) {
-          // If it's empty, update the orderStatus
           await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
         }
 
 
-            await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
+        await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
 
 
-        const walletAmount = orderData.cancelledProduct.reduce((acc, product) => {
-             const productPrice = product.productDetails.price || 0;
-          
-            return acc + product.quantity * productPrice;
-          }, 0);
-            const data = {
-              amount:  walletAmount,
-              date: Date.now(),
-            }
+        
             await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
 
         res.json({ success: true });
     } catch (error) {
-        console.log(error.message);
-        res.render('500Error');
+        console.log(error);
+        res.status(500).render('500');
     }
 };
 
@@ -340,9 +350,9 @@ const cancelOrder = async (req, res) => {
 
       res.json({ success: true });
   } catch (error) {
-      console.log(error.message);
-      res.render('500Error');
-  }
+      console.log(error);
+      res.status(500).render('500');
+    }
 };
   
 
@@ -355,7 +365,8 @@ const detailOrder=async(req,res)=>{
     await orderData.populate('products.productId.categoryId')
     res.render('orderdetails',{orderData,user_id})
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 }
 

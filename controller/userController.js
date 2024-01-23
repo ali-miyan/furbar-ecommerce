@@ -36,23 +36,17 @@ const loadHome = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
 //shop page
 const loadShop = async (req, res) => {
     try {
-        const orgPage = 1;
-        const perPage = 6;
-        const page = parseInt(req.query.page) || orgPage;
-        const pageSize = parseInt(req.query.pageSize) || perPage;
         const searchQuery = req.query.search;
         const sort = req.query.sort
 
-
-        const skip = (page - 1) * pageSize;
-        const limit = pageSize;
-
+        const totalProductsCount = await Product.countDocuments({is_blocked:false})
         let totalPages;
 
         const selectedCategory = req.query.category;
@@ -61,33 +55,26 @@ const loadShop = async (req, res) => {
         let product;
 
         if (selectedCategory) {
-            product = await Product.find({ categoryId: selectedCategory, is_blocked: false }).populate('offer').skip(skip).limit(limit);
+            product = await Product.find({ categoryId: selectedCategory, is_blocked: false }).populate('offer');
             console.log(product.length, 'ddddddd');
             console.log(selectedCategory, 'cat');
-            totalPages = product.length < 6 ? 1 : Math.ceil(product.length / perPage) + 1;
 
             if (searchQuery) {
                 product = await Product.find({ categoryId: selectedCategory, is_blocked: false, name: { $regex: searchQuery, $options: 'i' } })
                 if (product.length == 0) {
                     totalPages = 'no products available in specified category'
-                } else {
-                    totalPages = Math.ceil(product.length / perPage);
                 }
             }
         } else {
-            product = await Product.find({ is_blocked: false }).populate('offer').skip(skip).limit(limit);
+            product = await Product.find({ is_blocked: false }).populate('offer');
             console.log(product.length, 'ddddddd');
-            totalPages = product.length < 6 ? 1 : Math.ceil(product.length / perPage) + 1
 
             if (searchQuery) {
                 product = await Product.find({ is_blocked: false, name: { $regex: searchQuery, $options: 'i' } })
                 if (product.length == 0) {
                     totalPages = 'no products available'
-                } else {
-                    totalPages = Math.ceil(product.length / perPage);
                 }
                 console.log(product, totalPages, 'ffffffffffffffffffffffff');
-
             }
         }
 
@@ -109,9 +96,10 @@ const loadShop = async (req, res) => {
     const wishlistData = wishData ? wishData.product.map((val) => val.productId) : [];
 
 
-        res.render('shop', { product, category, selectedCategory, totalPages, page, pageSize, sort,wishlistData });
+        res.render('shop', { product, category, selectedCategory, totalPages, sort,wishlistData,totalProductsCount });
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -121,6 +109,7 @@ const loadSignup = async (req, res) => {
         res.render('signup')
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 //profile page
@@ -134,7 +123,7 @@ const loadProfile = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).render('500');
     }
 };
 
@@ -146,8 +135,10 @@ const loadLogin = async (req, res) => {
         res.render('login', { loginmessage })
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
+
 
 //signup and storing data to database
 const signupPost = async (req, res) => {
@@ -194,6 +185,7 @@ const signupPost = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).render('500');
     }
 };
 
@@ -206,7 +198,8 @@ const verifyOTP = async (req, res) => {
         console.log(id, 'th id');
         res.render('otp', { id,message});
     } catch (error) {
-        console.log("Error setting session:", error.message);
+        console.log(error.message);
+        res.status(500).render('500');
     }
 };
 
@@ -215,12 +208,11 @@ const verifyPost = async (req, res) => {
     try {
         const { id: userId } = req.body;
         const userOtp = req.body.otp
-
         const userOTPVerificationrecord = await userVerification.findOne({ user_id: userId });
         console.log(userOTPVerificationrecord, 'reccccccccc');
 
         if (!userOTPVerificationrecord) {
-           return res.json({ otp: false, message: "Record doesn't exist or has been verified already" });
+           return res.json({ otp: false, message: "Record doesn't exist" });
         }
 
         const { expiresAt, otp } = userOTPVerificationrecord;
@@ -232,7 +224,7 @@ const verifyPost = async (req, res) => {
             const validOTP = await bcrypt.compare(userOtp, otp);
             if (!validOTP) {
                 console.log('invaallidddddddd verify');
-                res.json({ otp: 'invalid', message: "Invalid code, try again..." });
+                return res.json({ otp: 'invalid', message: "Invalid code, try again..." });
             } else {
                 console.log('trueeeeeeeeee verify');
                 await User.updateOne({ _id: userId }, {$set:{ verfied: true }});
@@ -242,7 +234,8 @@ const verifyPost = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 };
 
@@ -253,7 +246,8 @@ const securePassword = async (password) => {
         const hashedPassword = bcrypt.hash(password, 10)
         return hashedPassword;
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -267,6 +261,7 @@ const resendOtp = async (req, res) => {
         await sendOTPverification(userData, res);
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -275,14 +270,23 @@ const sendOTPverification = async ({ _id, email }, res,message) => {
     try {
         console.log('heloooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
-        const mailOption = {
+        const mailOptions = {
             from: process.env.user_email,
             to: email,
             subject: "Verify Your Email",
-            html: `<p>Enter ${otp} to verify your email Address
-            this code will expires in 1 hour`
-        }
-
+            html: `
+                <html>
+                    <body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; padding: 20px;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                            <h1 style="color: #333;">Verify Your Email Address</h1>
+                            <p style="color: #555; line-height: 1.5;">Enter the following OTP code to verify your email address. This code will expire in 1 hour:</p>
+                            <p style="font-size: 24px; font-weight: bold; color: #007bff;">${otp}</p>
+                            <p style="color: #555; line-height: 1.5;">If you did not request this verification, please ignore this email.</p>
+                        </div>
+                    </body>
+                </html>
+            `,
+        };
         const hashedOTP = await bcrypt.hash(otp, 10);
 
         const newOTP = await new userOTP({
@@ -297,12 +301,14 @@ const sendOTPverification = async ({ _id, email }, res,message) => {
         if(message){
            return res.json({_id,message })
         }
-        res.json({ user: true, _id })
+        console.log(message);
         await newOTP.save();
-        await transporter.sendMail(mailOption);
+        await transporter.sendMail(mailOptions);
+        return res.json({ user: true, _id })
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -347,6 +353,7 @@ let loginPost = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -371,12 +378,13 @@ const detailShop = async (req, res) => {
     try {
         const id = req.query.id;
         const data = await Product.findOne({ _id: id }).populate('categoryId').populate('offer')
+        
         console.log(data);
         res.render('detailshop', { data })
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
-
 }
 
 const addressform = async (req, res) => {
@@ -403,7 +411,7 @@ const addressform = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ add: false, error: "Internal Server Error" });
+        res.status(500).render('500');
     }
 }
 
@@ -439,7 +447,8 @@ const editAddress = async (req, res) => {
         res.json({ success: true });
 
     } catch (error) {
-        console.error('Error updating address:', error);
+        console.error(error);
+        res.status(500).render('500');
     }
 }
 
@@ -453,7 +462,8 @@ const deleteAddress = async (req, res) => {
         res.json({ success: true })
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -477,7 +487,8 @@ const editUser = async (req, res) => {
         );
         res.redirect('/profile')
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -503,7 +514,8 @@ const generatePdf = async (req, res) => {
         res.send(pdfBuffer);
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -524,6 +536,7 @@ const forgetPassword = async(req,res)=>{
         res.render('forgetpassword')
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 const forgetPasswordPost = async(req,res)=>{
@@ -540,6 +553,7 @@ const forgetPasswordPost = async(req,res)=>{
         }
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -573,7 +587,8 @@ const sendResetLink = async (user,res) => {
         await transporter.sendMail(resetMail);
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -616,6 +631,7 @@ const resetPasswordPost = async(req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 
@@ -643,6 +659,7 @@ const changePassword = async(req,res)=>{
         return res.json({ success: true, message: 'Password changed successfully.' });
     } catch (error) {
         console.log(error);
+        res.status(500).render('500');
     }
 }
 

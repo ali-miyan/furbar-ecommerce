@@ -31,7 +31,6 @@ app.use(express.json());
 
 
 app.set('view engine','ejs');
-app.set('views','./views/user');
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(express.static(path.join(__dirname,'public/assets')));
@@ -43,7 +42,9 @@ app.use('/admin',adminRoute)
 
 
 
-
+app.use((req, res, next) => {
+  res.status(404).render('404');
+});
 
 
 

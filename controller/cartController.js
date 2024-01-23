@@ -12,9 +12,6 @@ const productController=require("../controller/productController")
 const session = require("express-session");
 const userController = require("../controller/userController");
 const cartModel=require('../models/cartModel')
-const addressModel=require('../models/addressModel')
-const cartController=require('../controller/cartController')
-const orderModel=require('../models/orderModal')
 const wishlistModel = require('../models/wishlistModel')
 
 const getCart=async(req,res)=>{
@@ -43,9 +40,9 @@ const getCart=async(req,res)=>{
         
         }
       }
-      // else{
-      //   res.json({failed:true})
-      // }
+      else{
+        res.json({stock:true})
+      }
       }
       else{
         res.json({failed:true})
@@ -53,6 +50,7 @@ const getCart=async(req,res)=>{
   
     } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
     }
   }
 
@@ -81,6 +79,7 @@ const getCart=async(req,res)=>{
   
     } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
     }
   }
 
@@ -124,6 +123,7 @@ const getCart=async(req,res)=>{
 
       } catch (error) {
           console.log(error);
+          res.status(500).render('500');
       }
       
 
@@ -140,7 +140,7 @@ const getCart=async(req,res)=>{
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).render('500');
     }
   }
 
@@ -154,6 +154,7 @@ const getCart=async(req,res)=>{
   
     } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
     }
   }
 
@@ -197,6 +198,7 @@ const getCart=async(req,res)=>{
 
     } catch (error) {
       console.log(error.message);
+      res.status(500).render('500');
     }
   };
 
@@ -206,6 +208,7 @@ const getCart=async(req,res)=>{
       res.render('wishlist',{data})
     } catch (error) {
       console.log(error);
+      res.status(500).render('500');
     }
   }
   
@@ -223,7 +226,7 @@ const getCart=async(req,res)=>{
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).render('500');
     }
   }
 

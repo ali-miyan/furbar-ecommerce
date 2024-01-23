@@ -8,6 +8,11 @@ const adminController = require("../controller/adminConroller");
 const orderModel = require('../models/orderModal');
 const offerModel = require("../models/offerModel");
 const Product = require("../models/productModel");
+const path = require('path')
+const ejs = require('ejs')
+const puppeteer = require('puppeteer')
+const ExcelJS = require('exceljs');
+
 
 
 const adminLogin = async (req, res) => {
@@ -16,6 +21,7 @@ const adminLogin = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -23,7 +29,6 @@ const loadDashboard = async (req, res) => {
   try {
     const totalOrders = await orderModel.countDocuments();
     const totalProducts = await Product.countDocuments();
-    // const totalCategory = await categoryModel.countDocuments();
 
     const revenue = await orderModel.aggregate([
       {
@@ -57,9 +62,27 @@ const loadDashboard = async (req, res) => {
       }
     ]);
 
-    res.render("adminhome", { totalOrders, totalProducts, revenue, monthlyRevenue,currentMonthName });
+    const graph = monthlyRevenue.map(entry => entry.monthlyRevenue)
+    const graphValue = graph.concat(Array(12 - graph.length).fill(0))
+    console.log(graphValue);
+
+    const cashOnDelivery = await orderModel.countDocuments({
+      payment: "Cash on delivery",
+    });
+    
+    const razorpay = await orderModel.countDocuments({
+      payment: "Razorpay",
+    });
+    
+    const wallet = await orderModel.countDocuments({
+      payment: "Wallet",
+    });
+    
+
+    res.render("adminhome", { totalOrders, totalProducts, revenue, monthlyRevenue,currentMonthName,graphValue,cashOnDelivery,wallet,razorpay});
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -69,6 +92,7 @@ const loadUser = async (req, res) => {
     res.render('users', { users: userData })
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 }
 
@@ -92,6 +116,7 @@ const loadSignin = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -110,6 +135,7 @@ const blockUser = async (req, res) => {
     res.json({ block: true });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 };
 //load category
@@ -121,6 +147,7 @@ const loadCategory = async (req, res) => {
     res.render('category', { category, message, offer })
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -130,6 +157,7 @@ const addCategory = (req, res) => {
     res.render('addcategory')
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -155,6 +183,7 @@ const addCategoryPost = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -169,6 +198,7 @@ const editCategory = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -177,19 +207,24 @@ const blockCategory = async (req, res) => {
   try {
     const user = req.params.id;
     console.log(user, 'user');
+    const categoryProduct = await Product.find({ categoryId: user });
     const userValue = await categoryModel.findOne({ _id: user });
     console.log(userValue);
     if (userValue.is_blocked) {
       await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: false } });
+      await Product.updateMany({categoryId:user},{$set:{isCategoryBlocked:false}})
     } else {
       await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: true } });
+      await Product.updateMany({categoryId:user},{$set:{isCategoryBlocked:true}})
     }
     console.log(userValue);
-    res.json({ blocked: true });
+    res.json({ blocked: true });  
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
+
 //edit category post
 const editCategoryPost = async (req, res) => {
   try {
@@ -207,6 +242,7 @@ const editCategoryPost = async (req, res) => {
     return res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
   } catch (error) {
     console.error(error.message);
+    res.status(500).render('500');
   }
 };
 
@@ -217,6 +253,7 @@ const showOrders = async (req, res) => {
     res.render('order', { orderData })
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -246,6 +283,7 @@ const updateStatus = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -261,11 +299,102 @@ const detailOrder = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('500');
+  }
+}
+
+const reportPage = async (req,res) => {
+  try {
+    const orders = await orderModel.find()
+    res.render('reportPage',{orders})
+  } catch (error) {
+    console.log(error);
+    res.status(500).render('500');
   }
 }
 
 
+const salesReport = async (req, res) => {
+  try {
+      console.log('heloooooooooo');
+      const orderData = await orderModel.find().populate('products.productId')
+      const totalOrders = await orderModel.countDocuments();
+      const totalProducts = await Product.countDocuments();
+  
+      const revenue = await orderModel.aggregate([
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: "$subtotal" }
+          }
+        }
+      ]);
 
+      const ejsPagePath = path.join(__dirname, '../views/admin/report.ejs');
+      const ejsPage = await ejs.renderFile(ejsPagePath, { orderData,totalOrders,totalProducts,revenue });
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setContent(ejsPage);
+      const pdfBuffer = await page.pdf();
+      await browser.close();
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+      res.send(pdfBuffer);
+
+  } catch (error) {
+      console.log(error.message);
+      res.status(500).render('500');
+  }
+}
+
+const salesReportExel = async (req, res) => {
+  try {
+    console.log('heloooooooooo');
+    const orderData = await orderModel.find().populate('products.productId');
+    const totalOrders = await orderModel.countDocuments();
+    const totalProducts = await Product.countDocuments();
+
+    const revenue = await orderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          revenue: { $sum: "$subtotal" }
+        }
+      }
+    ]);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sales Report');
+
+    worksheet.addRow(['Order ID', 'Billing Name', 'Date', 'Total', 'Payment Method']);
+    
+    orderData.forEach(order => {
+      worksheet.addRow([
+        order._id,
+        order.delivery_address.name,
+        order.orderDate,
+        order.subtotal,
+        order.payment
+      ]);
+    });
+
+    worksheet.addRow(['', '', '', 'Total Orders:', totalOrders]);
+    worksheet.addRow(['', '', '', 'Total Products:', totalProducts]);
+    worksheet.addRow(['', '', '', 'Total Revenue:', revenue[0] ? revenue[0].revenue : 0]);
+
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=sales_report.xlsx');
+    
+    res.send(buffer);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).render('500');
+  }
+};
 module.exports = {
   loadDashboard,
   loadSignin,
@@ -280,6 +409,8 @@ module.exports = {
   blockUser,
   showOrders,
   updateStatus,
-  detailOrder
-
+  detailOrder,
+  reportPage,
+  salesReport,
+  salesReportExel
 };

@@ -185,6 +185,7 @@ function userSignUp() {
         type: 'POST',
         data: formData,
         success: function (data) {
+            console.log(data,'response');
             if (data.referal === false) {
                 signupError.textContent = data.message
             } else if(data.user == false){

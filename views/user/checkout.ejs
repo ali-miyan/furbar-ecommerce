@@ -231,9 +231,9 @@
                                                         <%= subtotal %>
                                                     </del> <br>
                                                     Discounted Amount: ₹<%= discountAmount %>
-                                                        <% } else { %>
+                                                    <% } else { %>
                                                             ₹<%= subtotal %>
-                                                                <% } %>
+                                                    <% } %>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -332,10 +332,10 @@
     <script>
         $(document).ready(function () {
             console.log('ddddddddddddd');
-            $("#myForm  ").submit(function (event) {
+            $("#myForm ").submit(function (event) {
                 event.preventDefault();
 
-                var formData = $(this).serialize();
+                const formData = $(this).serialize();
 
                 $.ajax({
                     type: "POST",
@@ -348,7 +348,7 @@
                             location.href = `/successpage?id=${orderId}`
                         } else if (response.success == false) {
                             console.log("reaaaaaacccccehjssssssssssssssddddddddddddd");
-                            razorpayPayment(response.order)
+                            razorpayPayment(response.order,response.totalPrice)
                         }
 
                     },
@@ -359,11 +359,12 @@
             });
         });
 
-        function razorpayPayment(order) {
+        function razorpayPayment(order,total) {
+            console.log(total,'ttoota;ll');
             console.log("function called", order);
             let options = {
                 "key": "rzp_test_7MqCdAHp4YDLwZ",
-                "amount": order.amount,
+                "amount": total,
                 "currency": "INR",
                 "name": "furbar",
                 "description": "Test Transaction",
@@ -410,10 +411,8 @@
                             })
                         }
                     }
-
                 })
             }
-
         } 
     </script>
     <script>

@@ -25,7 +25,7 @@ routeAdmin.patch('/blockusers/:id',adminController.blockUser)
 
 routeAdmin.get("/users",auth.isAdminLogin,adminController.loadUser);
 
-routeAdmin.get("/dashboard",adminController.loadDashboard);
+routeAdmin.get("/dashboard",auth.isAdminLogin,adminController.loadDashboard);
 
 routeAdmin.post("/",auth.isAdminLogout,adminController.loadSignin);
 
@@ -49,38 +49,45 @@ routeAdmin.post('/addproducts',multer.uploadproduct,productController.addProduct
 
 routeAdmin.get('/editproducts',auth.isAdminLogin,productController.editProducts)
 
-routeAdmin.post('/editproducts',multer.uploadproduct,productController.editProductsPost)
+routeAdmin.post('/editproducts',auth.isAdminLogin,multer.uploadproduct,productController.editProductsPost)
 
-routeAdmin.patch('/blockproducts/:id',productController.blockProducts)
+routeAdmin.patch('/blockproducts/:id',auth.isAdminLogin,productController.blockProducts)
 
-routeAdmin.get('/orders',adminController.showOrders)
+routeAdmin.get('/orders',auth.isAdminLogin,adminController.showOrders)
 
-routeAdmin.get('/coupon', couponController.coupon)
+routeAdmin.get('/coupon', auth.isAdminLogin,couponController.coupon)
 
-routeAdmin.get('/addcoupon',couponController.addCoupon)
+routeAdmin.get('/addcoupon',auth.isAdminLogin,couponController.addCoupon)
 
-routeAdmin.post('/addcoupon',couponController.addCouponPost)
+routeAdmin.post('/addcoupon',auth.isAdminLogin,couponController.addCouponPost)
 
-routeAdmin.get('/offer', offerController.offer)
+routeAdmin.get('/offer', auth.isAdminLogin,offerController.offer)
 
-routeAdmin.get('/addoffer',offerController.addOffer)
+routeAdmin.get('/addoffer',auth.isAdminLogin,offerController.addOffer)
 
-routeAdmin.post('/addoffer',offerController.addOfferPost)
+routeAdmin.post('/addoffer',auth.isAdminLogin,offerController.addOfferPost)
 
-routeAdmin.patch('/deleteoffer',offerController.deleteOffer)
+routeAdmin.patch('/deleteoffer',auth.isAdminLogin,offerController.deleteOffer)
 
-routeAdmin.patch('/deletecoupon',couponController.deleteCoupon)
+routeAdmin.patch('/deletecoupon',auth.isAdminLogin,couponController.deleteCoupon)
 
- routeAdmin.post('/updatestatus',adminController.updateStatus)
+ routeAdmin.post('/updatestatus',auth.isAdminLogin,adminController.updateStatus)
 
- routeAdmin.get('/showorder', adminController.detailOrder)
+ routeAdmin.get('/showorder',auth.isAdminLogin, adminController.detailOrder)
 
- routeAdmin.patch('/applyoffer',offerController.applyOffer)
+ routeAdmin.patch('/applyoffer',auth.isAdminLogin,offerController.applyOffer)
 
- routeAdmin.patch('/removeoffer',offerController.removeOffer)
+ routeAdmin.patch('/removeoffer',auth.isAdminLogin,offerController.removeOffer)
 
- routeAdmin.patch('/applycategoryoffer',offerController.applyCategoryOffer)
+ routeAdmin.patch('/applycategoryoffer',auth.isAdminLogin,offerController.applyCategoryOffer)
 
  routeAdmin.patch('/removecategoryoffer',offerController.removeCategoryOffer)
+
+ routeAdmin.get('/reportpage',auth.isAdminLogin, adminController.reportPage)
+
+ routeAdmin.get('/downloadreport',adminController.salesReport)
+
+ routeAdmin.get('/downloadreportexel',adminController.salesReportExel)
+
 
 module.exports = routeAdmin;

@@ -4350,5 +4350,15 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
   color: red;
 }
 
+.preloader {
+  background:#ffffff url('../imgs/icons/ajax-loading-gif-transparent-background-2.gif') no-repeat center;
+  position: fixed;
+  background-size: 10%;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+}
+
 
 /*# sourceMappingURL=main.css.map */

@@ -14,31 +14,18 @@
                         <div class="shop-top-bar">
                             <div class="shop-text">
                                 <p>
-                                    <span>12</span> Product Found of
-                                    <span>30</span>
+                                    <span><%=product.length%></span> Product Found of
+                                    <span><%=totalProductsCount%></span>
                                 </p>
-                            </div>
-                            <div class="shop-tabs">
-                                <ul class="nav">
-                                    <li>
-                                        <button class="active" data-bs-toggle="tab" data-bs-target="#grid">
-                                            <i class="fa fa-th"></i>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button data-bs-toggle="tab" data-bs-target="#list">
-                                            <i class="fa fa-list"></i>
-                                        </button>
-                                    </li>
-                                </ul>
                             </div>
                             <div class="shop-sort">
                                 <span class="title">Sort By price:</span>
                                 <select class="select2-2" onchange="updateSort()">
-                                    <option><i class="fa-solid fa-arrow-down"></i></option>
+                                    <option value="none" selected>default</option>
                                     <option value="low-to-high" <%= sort === 'low-to-high' ? 'selected' : '' %>>Low to High</option>
                                     <option value="high-to-low" <%= sort === 'high-to-low' ? 'selected' : '' %>>High to Low</option>
                                 </select>
+
                             </div>
                         </div>
                         <!-- Shop top Bar End -->
@@ -47,11 +34,11 @@
                             <div class="tab-pane fade show active" id="grid">
                                 <!-- Shop Product Wrapper Start -->
                                 <div class="shop-product-wrapper" >
-                                    <div class="row">
+                                    <div class="row" id="productContainer">
                                         <p class="text-center mt-5"><%= typeof totalPages === 'string' ? totalPages : '' %></p>
                                         <%console.log(totalPages,'ssss')%>
                                         <% product.forEach(product=> { %>
-                                            <% if (!product.is_blocked) { %>
+                                            <% if (!product.is_blocked && !product.isCategoryBlocked) { %>
                                                 <div class="col-lg-4 col-sm-6" >
                                                     <!-- Single Product Start -->
                                                     <div class="single-product">
@@ -62,13 +49,23 @@
                                                                     <div style="position: absolute; top: 4px; left: 4px; background-color: #ffb300; color: #ffffff; padding: 5px; font-size: 12px;">
                                                                         <%= Math.floor(((product.price-product.discountedPrice)/product.price)*100)%>% Off
                                                                     </div>
-                                                                <% } %></a>   
+                                                                <% } %></a>
                                                         <div class="product-content">
-                                                            <h4 class="title">
+                                                            <h4 class="title d-flex">
                                                                 <a href="/detailshop?id=<%=product._id%>">
                                                                     <%= product.name %>
-                                                                </a>
-                                                                <% if (product.quantity==0){ %>Out of Stock<%}%>
+                                                                </a>      
+                                                                <div class="mx-3">        
+                                                                <% if (product.quantity === 0) { %>
+                                                                    <p style="color: red;">Out of Stock</p>
+                                                                  <% } else if (product.quantity === 1) { %>
+                                                                    <p style="color: red;">Only 1 left</p>
+                                                                  <% } else if (product.quantity === 2) { %>
+                                                                    <p style="color: red;">Only 2 left</p>
+                                                                  <% } else if (product.quantity === 4) { %>
+                                                                    <p style="color: green;">Only a few left</p>
+                                                                  <% } %>
+                                                                  </div>
                                                             </h4>
                                                             <div class="price">
                                                                 <%if(!product.discountedPrice){%>
@@ -77,7 +74,7 @@
                                                                     <span class="old-price">₹<%=product.price%></span>&nbsp;&nbsp;<span class="sale-price">₹<%=product.discountedPrice%></span>
                                                                 <%}%>
                                                             </div>
-                                                        </div>
+                                                            </div>
                                                         <div id="reloadWishlist_<%= product._id %>">
                                                             <ul class="product-meta">
                                                                 <li>
@@ -104,17 +101,15 @@
                         </div>
                         <!-- Page pagination Start -->
                         <div class="page-pagination">
-                            <!-- Assuming you have a variable hasNextPage from your backend -->
-                            <ul class="pagination justify-content-center">
-                                <% for (let i = 1; i <= totalPages; i++) { %>
-                                  <li class="page-item <%= i === page ? 'active' : '' %>">
-                                    <a class="page-link" href="/shop?page=<%= i %>&pageSize=<%= pageSize %>">
-                                      <%= i %>
-                                    </a>
-                                  </li>
+                            <!-- Assuming you have a letiable hasNextPage from your backend -->
+                            <ul class="list-unstyled pagination d-flex justify-content-center">
+                                <li><a href="javascript:void(0);" onclick="changePage(-1)"><i class="fas fa-chevron-left mx-4"></i></a></li>
+                                <% if(product.length >= 7) { %>
+                                <li><a href="javascript:void(0);" id="nextPageLink" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></a></li>
+                                <% } else {%>
+                                <li><a><i class="fas fa-chevron-right"></i></a></li>
                                 <% } %>
-                              </ul>
-
+                            </ul>
                           </div>
                         <!-- Page pagination End -->
                     </div>
@@ -140,6 +135,7 @@
                                     <form id="categoryFilterForm" action="/shop" method="GET">
                                         <ul class="checkbox-items">
                                           <% category.forEach((data, index) => { %>
+                                            <% if (!data.is_blocked) { %>
                                             <li>
                                               <input type="checkbox" id="checkbox<%= index + 1 %>"
                                                 class="category-checkbox" name="category" value="<%= data._id %>"
@@ -149,6 +145,7 @@
                                                 <%= data.name %>
                                               </label>
                                             </li>
+                                            <% } %>
                                           <% }) %>
                                         </ul>
                                         <button class="user-btn mt-5" style="margin-left: 75px;" type="submit">Apply</button>
@@ -156,19 +153,6 @@
                                 </div>
                             </div>
                             <!-- Sidebar Widget End -->
-
-                            <!-- Sidebar Widget Start -->
-                            <div class="sidebar-widget">
-
-                                <h4 class="widget-title">Filter By Price</h4>
-
-                                <div class="widget-price">
-                                    <input id="price-range" type="text">
-                                </div>
-                            </div>
-                            <!-- Sidebar Widget End -->
-
-
                         </div>
                         <!-- Sidebar End -->
                     </div>
@@ -201,14 +185,12 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.querySelector('.widget-search form');
     const searchInput = searchForm.querySelector('input');
-
     const urlParams = new URLSearchParams(window.location.search);
     const searchQuery = urlParams.get('search');
 
     if (searchQuery !== null) {
         searchInput.value = searchQuery;
     }
-
     searchForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const enteredSearchQuery = searchInput.value.trim();
@@ -231,21 +213,56 @@ function updateSort() {
     const baseUrl = "/shop";
     const existingParams = new URLSearchParams(window.location.search);
 
-    // Remove existing 'sort' parameter
-    existingParams.delete('sort');
+    if (selectedOption !== 'none') {
+        existingParams.set('sort', selectedOption);
+    } else {
+        existingParams.delete('sort');
+    }
 
-    const queryParams = existingParams.toString() ? `${existingParams.toString()}&sort=${selectedOption}` : `?sort=${selectedOption}`;
-    const newUrl = `${baseUrl}?${queryParams}`;
+    const queryParams = existingParams.toString();
+    const newUrl = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
 
     window.location.href = newUrl;
 }
+
 
 </script>
 
 
 
 <script>
-    
+    let currentPage = 1;
+    let products = '<%= JSON.stringify(product)%>';
+    var nextPageLink = document.getElementById("nextPageLink");
+    let productsPerPage = 7
+    console.log(products);
+    function showProducts() {
+        let startIndex = (currentPage - 1) * productsPerPage;
+        let endIndex = startIndex + productsPerPage;
+
+        for (let i = 0; i < products.length; i++) {
+            let productElement = document.getElementById('productContainer').children[i];
+            if (i >= startIndex && i < endIndex) {
+                productElement.style.display = 'block';
+            } else {
+                productElement.style.display = 'none';
+            }
+        }
+    }
+
+    function changePage(change) {
+        currentPage += change;
+        if (currentPage < 1) {
+            currentPage = 1;
+        } else if (currentPage > Math.ceil(products.length / productsPerPage)) {
+            currentPage = Math.ceil(products.length / productsPerPage);
+        }
+
+        showProducts();
+    }
+
+    showProducts();
 </script>
+
 
     <%- include('../layouts/footer.ejs') -%>

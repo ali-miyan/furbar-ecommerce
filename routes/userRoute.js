@@ -42,6 +42,8 @@ routeUser.use(express.json());
 
 routeUser.set("view engine", "ejs");
 routeUser.set("views", "./views/user");
+routeUser.set("views", "./views/user");
+
 
 routeUser.get("/", userController.loadHome);
 
@@ -85,40 +87,40 @@ routeUser.post('/checkoutform', auth.isLogin, orderController.checkoutPost)
 
 routeUser.post('/addressform', auth.isLogin, userController.addressform);
 
-routeUser.post('/editaddress', userController.editAddress);
+routeUser.post('/editaddress', auth.isLogin, userController.editAddress);
 
-routeUser.post('/deleteaddress', userController.deleteAddress)
+routeUser.post('/deleteaddress', auth.isLogin, userController.deleteAddress)
 
-routeUser.get('/detailorder', orderController.detailOrder)
+routeUser.get('/detailorder', auth.isLogin, orderController.detailOrder)
 
-routeUser.post('/cancelorder', orderController.cancelOrder)
+routeUser.post('/cancelorder', auth.isLogin, orderController.cancelOrder)
 
-routeUser.post('/returnorder', orderController.returnOrder)
+routeUser.post('/returnorder', auth.isLogin, orderController.returnOrder)
 
-routeUser.post('/edituser', userController.editUser)
+routeUser.post('/edituser', auth.isLogin, userController.editUser)
 
-routeUser.get('/successpage',orderController.successPage)
+routeUser.get('/successpage', auth.isLogin,orderController.successPage)
 
 routeUser.get('/generatepdf',userController.generatePdf)
 
-routeUser.post('/shippingamount', cartController.shippingAmount)
+routeUser.post('/shippingamount', auth.isLogin, cartController.shippingAmount)
 
-routeUser.post('/verifypayment', orderController.verifypayment)
+routeUser.post('/verifypayment', auth.isLogin, orderController.verifypayment)
 
-routeUser.post('/applycoupon', couponController.applyCoupon);
+routeUser.post('/applycoupon', auth.isLogin, couponController.applyCoupon);
 
-routeUser.post('/removecoupon',couponController.removeCoupon);
+routeUser.post('/removecoupon', auth.isLogin,couponController.removeCoupon);
 
 routeUser.get('/resendotp',userController.resendOtp)
 
-routeUser.get('/forgetpassword',userController.forgetPassword)
+routeUser.get('/forgetpassword',auth.isLogout,userController.forgetPassword)
 
-routeUser.post('/forgetpassword',userController.forgetPasswordPost)
+routeUser.post('/forgetpassword',auth.isLogout,userController.forgetPasswordPost)
 
-routeUser.get('/resetpassword',userController.resetPassword)
+routeUser.get('/resetpassword',auth.isLogout,userController.resetPassword)
 
-routeUser.post('/resetpassword',userController.resetPasswordPost)
+routeUser.post('/resetpassword',auth.isLogout,userController.resetPasswordPost)
 
-routeUser.post('/changepassword',userController.changePassword)
+routeUser.post('/changepassword',auth.isLogin,userController.changePassword)
 
 module.exports = routeUser;

@@ -13,6 +13,7 @@ const isLogin = (req, res, next) => {
     }
     catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 
@@ -28,6 +29,7 @@ const isLogout = (req, res, next) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 
@@ -44,6 +46,7 @@ const isAdminLogin = async (req, res, next) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 const isAdminLogout = async (req, res, next) => {
@@ -55,6 +58,7 @@ const isAdminLogout = async (req, res, next) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('500');
     }
 }
 

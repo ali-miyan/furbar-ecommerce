@@ -51,6 +51,10 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
         required: true
+    },
+    isCategoryBlocked:{
+      type:Boolean,
+      default:false,
     }
 });
 
