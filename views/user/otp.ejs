@@ -65,51 +65,54 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    function startTimer(a) {
-        console.log(a,'sssssssssssssssss');
-        if(a==1){
-        document.getElementById('resendMessage').innerText = 'New OTP has been sent to your mail';
-        setTimeout(() => {
-            document.getElementById('resendMessage').innerText = '';
-        }, 3000);
-    }
+ function startTimer() {
+    console.log('Timer started');
+    var secondsRemaining = 60;
 
-        const id = '<%=id%>';
-        $.ajax({
-        url: `/resendotp?id=${id}`,
-        type: 'GET',
-        success: function (data) {
-            if(data.otp){
-            console.log('otp resend successfully');
-            setTimeout(() => {
-                document.getElementById('resendMessage').innerText = 'new otp has been sent to your mail'
-            }, 3000);
+    document.getElementById('myButton').disabled = true;
 
+    var timerInterval = setInterval(function () {
+        document.getElementById('timerDisplay').innerText = 'Resend OTP in: ' + secondsRemaining + ' seconds';
+
+        if (secondsRemaining <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById('myButton').disabled = false;
+            document.getElementById('timerDisplay').innerText = '';
+        } else {
+            secondsRemaining--;
         }
-             
+    }, 1000);
+}
+
+function resendOTP() {
+    const id = '<%=id%>';
+    $.ajax({
+        url: `/resendotp?id=${id}`,
+        type: 'POST',
+        success: function (data) {
+            if (data.otp) {
+                console.log('OTP resend successfully');
+                document.getElementById('resendMessage').innerText = 'New OTP has been sent to your mail';
+                setTimeout(() => {
+                    document.getElementById('resendMessage').innerText = '';
+                }, 3000);
+            }
         },
         error: function (error) {
             console.error('Error:', error);
         }
     });
+}
 
-        var secondsRemaining = 60;
+window.onload = function () {
+    startTimer(); 
+};
 
-        document.getElementById('myButton').disabled = true;
-
-        var timerInterval = setInterval(function () {
-            document.getElementById('timerDisplay').innerText = 'resend otp in: ' + secondsRemaining + ' seconds';
-
-            if (secondsRemaining <= 0) {
-                clearInterval(timerInterval);
-                document.getElementById('myButton').disabled = false;
-                document.getElementById('timerDisplay').innerText = '';
-            } else {
-                secondsRemaining--;
-            }
-        }, 1000);
-    }
-    window.onload = startTimer;
+document.getElementById('myButton').addEventListener('click', function () {
+    resendOTP(); 
+    clearInterval(timerInterval); 
+    startTimer();
+});
 
 function otpCheck() {
     const formData = $('#otpForm').serialize();

@@ -39,6 +39,30 @@ const loadHome = async (req, res) => {
         res.status(500).render('500');
     }
 }
+const loadBlog = async (req, res) => {
+    try {
+        res.render('blog')
+    } catch (error) {
+        console.log(error);
+        res.status(500).render('500');
+    }
+}
+const loadContact = async (req, res) => {
+    try {
+        res.render('contact')
+    } catch (error) {
+        console.log(error);
+        res.status(500).render('500');
+    }
+}
+const loadAbout = async (req, res) => {
+    try {
+        res.render('about')
+    } catch (error) {
+        console.log(error);
+        res.status(500).render('500');
+    }
+}
 
 //shop page
 const loadShop = async (req, res) => {
@@ -180,7 +204,9 @@ const signupPost = async (req, res) => {
             if (data && result) {
                 await User.findByIdAndUpdate(result._id, { $push: { walletHistory: data } }, { new: true });
             }
-            console.log(result);
+            const id = result._id
+            console.log(result,'otp 2');
+            res.json({data:true,id})
             sendOTPverification(result, res);
         }
     } catch (error) {
@@ -212,25 +238,24 @@ const verifyPost = async (req, res) => {
         console.log(userOTPVerificationrecord, 'reccccccccc');
 
         if (!userOTPVerificationrecord) {
-           return res.json({ otp: false, message: "Record doesn't exist" });
+           res.json({ otp: false, message: "Record doesn't exist" });
         }
 
         const { expiresAt, otp } = userOTPVerificationrecord;
 
         if (expiresAt < Date.now()) {
             await userVerification.deleteOne({ user_id: userId });
-            return res.json({ otp: 'expired', message: "Your OTP has expired" });
+            res.json({ otp: 'expired', message: "Your OTP has expired" });
         } else {
             const validOTP = await bcrypt.compare(userOtp, otp);
             if (!validOTP) {
                 console.log('invaallidddddddd verify');
-                return res.json({ otp: 'invalid', message: "Invalid code, try again..." });
+                 res.json({ otp: 'invalid', message: "Invalid code, try again..." });
             } else {
-                console.log('trueeeeeeeeee verify');
                 await User.updateOne({ _id: userId }, {$set:{ verfied: true }});
                 await userVerification.deleteOne({ user_id: userId });
                 req.session.user_id = userId;
-                return res.json({ otp: true });
+                 res.json({ otp: true });
             }
         }
     } catch (error) {
@@ -258,22 +283,22 @@ const resendOtp = async (req, res) => {
         console.log("siuuuuuuuuuuuuuu");
         const id = req.query.id;
         const userData = await User.findOne({ _id: id });
-        await sendOTPverification(userData, res);
+        console.log('otp 3');
+        await resendOTPverification(userData, res);
     } catch (error) {
         console.log(error);
         res.status(500).render('500');
     }
 }
-
-//sending otp
-const sendOTPverification = async ({ _id, email }, res,message) => {
+//resend otp
+const resendOTPverification = async ({ _id, email }, res,message) => {
     try {
-        console.log('heloooooooooo');
+        console.log('noooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
         const mailOptions = {
             from: process.env.user_email,
             to: email,
-            subject: "Verify Your Email",
+            subject: "VERIFY YOUR EMAIL",
             html: `
                 <html>
                     <body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; padding: 20px;">
@@ -295,16 +320,55 @@ const sendOTPverification = async ({ _id, email }, res,message) => {
             createAt: Date.now(),
             expiresAt: Date.now() + 60000,
         })
-        console.log('vanuuuuuuuuuuuuuuuuuuuu');
+        console.log('resendddddddddd');
+
+        await newOTP.save();
+        await transporter.sendMail(mailOptions);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).render('500');
+    }
+}
+
+
+//sending otp
+const sendOTPverification = async ({ _id, email }, res,message) => {
+    try {
+        console.log('heloooooooooo');
+        const otp = `${Math.floor(1000 + Math.random() * 900)}`
+        const mail = {
+            from: process.env.user_email,
+            to: email,
+            subject: "Verify Your Email",
+            html: `
+                <html>
+                    <body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; padding: 20px;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                            <h1 style="color: #333;">Verify Your Email Address</h1>
+                            <p style="color: #555; line-height: 1.5;">Enter the following OTP code to verify your email address. This code will expire in 1 hour:</p>
+                            <p style="font-size: 24px; font-weight: bold; color: #007bff;">${otp}</p>
+                            <p style="color: #555; line-height: 1.5;">If you did not request this verification, please ignore this email.</p>
+                        </div>
+                    </body>
+                </html>`,
+        };
+        const hashedOTP = await bcrypt.hash(otp, 10);
+
+        const newOTP = await new userOTP({
+            user_id: _id,
+            otp: hashedOTP,
+            createAt: Date.now(),
+            expiresAt: Date.now() + 60000,
+        })
 
         //save otp records
         if(message){
            return res.json({_id,message })
         }
-        console.log(message);
+        console.log(message,'message');
         await newOTP.save();
-        await transporter.sendMail(mailOptions);
-        return res.json({ user: true, _id })
+        await transporter.sendMail(mail);
 
     } catch (error) {
         console.log(error);
@@ -343,6 +407,7 @@ let loginPost = async (req, res) => {
                 }
             } else {
                 const message = `Please verify your account by entering the OTP first.`
+                console.log('otp 1');
                 await sendOTPverification(validUser, res,message);
             }
         } else {
@@ -467,10 +532,6 @@ const deleteAddress = async (req, res) => {
     }
 }
 
-
-
-
-
 const editUser = async (req, res) => {
     try {
         const userData = await User.findById(req.session.user_id)
@@ -491,8 +552,6 @@ const editUser = async (req, res) => {
         res.status(500).render('500');
     }
 }
-
-
 
 const generatePdf = async (req, res) => {
     try {
@@ -539,6 +598,7 @@ const forgetPassword = async(req,res)=>{
         res.status(500).render('500');
     }
 }
+
 const forgetPasswordPost = async(req,res)=>{
     try {
         const user = await User.findOne({email:req.body.email})
@@ -592,7 +652,6 @@ const sendResetLink = async (user,res) => {
     }
 }
 
-
 const resetPassword = async(req,res)=>{
     try {        
     const token = req.query.id;
@@ -602,7 +661,6 @@ const resetPassword = async(req,res)=>{
         console.log(error);
     }
 }
-
 
 const resetPasswordPost = async(req,res)=>{
     try {
@@ -685,5 +743,8 @@ module.exports = {
     forgetPasswordPost,
     resetPassword,
     resetPasswordPost,
-    changePassword
+    changePassword,
+    loadContact,
+    loadAbout,
+    loadBlog
 }

@@ -1,44 +1,23 @@
 <%- include('../layouts/header.ejs') -%>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-    <div class="section page-banner-section" style="background-image: url(asset/images/page-banner.jpg)">
-        <div class="container">
-            <!-- Page Banner Content End -->
-            <div class="page-banner-content">
-                <h2 class="title">Detail view</h2>
-
-                <ul class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">My Account</li>
-                </ul>
-            </div>
-            <!-- Page Banner Content End -->
-        </div>
-    </div>
-
-
-
-    <div class="container">
+<br>
+<div class="section section-padding">
+    <div class="container"><hr><br>
         <div class="row">
-            <h3 class="mt-3">ORDER DETAILS</h3>
             <div id="reloadArea">
-                <div class="card card-dashboard mt-3" style="max-width: 350px; flex: 1;">
-                    <div class="card-body">
-                        <h4 class="name">OrderId: <%= orderData._id %></h4>
-                        <p><b>Date:</b>
+            <h3 class="mt-4  text-center text-warning">ORDER DETAILS</h3><br>
+                        <h4 class="name text-center text-muted">OrderId: <%= orderData._id %></h4>
+                        <p class="text-center text-muted"><b>Date:</b>
                             <%= orderData.orderDate.toLocaleDateString('en-GB') %>
                             <br><b>Payment Method:</b>
                             <%= orderData.payment %><br>
                             <b>Address:</b>
-                            <%= orderData.delivery_address.name %>,<%= orderData.delivery_address.address %>
+                            <%= orderData.delivery_address.name %>,<%= orderData.delivery_address.address %> <br>
+                            <b>Shipping:</b><%= orderData.delivery_address.pincode %>,<%= orderData.delivery_address.city %>
                             <br>
                         </p>
-                    </div>
-                </div>
                 <% if (orderData.products.length > 0) { %>
                     <div class="container mt-5">
-                        <h3 class="mb-4">Ordered Products</h3>
+                        <h3 class="mb-4 text-center">Ordered Products</h3>
                         <% orderData.products.forEach(function(product, index) { %>
                             <div class="card mt-3">
                                 <div class="card-body d-flex justify-content-start">
@@ -46,7 +25,7 @@
                                         <div class="product-image">
                                             <a href="/detailshop?id=<%= product.productId._id %>">
                                                 <img src="multerimages/<%= product.productId.images.image1 %>" alt=""
-                                                    class="img-thumbnail" style="max-height: 250px; max-width: 230px;">
+                                                    class="img-thumbnail" style="max-width: 280px;">
                                             </a>
                                         </div>
                                         <div class="mx-3" style="width: 180px;">
@@ -59,9 +38,9 @@
                                                 Price: ₹<%= product.price %> <br>
                                                 Quantity: <%= product.quantity %> <br>
                                                 Total: ₹<%= product.totalPrice %> <br>
+                                                Discounted:₹<%= product.price - product.totalPrice %> 
                                                 <% if (orderData.orderStatus !== 'Cancelled' ||
                                                     product.productStatus === 'Cancelled') { %>
-                                                    <div class="cancelSection">
                                                         <br>
                                                         <button class="cancel-btn"
                                                             onclick="validateAndCancel('<%= product._id %>','<%= product.productId._id %>', '<%= orderData._id %>','<%= product.productStatus %>')"
@@ -72,7 +51,6 @@
                                                                 (product.productStatus==='out-for-delivery'
                                                                 ) ? 'No action' : 'Cancel order' %>
                                                         </button>
-                                                    </div>
                                                 <% } %>
                                             </p>
                                         </div>

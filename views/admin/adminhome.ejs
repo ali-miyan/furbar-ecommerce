@@ -152,21 +152,26 @@
             </div>
         </header>
         <section class="content-main">
+
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Dashboard</h2>
-                    <p>Whole data about your business here</p>
+                    <h2 class="content-title card-title">Dashboard</h2> 
+                    <p>Whole data about your business here </p>
+                    
                 </div>
                 <div>
-                    <a href="/admin/downloadreportexel" class="btn btn-primary"><i class="text-muted material-icons md-post_add "></i>Download all EXEL</a>
+                    <a href="/admin/downloadreportexel" class="btn btn-primary"><i class="text-muted material-icons md-add_circle_outline"></i>EXEL</a>
+                </div>
+                
+                <div>
+                    <a href="/admin/downloadreport" class="btn btn-primary"><i class="text-muted material-icons md-add_circle_outline "></i>PDF</a>
                 </div>
                 <div>
-                    <a href="/admin/downloadreport" class="btn btn-primary"><i class="text-muted material-icons md-post_add "></i>Download all PDF</a>
+                    <a href="/admin/reportpage" class="btn btn-link"><i class="text-muted material-icons "></i>sort Orders</a>
                 </div>
-                <div>
-                    <a href="/admin/reportpage" class="btn btn-primary"><i class="text-muted material-icons md-add_circle_outline"></i>View all orders</a>
-                </div>
+
             </div>
+
             <div class="row">
                 <div class="col-lg-3">
                     <div class="card card-body mb-4">
@@ -202,11 +207,12 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title">Products</h6>
                                 <span><%=totalProducts%></span>
-                                <span class="text-sm"> In 19 Categories </span>
+                                <span class="text-sm"> Including all Categories </span>
                             </div>
                         </article>
                     </div>
                 </div>
+
                 <div class="col-lg-3">
                     <div class="card card-body mb-4">
                         <article class="icontext">
@@ -215,12 +221,13 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title"><%=currentMonthName%> Earnings</h6>
                                 <span>₹<%=monthlyRevenue[0].monthlyRevenue%></span>
-                                <span class="text-sm"> Based in your local time. </span>
+                                <span class="text-sm">monthly revenue </span>
                             </div>
                         </article>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-xl-8 col-lg-12">
                     <div class="card mb-4">
@@ -234,13 +241,14 @@
                 <div class="col-xl-4 col-lg-12">
                     <div class="card mb-4">
                         <article class="card-body">
-                            <h5 class="card-title">Revenue Base on Area</h5>
+                            <h5 class="card-title"> Payment Options</h5>
                             <canvas id="myChart2" height="217"></canvas>
                         </article>
                     </div>
                 </div>
             </div>
         </section>
+
         <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">

@@ -208,9 +208,11 @@
                                                 <%=orders[i].delivery_address.name%>
                                             </td>
                                             <td>
-                                                <%= orders[i].orderDate%>
+                                                <%= orders[i].orderDate.toLocaleDateString('en-US', {
+                                                    weekday: 'short' , year: 'numeric' , month: 'short' ,
+                                                    day: 'numeric' })%>
                                             </td>
-                                            <td>₹<%=orders[i].subtotal%>
+                                            <td><%=orders[i].subtotal%>
                                             </td>
                                             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>
                                                 <%=orders[i].payment%>

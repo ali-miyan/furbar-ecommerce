@@ -348,9 +348,8 @@
                             location.href = `/successpage?id=${orderId}`
                         } else if (response.success == false) {
                             console.log("reaaaaaacccccehjssssssssssssssddddddddddddd");
-                            razorpayPayment(response.order,response.totalPrice)
+                            razorpayPayment(response.order)
                         }
-
                     },
                     error: function (error) {
                         console.log(error);
@@ -359,12 +358,11 @@
             });
         });
 
-        function razorpayPayment(order,total) {
-            console.log(total,'ttoota;ll');
+        function razorpayPayment(order) {
             console.log("function called", order);
             let options = {
                 "key": "rzp_test_7MqCdAHp4YDLwZ",
-                "amount": total,
+                "amount": order.amount,
                 "currency": "INR",
                 "name": "furbar",
                 "description": "Test Transaction",

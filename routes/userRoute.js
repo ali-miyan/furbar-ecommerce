@@ -47,6 +47,12 @@ routeUser.set("views", "./views/user");
 
 routeUser.get("/", userController.loadHome);
 
+routeUser.get("/contact",userController.loadContact)
+
+routeUser.get("/about",userController.loadAbout)
+
+routeUser.get("/blog",userController.loadBlog)
+
 routeUser.get("/shop", userController.loadShop);
 
 routeUser.get("/profile",auth.isLogin, userController.loadProfile);
@@ -111,7 +117,7 @@ routeUser.post('/applycoupon', auth.isLogin, couponController.applyCoupon);
 
 routeUser.post('/removecoupon', auth.isLogin,couponController.removeCoupon);
 
-routeUser.get('/resendotp',userController.resendOtp)
+routeUser.post('/resendotp',userController.resendOtp)
 
 routeUser.get('/forgetpassword',auth.isLogout,userController.forgetPassword)
 

@@ -149,31 +149,20 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID: 3453012</p>
+                    <p>Details for Order ID: <%= orderData._id%></p>
                 </div>
             </div>
             <div class="card">
-                <header class="card-header">
+                <!-- <header class="card-header">
                     <div class="row align-items-center">
-                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                            <span> <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2020, 4:34PM</b>
+                        <div class="text-center">
+                            <span> <i class="material-icons md-calendar_today"></i> <b><%= orderData.orderDate.toLocaleDateString('en-US', {
+                                weekday: 'short' , year: 'numeric' , month: 'short' ,
+                                day: 'numeric' })%></b>
                             </span> <br />
-                            <small class="text-muted">Order ID: 3453012</small>
-                        </div>
-                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200">
-                                <option>Change status</option>
-                                <option>Awaiting payment</option>
-                                <option>Confirmed</option>
-                                <option>Shipped</option>
-                                <option>Delivered</option>
-                            </select>
-                            <a class="btn btn-primary" href="#">Save</a>
-                            <a class="btn btn-secondary print ms-2" href="#"><i
-                                    class="icon material-icons md-print"></i></a>
                         </div>
                     </div>
-                </header>
+                </header> -->
                 <!-- card-header end// -->
                 <div class="card-body">
                     <div class="row mb-50 mt-20 order-info-wrap">
@@ -249,8 +238,8 @@
                                                     <td>
                                                         <a class="itemside">
                                                             <div class="left">
-                                                                <img src="/sharpimages/<%= product.productId.images.image1 %>"
-                                                                    width="40" height="40" class="img-xs" alt="Item" />
+                                                                <img style="max-width: 90px;" src="/multerimages/<%= product.productId.images.image1 %>"
+                                                                     alt="Item" />
                                                             </div>
                                                     <td>
                                                         <div class="info">

@@ -190,8 +190,8 @@ function userSignUp() {
                 signupError.textContent = data.message
             } else if(data.user == false){
                 signupError.textContent = data.message
-            }else{
-                window.location.href = `/verifyOtp?id=${data._id}`;
+            }else if(data){
+                window.location.href = `/verifyOtp?id=${data.id}`;
             }
             
         },

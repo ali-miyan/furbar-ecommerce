@@ -103,11 +103,9 @@
                         <div class="page-pagination">
                             <!-- Assuming you have a letiable hasNextPage from your backend -->
                             <ul class="list-unstyled pagination d-flex justify-content-center">
-                                <li><a href="javascript:void(0);" onclick="changePage(-1)"><i class="fas fa-chevron-left mx-4"></i></a></li>
-                                <% if(product.length >= 7) { %>
+                                <li><a href="javascript:void(0);" id="backPageLink" onclick="changePage(-1)"><i class="fas fa-chevron-left mx-4"></i></a></li>
+                                <% if(product.length >= 7){ %>
                                 <li><a href="javascript:void(0);" id="nextPageLink" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></a></li>
-                                <% } else {%>
-                                <li><a><i class="fas fa-chevron-right"></i></a></li>
                                 <% } %>
                             </ul>
                           </div>
@@ -233,7 +231,14 @@ function updateSort() {
 <script>
     let currentPage = 1;
     let products = '<%= JSON.stringify(product)%>';
-    var nextPageLink = document.getElementById("nextPageLink");
+    let nextPageLink = document.getElementById("nextPageLink");
+    let backPageLink = document.getElementById("backPageLink")
+        nextPageLink.addEventListener("click", function() {
+            nextPageLink.style.display = "none";
+        });
+        backPageLink.addEventListener("click", function() {
+            nextPageLink.style.display = "block";
+        });
     let productsPerPage = 7
     console.log(products);
     function showProducts() {
@@ -257,7 +262,6 @@ function updateSort() {
         } else if (currentPage > Math.ceil(products.length / productsPerPage)) {
             currentPage = Math.ceil(products.length / productsPerPage);
         }
-
         showProducts();
     }
 
