@@ -52,11 +52,10 @@
                                                                     class="apply-btn btn btn-danger">
                                                                     <span> Remove</span>
                                                                 </button>
-                                                                <% } %>
-                                                                    <% } else { %>
-                                                                        <span class="badge not-applicable">Not
-                                                                            Applicable</span>
-                                                                        <%}%>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                               <span class="badge not-applicable">Not Applicable</span>
+                                                        <%}%>
                                             </div>
                                         </div>
                                     </div>
@@ -67,7 +66,7 @@
 
             </div>
             <div id="addrassArea">
-            <form id="myForm" onsubmit="return validateForm()">
+            <form id="checkForm">
                 <div class="row">
                     <div class="col-lg-7">
                         <% if (address && address.address && address.address.length> 0) { %>
@@ -76,10 +75,8 @@
                                     <div class="col-lg-6"><br><br>
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <%
-                                                    if (index===0) { %>checked<% } %> required>
-                                                    <h3 class="card-title">Address <%= index + 1 %>
-                                                    </h3>
+                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <% if (index===0) { %>checked<% } %> required>
+                                                    <h3 class="card-title">Address <%= index + 1 %></h3>
                                                     <p>Name: <%= address.name %><br>
                                                     Address: <%= address.address %><br>
                                                     Landmark: <%= address.landmark %><br>
@@ -330,9 +327,13 @@
     <!-- edit modal end -->
 
     <script>
-        $(document).ready(function () {
+        const myForm = document.getElementById('checkForm');
+            
+        myForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (validateForm()) {
             console.log('ddddddddddddd');
-            $("#myForm ").submit(function (event) {
+            $("#checkForm").submit(function (event) {
                 event.preventDefault();
 
                 const formData = $(this).serialize();
@@ -356,7 +357,9 @@
                     }
                 });
             });
+        }
         });
+        
 
         function razorpayPayment(order) {
             console.log("function called", order);
@@ -506,8 +509,6 @@
             });
         }
     </script>
-
-
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

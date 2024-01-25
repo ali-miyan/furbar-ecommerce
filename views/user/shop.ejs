@@ -247,11 +247,13 @@ function updateSort() {
 
         for (let i = 0; i < products.length; i++) {
             let productElement = document.getElementById('productContainer').children[i];
+        if(productElement){
             if (i >= startIndex && i < endIndex) {
                 productElement.style.display = 'block';
             } else {
                 productElement.style.display = 'none';
             }
+        }
         }
     }
 

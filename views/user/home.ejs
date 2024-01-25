@@ -99,14 +99,13 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Single Banner Start -->
                         <div class="single-banner">
-                            <img src="asset/images/banner/banner-01.jpg" width="370" height="245" alt="Banner" />
+                            <img src="/multerimages/4.3.webp" width="370" height="245" alt="Banner" />
 
                             <div class="banner-content">
                                 <h3 class="title">
-                                    <a href="/shop">New Ruben Teak <br />
-                                            Sideboard</a>
-                                </h3>
-                                <span class="discount">30% Off</span>
+                                    <a href="/shop">New Wooden <br />
+                                            Chairs</a>
+                                </h3><br>
                                 <a class="btn btn-primary btn-hover-dark" href="/shop">Shop Now</a>
                             </div>
                         </div>
@@ -115,14 +114,13 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Single Banner Start -->
                         <div class="single-banner">
-                            <img src="asset/images/banner/banner-02.jpg" width="370" height="245" alt="Banner" />
+                            <img src="/multerimages/5.1.webp" width="370" height="245" alt="Banner" />
 
-                            <div class="banner-content content-02">
+                            <div class="banner-content">
                                 <h3 class="title">
-                                    <a href="/shop">New Reversible <br />
+                                    <a href="/shop">New Classic <br />
                                             Sofa</a>
-                                </h3>
-                                <span class="discount">30% Off</span>
+                                </h3><br>
                                 <a class="btn btn-primary btn-hover-dark" href="/shop">Shop Now</a>
                             </div>
                         </div>
@@ -131,14 +129,13 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Single Banner Start -->
                         <div class="single-banner">
-                            <img src="asset/images/banner/banner-03.jpg" width="370" height="245" alt="Banner" />
+                            <img src="/multerimages/10.webp" width="370" height="245" alt="Banner" />
 
                             <div class="banner-content">
                                 <h3 class="title">
-                                    <a href="/shop">New Lamp Light <br />
+                                    <a href="/shop">New accessories <br />
                                             Collection</a>
-                                </h3>
-                                <span class="discount">30% Off</span>
+                                </h3><br>
                                 <a class="btn btn-primary btn-hover-dark" href="/shop">Shop Now</a>
                             </div>
                         </div>
@@ -157,22 +154,7 @@
             <!-- Product Section Wrapper Start -->
             <div class="product-section-wrapper">
                 <div class="row justify-content-center">
-                    <div class="col-lg-3 col-md-6">
-                        <!-- Single Banner Start -->
-                        <div class="single-banner-02">
-                            <img src="asset/images/banner/banner-04.jpg" width="270" height="429" alt="Banner" />
-
-                            <div class="banner-content">
-                                <h3 class="title">
-                                    <a href="/shop">All New Furniture</a>
-                                </h3>
-                                <span class="discount">40% Off</span>
-                                <a class="btn btn-primary btn-hover-dark" href="/shop">Shop Now</a>
-                            </div>
-                        </div>
-                        <!-- Single Banner End -->
-                    </div>
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <!-- Product Wrapper Start -->
                         <div class="product-wrapper product-active">
                             <!-- Product Top Wrapper Start -->
@@ -203,65 +185,37 @@
                                     <div class="tab-pane fade show active" id="tab1">
                                         <div class="swiper-container">
                                             <div class="swiper-wrapper">
+                                                <%console.log(product,'productssssssss')%>
+                                                <% product.forEach(product=> { %>
+                                                    <% if (!product.is_blocked && !product.isCategoryBlocked) { %>
                                                 <div class="swiper-slide">
                                                     <!-- Single Product Start -->
                                                     <div class="single-product">
-                                                        <a href="/shop"><img src="asset/images/product/product-01.jpg" width="270" height="303" alt="product" /></a>
+                                                        <a href="/detailshop?id=<%=product._id%>"><img src="multerimages/<%=product.images.image1 %>" width="270" height="303" alt="product" />
+                                                            <% if (product.offer) { %>
+                                                            <div style="position: absolute; top: 4px; left: 4px; background-color: #ffb300; color: #ffffff; padding: 5px; font-size: 12px;">
+                                                                <%= Math.floor(((product.price-product.discountedPrice)/product.price)*100)%>% Off
+                                                            </div>
+                                                        <% } %></a>
                                                         <div class="product-content">
                                                             <h4 class="title">
-                                                                <a href="/shop">Elona
-                                                                    bedside
-                                                                    grey
-                                                                    table</a>
+                                                                <a href="/detailshop?id=<%=product._id%>">
+                                                                    <%= product.name %>
+                                                                </a>     
                                                             </h4>
                                                             <div class="price">
-                                                                <span
-                                                                        class="sale-price"
-                                                                        >$40.00</span>
+                                                                <%if(!product.discountedPrice){%>
+                                                                    <span class="sale-price">₹<%=product.price%></span>
+                                                                <%}else{%>
+                                                                    <span class="old-price">₹<%=product.price%></span>&nbsp;&nbsp;<span class="sale-price">₹<%=product.discountedPrice%></span>
+                                                                <%}%>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                  </div>
+                                                <% } %>
+                                            <% }); %>
                                                     <!-- Single Product End -->
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <!-- Single Product Start -->
-                                                    <div class="single-product">
-                                                        <a href="/shop"><img src="asset/images/product/product-02.jpg" width="270" height="303" alt="product" /></a>
-                                                        <div class="product-content">
-                                                            <h4 class="title">
-                                                                <a href="/shop">Simple
-                                                                    minimal
-                                                                    Chair</a>
-                                                            </h4>
-                                                            <div class="price">
-                                                                <span
-                                                                        class="sale-price"
-                                                                        >$240.00</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single Product End -->
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <!-- Single Product Start -->
-                                                    <div class="single-product">
-                                                        <a href="/shop"><img src="asset/images/product/product-03.jpg" width="270" height="303" alt="product" /></a>
-                                                        <div class="product-content">
-                                                            <h4 class="title">
-                                                                <a href="/shop">
-                                                                    Pendant
-                                                                    Chandelier
-                                                                    Light</a>
-                                                            </h4>
-                                                            <div class="price">
-                                                                <span
-                                                                        class="sale-price"
-                                                                        >$240.00</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single Product End -->
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -665,12 +665,14 @@ function deleteAddress(addressId) {
 
 
 const editForm = document.getElementById('editForm');
+if(editForm){
 editForm.addEventListener('submit', function (event) {
     event.preventDefault();
     if (editValidate()) {
         editAddress();
     }
 });
+}
 const editAddressModal = document.getElementById('editAddressModal');
 const closeEditModalButton = document.getElementById('closeEditModal');
 
@@ -689,10 +691,11 @@ function openEditModal(addressId, name, address, landmark, state, city, pincode,
 
     editAddressModal.style.display = 'block';
 }
-
+if(closeEditModalButton){
 closeEditModalButton.addEventListener('click', function () {
     editAddressModal.style.display = 'none';
 });
+}
 
 function editAddress() {
     const formData = $('#editForm').serialize();
@@ -775,34 +778,18 @@ function updateAddress() {
 }
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    const showModalButton = document.getElementById('showModalButton');
-    const modal = document.getElementById('addAddressModal');
-    const closeModalButton = document.getElementById('closeModal');
 
-    showModalButton.addEventListener('click', function () {
-        modal.style.display = 'block';
-    });
-
-    closeModalButton.addEventListener('click', function () {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', function (event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-});
 
 const myForm = document.getElementById('myForm');
+if(myForm){
 myForm.addEventListener('submit', function (event) {
     event.preventDefault();
     if (validateForm()) {
         updateAddress();
     }
 });
+}
+
 
 
 function validateForm() {
@@ -917,13 +904,6 @@ function hideError(errorTag) {
         errorTag.innerText = '';
     }
 }
-
-
-var loader = document.getElementById('preloader');
-window.addEventListener("load",function(){
-    loader.style.display = "none"; 
-})
-
 
 
 

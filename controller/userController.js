@@ -32,7 +32,9 @@ const loadHome = async (req, res) => {
     try {
         const user_id = req.session.user_id
         const user = await User.findById(user_id)
-        res.render('home', { user })
+        const product = await Product.find({is_blocked:false}).limit(4)
+        console.log(product,'producttt');
+        res.render('home', { user,product })
 
     } catch (error) {
         console.log(error);
@@ -443,9 +445,11 @@ const detailShop = async (req, res) => {
     try {
         const id = req.query.id;
         const data = await Product.findOne({ _id: id }).populate('categoryId').populate('offer')
-        
-        console.log(data);
-        res.render('detailshop', { data })
+        const relatedProduct = await Product.find({ categoryId: data.categoryId._id,_id:{$ne:data._id} })
+        console.log(relatedProduct,'relatedproduct');
+        console.log(data.categoryId._id,'id');
+
+        res.render('detailshop', { data,data2:relatedProduct })
     } catch (error) {
         console.log(error);
         res.status(500).render('500');
