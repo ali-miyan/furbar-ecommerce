@@ -509,6 +509,232 @@
             });
         }
     </script>
+    <script>
+        const editForm = document.getElementById('editForm');
+if(editForm){
+editForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (editValidate()) {
+        editAddress();
+    }
+});
+}
+const editAddressModal = document.getElementById('editAddressModal');
+const closeEditModalButton = document.getElementById('closeEditModal');
+
+
+function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
+    document.querySelector('[name="editName"]').value = name;
+    document.querySelector('[name="editAddress"]').value = address;
+    document.querySelector('[name="editLandmark"]').value = landmark;
+    document.querySelector('[name="editState"]').value = state;
+    document.querySelector('[name="editCity"]').value = city;
+    document.querySelector('[name="editPincode"]').value = pincode;
+    document.querySelector('[name="editPhone"]').value = phone;
+    document.querySelector('[name="editEmail"]').value = email;
+
+    document.getElementById('editAddressId').value = addressId;
+
+    editAddressModal.style.display = 'block';
+}
+if(closeEditModalButton){
+closeEditModalButton.addEventListener('click', function () {
+    editAddressModal.style.display = 'none';
+});
+}
+
+function editAddress() {
+    const formData = $('#editForm').serialize();
+    $('#editForm').submit(function (event) {
+        event.preventDefault(); 
+        console.log("hiiiii");
+
+        const formData = $(this).serialize();
+        console.log("nnnnnnnnnnnnnnnnnnnn", formData);
+        const currentRoute = window.location.pathname;
+        let dynamicURL = '/profile #addrassArea';
+        if (currentRoute === '/checkout') {
+            dynamicURL = '/checkout #addrassArea';
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/editaddress', 
+            data: formData,
+            success: function (data) {
+                if (data.success == true) {
+                    console.log(data);
+                    $('#addrassArea').load(dynamicURL)
+                    editAddressModal.style.display = 'none';
+                    $('.modal-backdrop').remove();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Address Successfully Edited',
+                        text: 'Your address has been added successfully.',
+                    });
+
+                } else {
+                    console.error('Error updating address');
+                }
+            },
+            error: function (error) {
+                console.error('Ajax error:', error);
+            }
+        });
+    });
+}
+
+
+
+function editValidate() {
+    const name = validateField('editName', 'Name must contain only letters');
+    const address = validateField('editAddress', 'Address is required');
+    const landmark = validateField('editLandmark', 'cannot be empty');
+    const state = validateField('editState', 'State is required');
+    const city = validateField('editCity', 'City is required');
+    const pincode = editValidatePincode();
+    const phone = editValidatePhone();
+    const email = editValidateEmail();
+
+    return name && address && landmark && state && city && pincode && phone && email;
+}
+
+function validateField(fieldName, errorMessage) {
+    const field = document.querySelector(`[name="${fieldName}"]`);
+    const value = field.value.trim();
+    const errorTag = document.getElementById(`${fieldName}Error`);
+
+    if (!value) {
+        showError(errorTag, errorMessage);
+        return false;
+    }
+
+    if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
+        showError(errorTag, 'Name must contain only letters');
+        return false;
+    }
+
+    if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
+        showError(errorTag, 'Landmark must contain only letters and numbers');
+        return false;
+    }
+
+    hideError(errorTag);
+    return true;
+}
+
+function editValidatePincode() {
+    const pincodeField = document.querySelector('[name="editPincode"]');
+    const pincode = pincodeField.value.trim();
+    const errorTag = document.getElementById('editPincodeError');
+
+    if (!pincode) {
+        showError(errorTag, 'Pincode is required');
+        return false;
+    }
+
+    if (!/^\d{6}$/.test(pincode)) {
+        showError(errorTag, 'Pincode must be a 6-digit number');
+        return false;
+    }
+
+    hideError(errorTag);
+    return true;
+}
+
+function editValidatePhone() {
+    const phoneField = document.querySelector('[name="editPhone"]');
+    const phone = phoneField.value.trim();
+    const errorTag = document.getElementById('editPhoneError');
+
+    if (!phone) {
+        showError(errorTag, 'Phone is required');
+        return false;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+        showError(errorTag, 'Phone must be a 10-digit number');
+        return false;
+    }
+
+    hideError(errorTag);
+    return true;
+}
+
+function editValidateEmail() {
+    const emailField = document.querySelector('[name="editEmail"]');
+    const email = emailField.value.trim();
+    const errorTag = document.getElementById('editEmailError');
+
+    if (!email) {
+        showError(errorTag, 'Email is required');
+        return false;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+        showError(errorTag, 'Invalid email address');
+        return false;
+    }
+
+    hideError(errorTag);
+    return true;
+}
+
+function showError(errorTag, errorMessage) {
+    if (!errorTag) {
+        const fieldName = errorTag.id.replace('Error', '');
+        const field = document.querySelector(`[name="${fieldName}"]`);
+        const errorTag = document.createElement('p');
+        errorTag.id = `${fieldName}Error`;
+        errorTag.classList.add('error-message');
+        field.parentNode.appendChild(errorTag);
+    }
+
+    errorTag.innerText = errorMessage;
+}
+
+function hideError(errorTag) {
+    if (errorTag) {
+        errorTag.innerText = '';
+    }
+}
+
+
+
+
+function showusereditmodal() {
+    $('#editProfileModal').modal('show');
+}
+
+
+
+
+function validateEditProfileForm() {
+    var name = document.getElementById('editName').value;
+    var phone = document.getElementById('editPhone').value;
+
+    // Reset previous error messages
+    document.getElementById('usernameError').innerText = '';
+    document.getElementById('phoneError').innerText = '';
+
+    // Validate name
+    if (name.trim() === '') {
+        document.getElementById('usernameError').innerText = 'Name cannot be empty';
+        return false;
+    }
+
+    // Validate phone number
+    if (!/^\d{10}$/.test(phone)) {
+        document.getElementById('phoneError').innerText = 'Invalid mobile number';
+        return false;
+    }
+
+    return true; // Form submission allowed
+}
+
+
+
+    </script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
