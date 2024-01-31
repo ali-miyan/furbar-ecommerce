@@ -1,4 +1,4 @@
-  const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   user: {
@@ -6,69 +6,69 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  delivery_address:{
-    type:Object,
-    required:true
+  delivery_address: {
+    type: Object,
+    required: true
   },
   payment: {
     type: String,
     required: true,
-    method: ['Cash on delivery', 'Razorpay' , 'Wallet']
+    method: ['Cash on delivery', 'Razorpay', 'Wallet']
   },
   products: [{
-      productId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product',
-        required: true
-      },
-      quantity: {
-        type: Number,
-        required: true
-      },
-      price: {
-        type: Number,
-        required: true
-      },
-      totalPrice: {
+    productId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Product',
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    totalPrice: {
       type: Number,
       default: 0
     },
-    productStatus:{
-        type: String,
-        default: 'pending',
-        enum: ['pending','placed', 'delivered', 'cancelled', 'shipped','out-for-delivery','returned']
-      },
+    productStatus: {
+      type: String,
+      default: 'pending',
+      enum: ['pending', 'placed', 'delivered', 'cancelled', 'shipped', 'out-for-delivery', 'returned']
+    },
     cancelReason: {
       type: String
     }
   }],
   subtotal: {
     type: Number,
-    required:true
+    required: true
   }
   ,
   orderStatus: {
     type: String,
     default: 'pending',
-    enum: ['pending','placed','returned or cancelled']
+    enum: ['pending', 'placed', 'returned or cancelled']
   }
   ,
   orderDate: {
     type: Date,
     required: true
   },
-  wallet:{
-    type:Number,
+  wallet: {
+    type: Number,
   },
-  cancelledProduct:{
-    type:Array,
-    default:[]
+  cancelledProduct: {
+    type: Array,
+    default: []
   },
-  returnedProduct:{
-    type:Array,
-    default:[]
+  returnedProduct: {
+    type: Array,
+    default: []
   }
 })
 
 const Order = mongoose.model('Orders', orderSchema)
-module.exports =Order
+module.exports = Order

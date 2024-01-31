@@ -18,7 +18,7 @@ const offerSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  
+
   is_blocked: {
     type: Boolean,
     default: false,
@@ -27,4 +27,4 @@ const offerSchema = new mongoose.Schema({
 
 
 const offerModel = mongoose.model("offerModel", offerSchema);
-module.exports=offerModel
+module.exports = offerModel

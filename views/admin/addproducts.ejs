@@ -167,7 +167,7 @@
                                                     placeholder="Type here">
                                                 <div class="error-message text-center" id="productTitleError"></div>
                                             </div>
- 
+
                                             <div class="form-group">
                                                 <label for="quantity">Quantity</label>
                                                 <input type="number" class="form-control" id="quantity" name="quantity"
@@ -206,35 +206,43 @@
 
                                             <div class="row d-flex justify-content-center">
                                                 <div class="row d-flex justify-content-between">
-                                                  <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput1" class="image-label">Image 1
-                                                        <div class="image-preview" id="imagePreview1"></div>
-                                                      <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" onchange="previewImage(this, 'imagePreview1')">
-                                                    </label>
-                                                  </div>
-                                            
-                                                  <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput2" class="image-label">Image 2
-                                                        <div class="image-preview" id="imagePreview2"></div>
-                                                      <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" onchange="previewImage(this, 'imagePreview2')">
-                                                    </label>
-                                                  </div>
-                                            
-                                                  <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput3" class="image-label">Image 3
-                                                        <div class="image-preview" id="imagePreview3"></div>
-                                                      <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" onchange="previewImage(this, 'imagePreview3')">
-                                                    </label>
-                                                  </div>
-                                            
-                                                  <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput4" class="image-label">Image 4
-                                                        <div class="image-preview" id="imagePreview4"></div>
-                                                      <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput" onchange="previewImage(this, 'imagePreview4')">
-                                                    </label>
-                                                  </div>
+                                                    <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                                        <label for="imageInput1" class="image-label">Image 1
+                                                            <div class="image-preview" id="imagePreview1"></div>
+                                                            <input name="image1" type="file" accept="image/*"
+                                                                id="imageInput1" class="imageInput"
+                                                                onchange="previewImage(this, 'imagePreview1')">
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                                        <label for="imageInput2" class="image-label">Image 2
+                                                            <div class="image-preview" id="imagePreview2"></div>
+                                                            <input name="image2" type="file" accept="image/*"
+                                                                id="imageInput2" class="imageInput"
+                                                                onchange="previewImage(this, 'imagePreview2')">
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                                        <label for="imageInput3" class="image-label">Image 3
+                                                            <div class="image-preview" id="imagePreview3"></div>
+                                                            <input name="image3" type="file" accept="image/*"
+                                                                id="imageInput3" class="imageInput"
+                                                                onchange="previewImage(this, 'imagePreview3')">
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                                        <label for="imageInput4" class="image-label">Image 4
+                                                            <div class="image-preview" id="imagePreview4"></div>
+                                                            <input name="image4" type="file" accept="image/*"
+                                                                id="imageInput4" class="imageInput"
+                                                                onchange="previewImage(this, 'imagePreview4')">
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                              </div>
+                                            </div>
                                             <div class="error-message text-center mt-4" id="imageError"></div>
 
                                             <div class="container">
@@ -265,19 +273,19 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
-    console.log('loadeerrrrrrrrrr');
-    "use strict";
-        // Animate loader off screen
-        $( ' .preloader' ).fadeOut("slow");
-        setTimeout(function(){ $('.preloader').fadeOut('slow'); }, 3000);
-    });
+            console.log('loadeerrrrrrrrrr');
+            "use strict";
+            // Animate loader off screen
+            $(' .preloader').fadeOut("slow");
+            setTimeout(function () { $('.preloader').fadeOut('slow'); }, 3000);
+        });
 
-    $(document).ready(function () {
-      "use strict";
-          // Animate loader off screen
-          $( ' .preloader1' ).fadeOut("slow");
-          setTimeout(function(){ $('.preloader').fadeOut('slow'); }, 3000);
-      });
+        $(document).ready(function () {
+            "use strict";
+            // Animate loader off screen
+            $(' .preloader1').fadeOut("slow");
+            setTimeout(function () { $('.preloader').fadeOut('slow'); }, 3000);
+        });
 
     </script>
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
@@ -301,7 +309,7 @@
                 reader.onload = function (e) {
                     const image = new Image();
                     image.src = e.target.result;
-                    image.width = 130; 
+                    image.width = 130;
 
                     preview.innerHTML = '';
                     preview.appendChild(image);

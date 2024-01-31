@@ -1,3 +1,5 @@
+const config = require('./config/config');
+config.connectDB();
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
@@ -9,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 const session = require('express-session');
 const nocache = require('nocache');   
 const Config=require('./config/config')
-const { config } = require('dotenv');
 
 
 app.use((req, res, next) => {

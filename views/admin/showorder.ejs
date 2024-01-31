@@ -258,9 +258,9 @@
                                                         <%= product.totalPrice %>
                                                     </td>
                                                     <td>
-                                                        <select class="statusSelect"
-                                                            id="<%=orderData._id%><%=product._id%>"
-                                                            onchange="status('<%=orderData._id%>', '<%=product._id%>')">
+                                                            <select class="statusSelect"
+                                                                id="<%=orderData._id%><%=product._id%>"
+                                                                onchange="status('<%=orderData._id%>', '<%=product._id%>')">
                                                             <option value="placed" <% if
                                                                 (product.productStatus=='placed' ) { %> selected <% } %>
                                                                     >placed</option>

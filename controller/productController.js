@@ -1,47 +1,39 @@
-const express = require("express");
-const routeAdmin = express();
-const sharp = require("sharp")
-const config = require("../config/config");
-const User = require("../models/userModel");
-const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
-const adminController = require("../controller/adminConroller");
-const Product=require("../models/productModel")
-const couponModel = require('../models/couponModel');
+const Product = require("../models/productModel")
 const offerModel = require("../models/offerModel");
 
-const getProduct=async(req,res)=>{
-    try {
-        const products=await Product.find({}).populate({
-          path: 'categoryId',
-          populate: {
-            path: 'offer'
-          }
-        }).populate('offer');
-        const offer = await offerModel.find({})
+const getProduct = async (req, res) => {
+  try {
+    const products = await Product.find({}).populate({
+      path: 'categoryId',
+      populate: {
+        path: 'offer'
+      }
+    }).populate('offer');
+    const offer = await offerModel.find({})
 
-        products.forEach(async(product) => {
-          if(product.categoryId.offer){
-            const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
-            product.discountedPrice = parseInt(offerPrice);
-            product.offer = product.categoryId.offer
-            await product.save();
-          }
-          else if (product.offer) {
-            const discountedPrice = product.price * (1 - product.offer.discountAmount / 100);
-            product.discountedPrice = parseInt(discountedPrice);
-            await product.save();
-          }
-      });      
+    products.forEach(async (product) => {
+      if (product.categoryId.offer) {
+        const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
+        product.discountedPrice = parseInt(offerPrice);
+        product.offer = product.categoryId.offer
+        await product.save();
+      }
+      else if (product.offer) {
+        const discountedPrice = product.price * (1 - product.offer.discountAmount / 100);
+        product.discountedPrice = parseInt(discountedPrice);
+        await product.save();
+      }
+    });
 
-      console.log(products,'backenddddd');
+    console.log(products, 'backenddddd');
 
 
-      res.render('products',{products,offer})
-    } catch (error) {
-        console.log(error);
-        res.status(500).render('500');
-    }
+    res.render('products', { products, offer })
+  } catch (error) {
+    console.log(error);
+    res.status(500).render('500');
+  }
 }
 
 const addProducts = async (req, res) => {
@@ -74,23 +66,23 @@ const addProductsPost = async (req, res) => {
     //   }
     // }
 
-      const product = new Product({
-        name: details.name,
-        quantity: details.quantity,
-        categoryId: details.category,
-        price: details.price,
-        description: details.description,
-        images: { 
-          image1: img[0],
-          image2: img[1],
-          image3: img[2],
-          image4: img[3],
-        },
-      });
+    const product = new Product({
+      name: details.name,
+      quantity: details.quantity,
+      categoryId: details.category,
+      price: details.price,
+      description: details.description,
+      images: {
+        image1: img[0],
+        image2: img[1],
+        image3: img[2],
+        image4: img[3],
+      },
+    });
 
-      const result = await product.save();
-      res.redirect('/admin/products');
-    
+    const result = await product.save();
+    res.redirect('/admin/products');
+
   } catch (error) {
     console.log(error);
     res.status(500).render('500');
@@ -133,22 +125,22 @@ const editProductsPost = async (req, res) => {
     //   }
     // }
 
-      const product = {
-        name: details.name,
-        quantity: details.quantity,
-        categoryId: details.category,
-        price: details.price,
-        description: details.description,
-        images: {
-          image1: img[0],
-          image2: img[1],
-          image3: img[2],
-          image4: img[3],
-        },
-      };
+    const product = {
+      name: details.name,
+      quantity: details.quantity,
+      categoryId: details.category,
+      price: details.price,
+      description: details.description,
+      images: {
+        image1: img[0],
+        image2: img[1],
+        image3: img[2],
+        image4: img[3],
+      },
+    };
 
-      const result = await Product.findOneAndUpdate({ _id: id }, product, { new: true });
-      res.redirect('/admin/products');
+    const result = await Product.findOneAndUpdate({ _id: id }, product, { new: true });
+    res.redirect('/admin/products');
 
   } catch (error) {
     console.log(error);
@@ -157,27 +149,27 @@ const editProductsPost = async (req, res) => {
 };
 
 
-const blockProducts=async(req,res)=>{
-    try {
-      const user = req.params.id; 
-      const userValue = await Product.findOne({ _id: user });
-      if (userValue.is_blocked) {
-        await Product.updateOne({ _id: user }, { $set: { is_blocked: false } });
-      } else {
-        await Product.updateOne({ _id: user }, { $set: { is_blocked: true } });
-      }
-      res.json({ block: true });
-    } catch (error) {
-      console.log(error);
-      res.status(500).render('500');
+const blockProducts = async (req, res) => {
+  try {
+    const user = req.params.id;
+    const userValue = await Product.findOne({ _id: user });
+    if (userValue.is_blocked) {
+      await Product.updateOne({ _id: user }, { $set: { is_blocked: false } });
+    } else {
+      await Product.updateOne({ _id: user }, { $set: { is_blocked: true } });
     }
+    res.json({ block: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).render('500');
   }
+}
 
-module.exports={
-    getProduct,
-    addProducts,
-    addProductsPost,
-    editProducts,
-    editProductsPost,
-    blockProducts
+module.exports = {
+  getProduct,
+  addProducts,
+  addProductsPost,
+  editProducts,
+  editProductsPost,
+  blockProducts
 }

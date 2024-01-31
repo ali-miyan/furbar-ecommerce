@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId
 
- const categorySchema = mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        unique:true
+const categorySchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
     },
-    description:{
-        type:String,
-        required:true
+    description: {
+        type: String,
+        required: true
     },
     offer: {
         type: ObjectId,
-        ref:'offerModel',
+        ref: 'offerModel',
     },
-    discountedPrice:Number
+    discountedPrice: Number
     ,
-    is_blocked:{
-        type:Boolean,
-        default:false
+    is_blocked: {
+        type: Boolean,
+        default: false
     }
- })
- 
-const categoryModel= mongoose.model("categoryModel",categorySchema);
-module.exports=categoryModel
+})
+
+const categoryModel = mongoose.model("categoryModel", categorySchema);
+module.exports = categoryModel

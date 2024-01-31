@@ -1,19 +1,7 @@
-const express = require("express");
-const config = require("../config/config");
 const User = require("../models/userModel");
-const categoryModel = require('../models/categoryModel');
-const bcrypt = require("bcrypt");
-const adminController = require("../controller/adminConroller");
-const auth = require("../middleware/auth");
 const Product = require("../models/productModel")
-const sharp = require('sharp');
-const multer = require('../middleware/multer')
-const productController = require("../controller/productController")
-const session = require("express-session");
-const userController = require("../controller/userController");
 const cartModel = require('../models/cartModel')
 const addressModel = require('../models/addressModel')
-const cartController = require('../controller/cartController')
 const orderModel = require('../models/orderModal')
 const Razorpay = require('razorpay');
 const dotenv = require('dotenv')
@@ -80,16 +68,16 @@ const checkoutPost = async (req, res) => {
 
         if (cartData.couponDiscount) {
           const totalQuantity = cartData.product.reduce((total, product) => total + product.quantity, 0);
-          console.log(totalQuantity,'totalquantity');
-          const discountPerItem = cartData.couponDiscount.discountAmount /totalQuantity;
-          console.log(discountPerItem,'per item');
+          console.log(totalQuantity, 'totalquantity');
+          const discountPerItem = cartData.couponDiscount.discountAmount / totalQuantity;
+          console.log(discountPerItem, 'per item');
           item.totalPrice = price - discountPerItem;
         } else {
           item.totalPrice = price;
         }
         orderItems.push(item);
       }
-  }
+    }
 
 
     const total = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);

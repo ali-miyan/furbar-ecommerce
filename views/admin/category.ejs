@@ -202,7 +202,7 @@
                                                 onclick="applyCategoryOffer('<%=offer._id%>')">Apply</button>
                                         </div>
                                     </div>
-                                <% }) %>
+                                    <% }) %>
                             </div>
 
                         </div>
@@ -267,13 +267,14 @@
                                                 <td>
 
                                                     <% if (category[i].is_blocked) { %>
-                                                        <a class="unblock-user" data-user-id="<%= category[i]._id %>"><span
+                                                        <a class="unblock-user"
+                                                            data-user-id="<%= category[i]._id %>"><span
                                                                 class="badge rounded-pill alert-success">unblock</span></a>
                                                         <% } else { %>
                                                             <a class="block-user"
                                                                 data-user-id="<%= category[i]._id %>"><span
-                                                                class="badge rounded-pill alert-warning">block</span></a>
-                                                        <% } %>
+                                                                    class="badge rounded-pill alert-warning">block</span></a>
+                                                            <% } %>
                                                 </td>
 
                                             </tr>
@@ -323,7 +324,7 @@
 
             <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
             <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-            
+
             <script type="text/javascript" charset="utf8"
                 src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
             <script>
@@ -333,37 +334,37 @@
             </script>
 
 
-<script>
-    document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
-        console.log(element);
-        element.addEventListener('click', function (event) {
-            event.preventDefault();
+            <script>
+                document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
+                    console.log(element);
+                    element.addEventListener('click', function (event) {
+                        event.preventDefault();
 
-            const userId = element.getAttribute('data-user-id');
-            const action = element.classList.contains('block-user') ? 'block' : 'unblock';
+                        const userId = element.getAttribute('data-user-id');
+                        const action = element.classList.contains('block-user') ? 'block' : 'unblock';
 
-            fetch(`/admin/blockcategory/${userId}`, {
-                method: 'PATCH',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.blocked === true) {
-                        //updating the button text and color
-                        element.querySelector('span').classList.toggle('alert-success');
-                        element.querySelector('span').classList.toggle('alert-warning');
-                        element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
+                        fetch(`/admin/blockcategory/${userId}`, {
+                            method: 'PATCH',
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.blocked === true) {
+                                    //updating the button text and color
+                                    element.querySelector('span').classList.toggle('alert-success');
+                                    element.querySelector('span').classList.toggle('alert-warning');
+                                    element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
 
-                        // Replace button class
-                        element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
-                        element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
-                    }
-                }).catch((error) => {
-                    console.log(error.message);
-                })
+                                    // Replace button class
+                                    element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
+                                    element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
+                                }
+                            }).catch((error) => {
+                                console.log(error.message);
+                            })
 
-        });
-    });
-</script>
+                    });
+                });
+            </script>
 </body>
 
 </html>
