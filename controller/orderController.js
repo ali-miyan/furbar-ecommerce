@@ -16,6 +16,7 @@ const razorpay = new Razorpay({
 
 const checkout = async (req, res) => {
   try {
+    if(!req.session.orderId){
     const wallet = await User.findById(req.session.user_id);
     const cartData = await cartModel.findOne({ user: req.session.user_id }).populate({ path: 'product.productId', model: 'Product' }).populate('couponDiscount');
     const currentDate = new Date();
@@ -32,6 +33,10 @@ const checkout = async (req, res) => {
     console.log(discountAmount, "helooooo");
 
     res.render('checkout', { wallet, address, cartData, subtotal, coupons, discountAmount });
+    }else{
+      delete req.session.orderId
+      res.redirect('/showcart')
+    }
 
   } catch (error) {
     console.log(error);
@@ -118,6 +123,7 @@ const checkoutPost = async (req, res) => {
 
     await order.save();
     const orderId = order._id;
+    req.session.orderId = order._id
 
     if (order.orderStatus == "placed") {
       console.log("placeeddddddddddddddd");
@@ -269,11 +275,8 @@ const returnOrder = async (req, res) => {
     if (orderData.products.length === 0) {
       await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
     }
-
-
+ 
     await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
-
-
 
     await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
 
@@ -294,7 +297,6 @@ const cancelOrder = async (req, res) => {
     console.log(productId);
     const cancelReason = req.body.cancelReason;
     const productDetails = await Product.findById(productId).populate('categoryId');
-
 
     const orderData = await orderModel.findOneAndUpdate(
       { _id: orderId, 'products._id': id },

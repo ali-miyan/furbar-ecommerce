@@ -1,4 +1,4 @@
-;(function ($) {
+(function ($) {
     "use strict"
 
     /*--
@@ -662,6 +662,35 @@ function deleteAddress(addressId) {
 }
 
 
+function showusereditmodal() {
+    $('#editProfileModal').modal('show');
+}
+
+
+
+
+function validateEditProfileForm() {
+    var name = document.getElementById('editName').value;
+    var phone = document.getElementById('editPhone').value;
+
+    // Reset previous error messages
+    document.getElementById('usernameError').innerText = '';
+    document.getElementById('phoneError').innerText = '';
+
+    // Validate name
+    if (name.trim() === '') {
+        document.getElementById('usernameError').innerText = 'Name cannot be empty';
+        return false;
+    }
+
+    // Validate phone number
+    if (!/^\d{10}$/.test(phone)) {
+        document.getElementById('phoneError').innerText = 'Invalid mobile number';
+        return false;
+    }
+
+    return true; // Form submission allowed
+}
 
 
 
@@ -705,17 +734,6 @@ function updateAddress() {
 
 
 
-const myForm = document.getElementById('myForm');
-if(myForm){
-myForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    if (validateForm()) {
-        updateAddress();
-    }
-});
-}
-
-
 
 function validateForm() {
     const name = validateField('name', 'Name must contain only letters');
@@ -726,6 +744,11 @@ function validateForm() {
     const pincode = validatePincode();
     const phone = validatePhone();
     const email = validateEmail();
+
+     if (name === null || address === null || landmark === null || state === null || city === null || pincode === null || phone === null || email === null) {
+        // If any required field is null, return false to indicate form validation failure
+        return false;
+    }
 
     return name && address && landmark && state && city && pincode && phone && email;
 }
@@ -838,18 +861,16 @@ function hideError(errorTag) {
 
     
 function copyToClipboard() {
-  // Select the referral code text
   var referralCodeElement = document.getElementById('referralCode');
   var range = document.createRange();
   range.selectNode(referralCodeElement);
   window.getSelection().removeAllRanges();
   window.getSelection().addRange(range);
 
-  // Copy the text to clipboard
   document.execCommand('copy');
 
   window.getSelection().removeAllRanges();
-  document.getElementById("copyLink").querySelector("i").classList.replace("bi-clipboard", "bi-check-circle");
+  document.getElementById("copyLink").querySelector("i").classList.replace("fa-copy", "fa-circle-check");
 
 }
 

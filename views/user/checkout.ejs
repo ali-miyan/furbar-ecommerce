@@ -5,7 +5,7 @@
 
     <!-- Checkout Section Start -->
     <div class="section section-padding">
-        <div class="container" ><br>
+        <div class="container"><br>
             <hr><br><br>
             <div class="checkout-info">
                 <p class="info-header">
@@ -52,10 +52,11 @@
                                                                     class="apply-btn btn btn-danger">
                                                                     <span> Remove</span>
                                                                 </button>
-                                                            <% } %>
-                                                        <% } else { %>
-                                                               <span class="badge not-applicable">Not Applicable</span>
-                                                        <%}%>
+                                                                <% } %>
+                                                                    <% } else { %>
+                                                                        <span class="badge not-applicable">Not
+                                                                            Applicable</span>
+                                                                        <%}%>
                                             </div>
                                         </div>
                                     </div>
@@ -66,189 +67,195 @@
 
             </div>
             <div id="addrassArea">
-            <form id="checkForm">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <% if (address && address.address && address.address.length> 0) { %>
-                            <div class="row">
-                                <% address.address.forEach(function(address, index) { %>
-                                    <div class="col-lg-6"><br><br>
-                                        <div class="card card-dashboard">
-                                            <div class="card-body">
-                                                <input type="radio" name="selectedAddress" value="<%= address._id %>" <% if (index===0) { %>checked<% } %> required>
-                                                    <h3 class="card-title">Address <%= index + 1 %></h3>
-                                                    <p>Name: <%= address.name %><br>
-                                                    Address: <%= address.address %><br>
-                                                    Landmark: <%= address.landmark %><br>
-                                                    State: <%= address.state %><br>
-                                                    City: <%= address.city %><br>
-                                                    Pincode: <%= address.pincode %><br>
-                                                    Phone: <%= address.phone %><br>
-                                                    Email: <%= address.email %><br>
-                                                    <a onclick="openEditModal('<%= address._id %>', '<%= address.name %>', '<%= address.address %>', '<%= address.landmark %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>')"><i class="fa fa-edit"></i></a>
+                <form id="checkForm">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <% if (address && address.address && address.address.length> 0) { %>
+                                <div class="row">
+                                    <% address.address.forEach(function(address, index) { %>
+                                        <div class="col-lg-6"><br><br>
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <input type="radio" name="selectedAddress"
+                                                        value="<%= address._id %>" <% if (index===0) { %>checked<% } %>
+                                                        required>
+                                                        <h3 class="card-title">Address <%= index + 1 %>
+                                                        </h3>
+                                                        <p>Name: <%= address.name %><br>
+                                                                Address: <%= address.address %><br>
+                                                                    Landmark: <%= address.landmark %><br>
+                                                                        State: <%= address.state %><br>
+                                                                            City: <%= address.city %><br>
+                                                                                Pincode: <%= address.pincode %><br>
+                                                                                    Phone: <%= address.phone %><br>
+                                                                                        Email: <%= address.email %><br>
+                                                                                            <a
+                                                                                                onclick="openEditModal('<%= address._id %>', '<%= address.name %>', '<%= address.address %>', '<%= address.landmark %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>')"><i
+                                                                                                    class="fa fa-edit"></i></a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <% }); %>
-                            </div>
+                                        <% }); %>
+                                </div>
                         </div>
-                    <% } else { %>
-                        <div class="col-lg-12">
-                            <!-- Checkout Form Start -->
-                            <div class="checkout-form">
+                        <% } else { %>
+                            <div class="col-lg-12">
+                                <!-- Checkout Form Start -->
+                                <div class="checkout-form">
+                                    <div class="checkout-title">
+                                        <h4 class="title">Add Address</h4>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="name" placeholder="Name" />
+                                                <p id="nameError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="address" placeholder="Address" />
+                                                <p id="addressError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="landmark" placeholder="Landmark" />
+                                                <p id="landmarkError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="state" placeholder="State" />
+                                                <p id="stateError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="city" placeholder="City" />
+                                                <p id="cityError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="pincode" placeholder="Pincode" />
+                                                <p id="pincodeError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="phone" placeholder="Phone" />
+                                                <p id="mobileError" class="error-message"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="single-form">
+                                                <input type="text" name="email" placeholder="Email address" />
+                                                <p id="emailError" class="error-message"></p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Checkout Form End -->
+                            </div>
+                    </div><!-- End .row -->
+                    <% } %>
+                        <div class="col-lg-5">
+                            <div class="checkout-order">
                                 <div class="checkout-title">
-                                    <h4 class="title">Add Address</h4>
+                                    <h4 class="title">Your Order</h4>
                                 </div>
 
+                                <div class="checkout-order-table table-responsive" id="reloadAmount">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="name" placeholder="Name" />
-                                            <p id="nameError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="address" placeholder="Address" />
-                                            <p id="addressError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="landmark" placeholder="Landmark" />
-                                            <p id="landmarkError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="state" placeholder="State" />
-                                            <p id="stateError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="city" placeholder="City" />
-                                            <p id="cityError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="pincode" placeholder="Pincode" />
-                                            <p id="pincodeError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="phone" placeholder="Phone" />
-                                            <p id="mobileError" class="error-message"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="single-form">
-                                            <input type="text" name="email" placeholder="Email address" />
-                                            <p id="emailError" class="error-message"></p>
-                                        </div>
-                                    </div>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                </div>
-                            </div>
-                            <!-- Checkout Form End -->
-                        </div>
-                </div><!-- End .row -->
-                <% } %>
-                    <div class="col-lg-5">
-                        <div class="checkout-order">
-                            <div class="checkout-title">
-                                <h4 class="title">Your Order</h4>
-                            </div>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
 
-                            <div class="checkout-order-table table-responsive" id="reloadAmount">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-
-                                            <td class="Product-name">
-                                                <p>Subtotal</p>
-                                            </td>
-                                            <td class="Product-price">
-                                                <p>₹<%=subtotal%>
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="Product-name">
-                                                <p>Shipping</p>
-                                            </td>
-                                            <td class="Product-price">
-                                                <ul class="shipping-list">
-                                                    <li class="radio">
-                                                        <input type="radio" name="payment" value="Cash on delivery"
-                                                            id="radio1" checked />
-                                                        <label for="radio1"><span></span>Cash on delivery</label>
-                                                    </li>
-                                                    <li class="radio">
-                                                        <input type="radio" name="payment" value="Razorpay"
-                                                            id="radio2" />
-                                                        <label for="radio2"><span></span>Online paymet</label>
-                                                    </li>
-                                                    <li class="radio">
-                                                        <% if (wallet.wallet < subtotal) { %>
-                                                            <input type="radio" name="payment" value="Wallet"
-                                                                id="radio3" disabled />
-                                                            <label for="radio3"><span></span>Wallet</label>
-                                                            <p>Wallet Balance: ₹<%=wallet.wallet%> (Not enough balance)
-                                                            </p>
-                                                            <% } else { %>
+                                                <td class="Product-name">
+                                                    <p>Subtotal</p>
+                                                </td>
+                                                <td class="Product-price">
+                                                    <p>₹<%=subtotal%>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="Product-name">
+                                                    <p>Shipping</p>
+                                                </td>
+                                                <td class="Product-price">
+                                                    <ul class="shipping-list">
+                                                        <li class="radio">
+                                                            <input type="radio" name="payment" value="Cash on delivery"
+                                                                id="radio1" checked />
+                                                            <label for="radio1"><span></span>Cash on delivery</label>
+                                                        </li>
+                                                        <li class="radio">
+                                                            <input type="radio" name="payment" value="Razorpay"
+                                                                id="radio2" />
+                                                            <label for="radio2"><span></span>Online paymet</label>
+                                                        </li>
+                                                        <li class="radio">
+                                                            <% if (wallet.wallet < subtotal) { %>
                                                                 <input type="radio" name="payment" value="Wallet"
-                                                                    id="radio3" />
+                                                                    id="radio3" disabled />
                                                                 <label for="radio3"><span></span>Wallet</label>
-                                                                <p>Wallet Balance: ₹<%=wallet.wallet%>
+                                                                <p>Wallet Balance: ₹<%=wallet.wallet%> (Not enough
+                                                                        balance)
                                                                 </p>
-                                                                <% } %>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="Product-name">
-                                                <p>Total</p>
-                                            </td>
-                                            <td class="total-price">
-                                                <% if (discountAmount !==subtotal ) { %>
-                                                    Original Amount: ₹ <del>
-                                                        <%= subtotal %>
-                                                    </del> <br>
-                                                    Discounted Amount: ₹<%= discountAmount %>
-                                                    <% } else { %>
-                                                            ₹<%= subtotal %>
-                                                    <% } %>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                                                                <% } else { %>
+                                                                    <input type="radio" name="payment" value="Wallet"
+                                                                        id="radio3" />
+                                                                    <label for="radio3"><span></span>Wallet</label>
+                                                                    <p>Wallet Balance: ₹<%=wallet.wallet%>
+                                                                    </p>
+                                                                    <% } %>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="Product-name">
+                                                    <p>Total</p>
+                                                </td>
+                                                <td class="total-price">
+                                                    <% if (discountAmount !==subtotal ) { %>
+                                                        Original Amount: ₹ <del>
+                                                            <%= subtotal %>
+                                                        </del> <br>
+                                                        Discounted Amount: ₹<%= discountAmount %>
+                                                            <% } else { %>
+                                                                ₹<%= subtotal %>
+                                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
 
-                            <div class="checkout-payment">
+                                <div class="checkout-payment">
 
-                                <div class="single-form">
-                                    <button type="submit" id="razorpayButton"
-                                        class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                                    <div class="single-form">
+                                        <button type="submit" id="razorpayButton"
+                                            class="btn btn-primary btn-hover-dark d-block">Place Order</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
-    </div>
+        </div>
 
     </div><br><br>
     <!-- Checkout Section End -->
@@ -328,38 +335,67 @@
 
     <script>
         const myForm = document.getElementById('checkForm');
-            
-        myForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            if (validateForm()) {
-            console.log('ddddddddddddd');
-            $("#checkForm").submit(function (event) {
+
+        if (myForm) {
+            myForm.addEventListener('submit', function (event) {
                 event.preventDefault();
 
-                const formData = $(this).serialize();
+                const addressesExist = document.querySelectorAll('[name="selectedAddress"]').length > 0;
+                console.log(addressesExist, 'exist');
 
-                $.ajax({
-                    type: "POST",
-                    url: "/checkoutform",
-                    data: formData,
-                    success: function (response) {
-                        console.log("AJAX Success:", response);
-                        if (response.success) {
-                            let orderId = response.orderId;
-                            location.href = `/successpage?id=${orderId}`
-                        } else if (response.success == false) {
-                            console.log("reaaaaaacccccehjssssssssssssssddddddddddddd");
-                            razorpayPayment(response.order)
-                        }
-                    },
-                    error: function (error) {
-                        console.log(error);
+                if (!addressesExist) {
+                    if (validateForm()) {
+                        console.log('Form is valid. Proceeding with submission.');
+
+                        const formData = $(this).serialize();
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/checkoutform",
+                            data: formData,
+                            success: function (response) {
+                                console.log("AJAX Success:", response);
+                                if (response.success) {
+                                    let orderId = response.orderId;
+                                    location.href = `/successpage?id=${orderId}`;
+                                } else if (response.success === false) {
+                                    console.log("Reached AJAX success with success as false.");
+                                    razorpayPayment(response.order);
+                                }
+                            },
+                            error: function (error) {
+                                console.log("AJAX Error:", error);
+                            }
+                        });
                     }
-                });
+                } else {
+                    console.log('Addresses exist. Proceeding with form submission without validation.');
+
+                    const formData = $(this).serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/checkoutform",
+                        data: formData,
+                        success: function (response) {
+                            console.log("AJAX Success:", response);
+                            if (response.success) {
+                                let orderId = response.orderId;
+                                location.href = `/successpage?id=${orderId}`;
+                            } else if (response.success === false) {
+                                console.log("Reached AJAX success with success as false.");
+                                razorpayPayment(response.order);
+                            }
+                        },
+                        error: function (error) {
+                            console.log("AJAX Error:", error);
+                        }
+                    });
+                }
             });
         }
-        });
-        
+
+
 
         function razorpayPayment(order) {
             console.log("function called", order);
@@ -511,226 +547,316 @@
     </script>
     <script>
         const editForm = document.getElementById('editForm');
-if(editForm){
-editForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    if (editValidate()) {
-        editAddress();
-    }
-});
-}
-const editAddressModal = document.getElementById('editAddressModal');
-const closeEditModalButton = document.getElementById('closeEditModal');
+        if (editForm) {
+            editForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (editValidate()) {
+                    editAddress();
+                }
+            });
+        }
+        const editAddressModal = document.getElementById('editAddressModal');
+        const closeEditModalButton = document.getElementById('closeEditModal');
 
 
-function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
-    document.querySelector('[name="editName"]').value = name;
-    document.querySelector('[name="editAddress"]').value = address;
-    document.querySelector('[name="editLandmark"]').value = landmark;
-    document.querySelector('[name="editState"]').value = state;
-    document.querySelector('[name="editCity"]').value = city;
-    document.querySelector('[name="editPincode"]').value = pincode;
-    document.querySelector('[name="editPhone"]').value = phone;
-    document.querySelector('[name="editEmail"]').value = email;
+        function openEditModal(addressId, name, address, landmark, state, city, pincode, phone, email) {
+            document.querySelector('[name="editName"]').value = name;
+            document.querySelector('[name="editAddress"]').value = address;
+            document.querySelector('[name="editLandmark"]').value = landmark;
+            document.querySelector('[name="editState"]').value = state;
+            document.querySelector('[name="editCity"]').value = city;
+            document.querySelector('[name="editPincode"]').value = pincode;
+            document.querySelector('[name="editPhone"]').value = phone;
+            document.querySelector('[name="editEmail"]').value = email;
 
-    document.getElementById('editAddressId').value = addressId;
+            document.getElementById('editAddressId').value = addressId;
 
-    editAddressModal.style.display = 'block';
-}
-if(closeEditModalButton){
-closeEditModalButton.addEventListener('click', function () {
-    editAddressModal.style.display = 'none';
-});
-}
-
-function editAddress() {
-    const formData = $('#editForm').serialize();
-    $('#editForm').submit(function (event) {
-        event.preventDefault(); 
-        console.log("hiiiii");
-
-        const formData = $(this).serialize();
-        console.log("nnnnnnnnnnnnnnnnnnnn", formData);
-        const currentRoute = window.location.pathname;
-        let dynamicURL = '/profile #addrassArea';
-        if (currentRoute === '/checkout') {
-            dynamicURL = '/checkout #addrassArea';
+            editAddressModal.style.display = 'block';
+        }
+        if (closeEditModalButton) {
+            closeEditModalButton.addEventListener('click', function () {
+                editAddressModal.style.display = 'none';
+            });
         }
 
-        $.ajax({
-            type: 'POST',
-            url: '/editaddress', 
-            data: formData,
-            success: function (data) {
-                if (data.success == true) {
-                    console.log(data);
-                    $('#addrassArea').load(dynamicURL)
-                    editAddressModal.style.display = 'none';
-                    $('.modal-backdrop').remove();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Address Successfully Edited',
-                        text: 'Your address has been added successfully.',
-                    });
+        function editAddress() {
+            const formData = $('#editForm').serialize();
+            $('#editForm').submit(function (event) {
+                event.preventDefault();
+                console.log("hiiiii");
 
-                } else {
-                    console.error('Error updating address');
+                const formData = $(this).serialize();
+                console.log("nnnnnnnnnnnnnnnnnnnn", formData);
+                const currentRoute = window.location.pathname;
+                let dynamicURL = '/profile #addrassArea';
+                if (currentRoute === '/checkout') {
+                    dynamicURL = '/checkout #addrassArea';
                 }
-            },
-            error: function (error) {
-                console.error('Ajax error:', error);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/editaddress',
+                    data: formData,
+                    success: function (data) {
+                        if (data.success == true) {
+                            console.log(data);
+                            $('#addrassArea').load(dynamicURL)
+                            editAddressModal.style.display = 'none';
+                            $('.modal-backdrop').remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Address Successfully Edited',
+                                text: 'Your address has been added successfully.',
+                            });
+
+                        } else {
+                            console.error('Error updating address');
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Ajax error:', error);
+                    }
+                });
+            });
+        }
+
+        function validateForm() {
+            const name = validateField('name', 'Name must contain only letters');
+            const address = validateField('address', 'Address is required');
+            const landmark = validateField('landmark', 'Landmark must contain only letters and numbers');
+            const state = validateField('state', 'State is required');
+            const city = validateField('city', 'City is required');
+            const pincode = validatePincode();
+            const phone = validatePhone();
+            const email = validateEmail();
+
+            if (name === null || address === null || landmark === null || state === null || city === null || pincode === null || phone === null || email === null) {
+                return true;
             }
-        });
-    });
-}
 
+            return name && address && landmark && state && city && pincode && phone && email;
+        }
 
+        function validateField(fieldName, errorMessage) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            const value = field.value.trim();
+            const errorTag = document.getElementById(`${fieldName}Error`);
 
-function editValidate() {
-    const name = validateField('editName', 'Name must contain only letters');
-    const address = validateField('editAddress', 'Address is required');
-    const landmark = validateField('editLandmark', 'cannot be empty');
-    const state = validateField('editState', 'State is required');
-    const city = validateField('editCity', 'City is required');
-    const pincode = editValidatePincode();
-    const phone = editValidatePhone();
-    const email = editValidateEmail();
+            if (!value) {
+                showError(errorTag, errorMessage);
+                return false;
+            }
 
-    return name && address && landmark && state && city && pincode && phone && email;
-}
+            if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
+                showError(errorTag, 'Name must contain only letters');
+                return false;
+            }
 
-function validateField(fieldName, errorMessage) {
-    const field = document.querySelector(`[name="${fieldName}"]`);
-    const value = field.value.trim();
-    const errorTag = document.getElementById(`${fieldName}Error`);
+            if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
+                showError(errorTag, 'Landmark must contain only letters and numbers');
+                return false;
+            }
 
-    if (!value) {
-        showError(errorTag, errorMessage);
-        return false;
-    }
+            hideError(errorTag);
+            return true;
+        }
 
-    if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
-        showError(errorTag, 'Name must contain only letters');
-        return false;
-    }
+        function validatePincode() {
+            const pincodeField = document.querySelector('[name="pincode"]');
+            const pincode = pincodeField.value.trim();
+            const errorTag = document.getElementById('pincodeError');
 
-    if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
-        showError(errorTag, 'Landmark must contain only letters and numbers');
-        return false;
-    }
+            if (!pincode) {
+                showError(errorTag, 'Pincode is required');
+                return false;
+            }
 
-    hideError(errorTag);
-    return true;
-}
+            if (!/^\d{6}$/.test(pincode)) {
+                showError(errorTag, 'Pincode must be a 6-digit number');
+                return false;
+            }
 
-function editValidatePincode() {
-    const pincodeField = document.querySelector('[name="editPincode"]');
-    const pincode = pincodeField.value.trim();
-    const errorTag = document.getElementById('editPincodeError');
+            hideError(errorTag);
+            return true;
+        }
 
-    if (!pincode) {
-        showError(errorTag, 'Pincode is required');
-        return false;
-    }
+        function validatePhone() {
+            const phoneField = document.querySelector('[name="phone"]');
+            const phone = phoneField.value.trim();
+            const errorTag = document.getElementById('mobileError');
 
-    if (!/^\d{6}$/.test(pincode)) {
-        showError(errorTag, 'Pincode must be a 6-digit number');
-        return false;
-    }
+            if (!phone) {
+                showError(errorTag, 'Phone is required');
+                return false;
+            }
 
-    hideError(errorTag);
-    return true;
-}
+            if (!/^\d{10}$/.test(phone)) {
+                showError(errorTag, 'Phone must be a 10-digit number');
+                return false;
+            }
 
-function editValidatePhone() {
-    const phoneField = document.querySelector('[name="editPhone"]');
-    const phone = phoneField.value.trim();
-    const errorTag = document.getElementById('editPhoneError');
+            hideError(errorTag);
+            return true;
+        }
 
-    if (!phone) {
-        showError(errorTag, 'Phone is required');
-        return false;
-    }
+        function validateEmail() {
+            const emailField = document.querySelector('[name="email"]');
+            const email = emailField.value.trim();
+            const errorTag = document.getElementById('emailError');
 
-    if (!/^\d{10}$/.test(phone)) {
-        showError(errorTag, 'Phone must be a 10-digit number');
-        return false;
-    }
+            if (!email) {
+                showError(errorTag, 'Email is required');
+                return false;
+            }
 
-    hideError(errorTag);
-    return true;
-}
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                showError(errorTag, 'Invalid email address');
+                return false;
+            }
 
-function editValidateEmail() {
-    const emailField = document.querySelector('[name="editEmail"]');
-    const email = emailField.value.trim();
-    const errorTag = document.getElementById('editEmailError');
+            hideError(errorTag);
+            return true;
+        }
 
-    if (!email) {
-        showError(errorTag, 'Email is required');
-        return false;
-    }
+        function showError(errorTag, errorMessage) {
+            if (!errorTag) {
+                const fieldName = errorTag.id.replace('Error', '');
+                const field = document.querySelector(`[name="${fieldName}"]`);
+                const errorTag = document.createElement('p');
+                errorTag.id = `${fieldName}Error`;
+                errorTag.classList.add('error-message');
+                field.parentNode.appendChild(errorTag);
+            }
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-        showError(errorTag, 'Invalid email address');
-        return false;
-    }
+            errorTag.innerText = errorMessage;
+        }
 
-    hideError(errorTag);
-    return true;
-}
-
-function showError(errorTag, errorMessage) {
-    if (!errorTag) {
-        const fieldName = errorTag.id.replace('Error', '');
-        const field = document.querySelector(`[name="${fieldName}"]`);
-        const errorTag = document.createElement('p');
-        errorTag.id = `${fieldName}Error`;
-        errorTag.classList.add('error-message');
-        field.parentNode.appendChild(errorTag);
-    }
-
-    errorTag.innerText = errorMessage;
-}
-
-function hideError(errorTag) {
-    if (errorTag) {
-        errorTag.innerText = '';
-    }
-}
+        function hideError(errorTag) {
+            if (errorTag) {
+                errorTag.innerText = '';
+            }
+        }
 
 
 
 
-function showusereditmodal() {
-    $('#editProfileModal').modal('show');
-}
+
+        function editValidate() {
+            const name = validateField('editName', 'Name must contain only letters');
+            const address = validateField('editAddress', 'Address is required');
+            const landmark = validateField('editLandmark', 'cannot be empty');
+            const state = validateField('editState', 'State is required');
+            const city = validateField('editCity', 'City is required');
+            const pincode = editValidatePincode();
+            const phone = editValidatePhone();
+            const email = editValidateEmail();
+
+            return name && address && landmark && state && city && pincode && phone && email;
+        }
+
+        function validateField(fieldName, errorMessage) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            const value = field.value.trim();
+            const errorTag = document.getElementById(`${fieldName}Error`);
+
+            if (!value) {
+                showError(errorTag, errorMessage);
+                return false;
+            }
+
+            if (fieldName === 'name' && !/^[a-zA-Z\s]*$/.test(value)) {
+                showError(errorTag, 'Name must contain only letters');
+                return false;
+            }
+
+            if (fieldName === 'landmark' && !/^[a-zA-Z0-9\s]*$/.test(value)) {
+                showError(errorTag, 'Landmark must contain only letters and numbers');
+                return false;
+            }
+
+            hideError(errorTag);
+            return true;
+        }
+
+        function editValidatePincode() {
+            const pincodeField = document.querySelector('[name="editPincode"]');
+            const pincode = pincodeField.value.trim();
+            const errorTag = document.getElementById('editPincodeError');
+
+            if (!pincode) {
+                showError(errorTag, 'Pincode is required');
+                return false;
+            }
+
+            if (!/^\d{6}$/.test(pincode)) {
+                showError(errorTag, 'Pincode must be a 6-digit number');
+                return false;
+            }
+
+            hideError(errorTag);
+            return true;
+        }
+
+        function editValidatePhone() {
+            const phoneField = document.querySelector('[name="editPhone"]');
+            const phone = phoneField.value.trim();
+            const errorTag = document.getElementById('editPhoneError');
+
+            if (!phone) {
+                showError(errorTag, 'Phone is required');
+                return false;
+            }
+
+            if (!/^\d{10}$/.test(phone)) {
+                showError(errorTag, 'Phone must be a 10-digit number');
+                return false;
+            }
+
+            hideError(errorTag);
+            return true;
+        }
+
+        function editValidateEmail() {
+            const emailField = document.querySelector('[name="editEmail"]');
+            const email = emailField.value.trim();
+            const errorTag = document.getElementById('editEmailError');
+
+            if (!email) {
+                showError(errorTag, 'Email is required');
+                return false;
+            }
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                showError(errorTag, 'Invalid email address');
+                return false;
+            }
+
+            hideError(errorTag);
+            return true;
+        }
+
+        function showError(errorTag, errorMessage) {
+            if (!errorTag) {
+                const fieldName = errorTag.id.replace('Error', '');
+                const field = document.querySelector(`[name="${fieldName}"]`);
+                const errorTag = document.createElement('p');
+                errorTag.id = `${fieldName}Error`;
+                errorTag.classList.add('error-message');
+                field.parentNode.appendChild(errorTag);
+            }
+
+            errorTag.innerText = errorMessage;
+        }
+
+        function hideError(errorTag) {
+            if (errorTag) {
+                errorTag.innerText = '';
+            }
+        }
 
 
 
 
-function validateEditProfileForm() {
-    var name = document.getElementById('editName').value;
-    var phone = document.getElementById('editPhone').value;
-
-    // Reset previous error messages
-    document.getElementById('usernameError').innerText = '';
-    document.getElementById('phoneError').innerText = '';
-
-    // Validate name
-    if (name.trim() === '') {
-        document.getElementById('usernameError').innerText = 'Name cannot be empty';
-        return false;
-    }
-
-    // Validate phone number
-    if (!/^\d{10}$/.test(phone)) {
-        document.getElementById('phoneError').innerText = 'Invalid mobile number';
-        return false;
-    }
-
-    return true; // Form submission allowed
-}
 
 
 
