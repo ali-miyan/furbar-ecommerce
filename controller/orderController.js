@@ -1,19 +1,7 @@
-const express = require("express");
-const config = require("../config/config");
 const User = require("../models/userModel");
-const categoryModel = require('../models/categoryModel');
-const bcrypt = require("bcrypt");
-const adminController = require("../controller/adminConroller");
-const auth = require("../middleware/auth");
 const Product = require("../models/productModel")
-const sharp = require('sharp');
-const multer = require('../middleware/multer')
-const productController = require("../controller/productController")
-const session = require("express-session");
-const userController = require("../controller/userController");
 const cartModel = require('../models/cartModel')
 const addressModel = require('../models/addressModel')
-const cartController = require('../controller/cartController')
 const orderModel = require('../models/orderModal')
 const Razorpay = require('razorpay');
 const dotenv = require('dotenv')
@@ -28,6 +16,7 @@ const razorpay = new Razorpay({
 
 const checkout = async (req, res) => {
   try {
+    if(!req.session.orderId){
     const wallet = await User.findById(req.session.user_id);
     const cartData = await cartModel.findOne({ user: req.session.user_id }).populate({ path: 'product.productId', model: 'Product' }).populate('couponDiscount');
     const currentDate = new Date();
@@ -44,6 +33,10 @@ const checkout = async (req, res) => {
     console.log(discountAmount, "helooooo");
 
     res.render('checkout', { wallet, address, cartData, subtotal, coupons, discountAmount });
+    }else{
+      delete req.session.orderId
+      res.redirect('/showcart')
+    }
 
   } catch (error) {
     console.log(error);
@@ -80,16 +73,16 @@ const checkoutPost = async (req, res) => {
 
         if (cartData.couponDiscount) {
           const totalQuantity = cartData.product.reduce((total, product) => total + product.quantity, 0);
-          console.log(totalQuantity,'totalquantity');
-          const discountPerItem = cartData.couponDiscount.discountAmount /totalQuantity;
-          console.log(discountPerItem,'per item');
+          console.log(totalQuantity, 'totalquantity');
+          const discountPerItem = cartData.couponDiscount.discountAmount / totalQuantity;
+          console.log(discountPerItem, 'per item');
           item.totalPrice = price - discountPerItem;
         } else {
           item.totalPrice = price;
         }
         orderItems.push(item);
       }
-  }
+    }
 
 
     const total = orderItems.reduce((acc, item) => acc + item.totalPrice, 0);
@@ -130,6 +123,7 @@ const checkoutPost = async (req, res) => {
 
     await order.save();
     const orderId = order._id;
+    req.session.orderId = order._id
 
     if (order.orderStatus == "placed") {
       console.log("placeeddddddddddddddd");
@@ -157,8 +151,8 @@ const checkoutPost = async (req, res) => {
           { $inc: { quantity: -item.quantity } }
         );
       }
+      await cartData.deleteOne({ user: user._id })
       return res.json({ orderId, success: true })
-
     } else {
       let options = {
         amount: totalPrice * 100,
@@ -258,7 +252,6 @@ const returnOrder = async (req, res) => {
       amount: walletAmount,
       date: Date.now(),
     }
-
     const orderData = await orderModel.findOneAndUpdate(
       { _id: orderId, 'products._id': id },
       {
@@ -281,11 +274,8 @@ const returnOrder = async (req, res) => {
     if (orderData.products.length === 0) {
       await orderModel.findByIdAndUpdate(orderId, { orderStatus: 'returned or cancelled' });
     }
-
-
+ 
     await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
-
-
 
     await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: walletAmount }, $push: { walletHistory: data } })
 
@@ -306,7 +296,6 @@ const cancelOrder = async (req, res) => {
     console.log(productId);
     const cancelReason = req.body.cancelReason;
     const productDetails = await Product.findById(productId).populate('categoryId');
-
 
     const orderData = await orderModel.findOneAndUpdate(
       { _id: orderId, 'products._id': id },

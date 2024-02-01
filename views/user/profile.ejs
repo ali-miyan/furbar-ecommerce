@@ -68,7 +68,7 @@
                                                         <span class="info-label">Name:</span><%=user.name%> <br>
                                                         <span class="info-label">Email:</span><%=user.email%> <br>
                                                         <span class="info-label">Phone:</span><%=user.mobile%> <br>
-                                                        <span class="info-label">Referral Code:</span><span id="referralCode"><%=user.referalCode%></span>&nbsp;&nbsp;<a id="copyLink"><i  onclick="copyToClipboard()" class="bi bi-clipboard link-primary"></i></a>
+                                                        <span class="info-label">Referral Code:</span><span id="referralCode"><%=user.referalCode%></span>&nbsp;&nbsp;<a id="copyLink"><i  onclick="copyToClipboard()" class="fa-regular fa-copy"></i></a>
                                                     </p>
                                                 </div>
                                             </div>
@@ -381,8 +381,6 @@
                                                 <p id="editEmailError" class="error-message"></p>
                                             </div>
                                         </div>
-                                        <!-- Add other fields as needed for editing -->
-
                                         <!-- Add hidden input for address ID -->
                                         <input type="hidden" name="editAddressId" id="editAddressId" />
                                         <div class="col-md-12">

@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/ecommerce',{
+    await mongoose.connect('mongodb://localhost:27017/ecommerce', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      family:4
+      family: 4
     })
     console.log('Connected to MongoDB');
   } catch (error) {
@@ -16,9 +16,8 @@ const connectDB = async () => {
 const sessionSecret = 'mysitesessionsecret';
 
 module.exports = {
-    sessionSecret,
-    connectDB
+  sessionSecret,
+  connectDB
 }
 
 
- 

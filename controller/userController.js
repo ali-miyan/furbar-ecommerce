@@ -1,11 +1,5 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const config = require('../config/config');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const session = require('express-session');
-const auth = require('../middleware/auth');
-const userController = require('../controller/userController')
 const userVerification = require('../models/userOTP');
 const User = require('../models/userModel');
 const userOTP = require('../models/userOTP');
@@ -13,7 +7,6 @@ const dotenv = require('dotenv')
 dotenv.config()
 const path = require('path')
 const ejs = require('ejs')
-config.connectDB();
 const Product = require("../models/productModel");
 const addressModel = require('../models/addressModel');
 const orderModel = require('../models/orderModal');
@@ -32,9 +25,9 @@ const loadHome = async (req, res) => {
     try {
         const user_id = req.session.user_id
         const user = await User.findById(user_id)
-        const product = await Product.find({is_blocked:false}).limit(4)
-        console.log(product,'producttt');
-        res.render('home', { user,product })
+        const product = await Product.find({ is_blocked: false }).limit(4)
+        console.log(product, 'producttt');
+        res.render('home', { user, product })
 
     } catch (error) {
         console.log(error);
@@ -72,7 +65,7 @@ const loadShop = async (req, res) => {
         const searchQuery = req.query.search;
         const sort = req.query.sort
 
-        const totalProductsCount = await Product.countDocuments({is_blocked:false})
+        const totalProductsCount = await Product.countDocuments({ is_blocked: false })
         let totalPages;
 
         const selectedCategory = req.query.category;
@@ -116,13 +109,13 @@ const loadShop = async (req, res) => {
             default:
                 product = product
                 break
-        }   
+        }
 
-    const wishData = await wishlistModel.findOne({user:req.session.user_id})
-    const wishlistData = wishData ? wishData.product.map((val) => val.productId) : [];
+        const wishData = await wishlistModel.findOne({ user: req.session.user_id })
+        const wishlistData = wishData ? wishData.product.map((val) => val.productId) : [];
 
 
-        res.render('shop', { product, category, selectedCategory, totalPages, sort,wishlistData,totalProductsCount });
+        res.render('shop', { product, category, selectedCategory, totalPages, sort, wishlistData, totalProductsCount });
     } catch (error) {
         console.log(error);
         res.status(500).render('500');
@@ -207,8 +200,8 @@ const signupPost = async (req, res) => {
                 await User.findByIdAndUpdate(result._id, { $push: { walletHistory: data } }, { new: true });
             }
             const id = result._id
-            console.log(result,'otp 2');
-            res.json({data:true,id})
+            console.log(result, 'otp 2');
+            res.json({ data: true, id })
             sendOTPverification(result, res);
         }
     } catch (error) {
@@ -224,7 +217,7 @@ const verifyOTP = async (req, res) => {
         const id = req.query.id
         const message = req.query.id2
         console.log(id, 'th id');
-        res.render('otp', { id,message});
+        res.render('otp', { id, message });
     } catch (error) {
         console.log(error.message);
         res.status(500).render('500');
@@ -240,7 +233,7 @@ const verifyPost = async (req, res) => {
         console.log(userOTPVerificationrecord, 'reccccccccc');
 
         if (!userOTPVerificationrecord) {
-           res.json({ otp: false, message: "Record doesn't exist" });
+            res.json({ otp: false, message: "Record doesn't exist" });
         }
 
         const { expiresAt, otp } = userOTPVerificationrecord;
@@ -252,12 +245,12 @@ const verifyPost = async (req, res) => {
             const validOTP = await bcrypt.compare(userOtp, otp);
             if (!validOTP) {
                 console.log('invaallidddddddd verify');
-                 res.json({ otp: 'invalid', message: "Invalid code, try again..." });
+                res.json({ otp: 'invalid', message: "Invalid code, try again..." });
             } else {
-                await User.updateOne({ _id: userId }, {$set:{ verfied: true }});
+                await User.updateOne({ _id: userId }, { $set: { verfied: true } });
                 await userVerification.deleteOne({ user_id: userId });
                 req.session.user_id = userId;
-                 res.json({ otp: true });
+                res.json({ otp: true });
             }
         }
     } catch (error) {
@@ -293,7 +286,7 @@ const resendOtp = async (req, res) => {
     }
 }
 //resend otp
-const resendOTPverification = async ({ _id, email }, res,message) => {
+const resendOTPverification = async ({ _id, email }, res, message) => {
     try {
         console.log('noooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
@@ -335,7 +328,7 @@ const resendOTPverification = async ({ _id, email }, res,message) => {
 
 
 //sending otp
-const sendOTPverification = async ({ _id, email }, res,message) => {
+const sendOTPverification = async ({ _id, email }, res, message) => {
     try {
         console.log('heloooooooooo');
         const otp = `${Math.floor(1000 + Math.random() * 900)}`
@@ -365,10 +358,10 @@ const sendOTPverification = async ({ _id, email }, res,message) => {
         })
 
         //save otp records
-        if(message){
-           return res.json({_id,message })
+        if (message) {
+            return res.json({ _id, message })
         }
-        console.log(message,'message');
+        console.log(message, 'message');
         await newOTP.save();
         await transporter.sendMail(mail);
 
@@ -394,27 +387,27 @@ let loginPost = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
         const validUser = await User.findOne({ email: email })
-        if (validUser) { 
-        const passwordMatch = await bcrypt.compare(password, validUser.password)
-        if (passwordMatch) { 
-            console.log(validUser.verfied);
-            if (validUser.verfied === true) {
-            console.log('brooooooooooooooo');
-                if (validUser.is_blocked == false) {
-            console.log('brooooooooo2222222222oooooo');
-                    req.session.user_id = validUser._id;
-                    res.json({ redirect: '/', _id: validUser._id, message: 'success' });
+        if (validUser) {
+            const passwordMatch = await bcrypt.compare(password, validUser.password)
+            if (passwordMatch) {
+                console.log(validUser.verfied);
+                if (validUser.verfied === true) {
+                    console.log('brooooooooooooooo');
+                    if (validUser.is_blocked == false) {
+                        console.log('brooooooooo2222222222oooooo');
+                        req.session.user_id = validUser._id;
+                        res.json({ redirect: '/', _id: validUser._id, message: 'success' });
+                    } else {
+                        return res.json({ block: true, message: 'you have been bloacked by admin' })
+                    }
                 } else {
-                   return res.json({block:true,message:'you have been bloacked by admin'})
+                    const message = `Please verify your account by entering the OTP first.`
+                    console.log('otp 1');
+                    await sendOTPverification(validUser, res, message);
                 }
             } else {
-                const message = `Please verify your account by entering the OTP first.`
-                console.log('otp 1');
-                await sendOTPverification(validUser, res,message);
+                return res.json({ user: true, message: 'incorrect password' })
             }
-        } else {
-            return res.json({ user: true, message: 'incorrect password' })
-        }
         } else {
             return res.json({ user: true, message: 'you are not a user' })
         }
@@ -445,11 +438,11 @@ const detailShop = async (req, res) => {
     try {
         const id = req.query.id;
         const data = await Product.findOne({ _id: id }).populate('categoryId').populate('offer')
-        const relatedProduct = await Product.find({ categoryId: data.categoryId._id,_id:{$ne:data._id} })
-        console.log(relatedProduct,'relatedproduct');
-        console.log(data.categoryId._id,'id');
+        const relatedProduct = await Product.find({ categoryId: data.categoryId._id, _id: { $ne: data._id } })
+        console.log(relatedProduct, 'relatedproduct');
+        console.log(data.categoryId._id, 'id');
 
-        res.render('detailshop', { data,data2:relatedProduct })
+        res.render('detailshop', { data, data2: relatedProduct })
     } catch (error) {
         console.log(error);
         res.status(500).render('500');
@@ -594,7 +587,7 @@ function generateCode() {
     return code;
 }
 
-const forgetPassword = async(req,res)=>{
+const forgetPassword = async (req, res) => {
     try {
         res.render('forgetpassword')
     } catch (error) {
@@ -603,17 +596,17 @@ const forgetPassword = async(req,res)=>{
     }
 }
 
-const forgetPasswordPost = async(req,res)=>{
+const forgetPasswordPost = async (req, res) => {
     try {
-        const user = await User.findOne({email:req.body.email})
-        if(!user){
+        const user = await User.findOne({ email: req.body.email })
+        if (!user) {
             console.log('ttttttt');
-           return res.json({user:true,message:`can't find your email`})
-        }else if(!user.verfied){
-           return res.json({user:true,message:`sorry,you are a blocked user`})
-        }else{
-        res.json({success:true})
-        await sendResetLink(user,res);
+            return res.json({ user: true, message: `can't find your email` })
+        } else if (!user.verfied) {
+            return res.json({ user: true, message: `sorry,you are a blocked user` })
+        } else {
+            res.json({ success: true })
+            await sendResetLink(user, res);
         }
     } catch (error) {
         console.log(error);
@@ -621,10 +614,10 @@ const forgetPasswordPost = async(req,res)=>{
     }
 }
 
-const sendResetLink = async (user,res) => {
+const sendResetLink = async (user, res) => {
     try {
         const token = crypto.randomBytes(32).toString('hex')
-        user.tokenExpire = Date.now()+10 *60*1000
+        user.tokenExpire = Date.now() + 10 * 60 * 1000
         user.resetToken = token;
         await user.save();
 
@@ -646,7 +639,7 @@ const sendResetLink = async (user,res) => {
                 </div>
             `,
         };
-        
+
 
         await transporter.sendMail(resetMail);
 
@@ -656,28 +649,28 @@ const sendResetLink = async (user,res) => {
     }
 }
 
-const resetPassword = async(req,res)=>{
-    try {        
-    const token = req.query.id;
-    console.log('queryyyyyyyy');
-    res.render('resetpassword',{token})   
+const resetPassword = async (req, res) => {
+    try {
+        const token = req.query.id;
+        console.log('queryyyyyyyy');
+        res.render('resetpassword', { token })
     } catch (error) {
         console.log(error);
     }
 }
 
-const resetPasswordPost = async(req,res)=>{
+const resetPasswordPost = async (req, res) => {
     try {
-        const {token,password} = req.body;
+        const { token, password } = req.body;
         console.log(req.body);
         const user = await User.findOne({
             resetToken: token,
             tokenExpire: { $gt: Date.now() }
         });
-        console.log(user,'ddddddddddddddddddd');
+        console.log(user, 'ddddddddddddddddddd');
 
         if (!user) {
-            return res.json({ok:true,message:`Invalid or expired token`});
+            return res.json({ ok: true, message: `Invalid or expired token` });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -689,7 +682,7 @@ const resetPasswordPost = async(req,res)=>{
 
         await user.save();
 
-        return res.json({success:true});
+        return res.json({ success: true });
 
     } catch (error) {
         console.log(error);
@@ -697,13 +690,13 @@ const resetPasswordPost = async(req,res)=>{
     }
 }
 
-const changePassword = async(req,res)=>{
+const changePassword = async (req, res) => {
     try {
-        const { current , newPass } = req.body;
-        console.log(req.body,'ddddddddddd');
+        const { current, newPass } = req.body;
+        console.log(req.body, 'ddddddddddd');
         const id = req.session.user_id
         const user = await User.findById(id)
-        console.log(user,'ffffffffffffffff');
+        console.log(user, 'ffffffffffffffff');
         if (!user) {
             return res.json({ success: false, message: 'User not found.' });
         }

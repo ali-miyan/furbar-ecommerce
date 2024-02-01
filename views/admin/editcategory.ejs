@@ -155,31 +155,33 @@
                         <!-- Category Form -->
                         <form action="" method="post" onsubmit="return validateEditCategoryForm()">
                             <!-- Category Name -->
-                            <% if (typeof message !== 'undefined') { %>
+                            <% if (typeof message !=='undefined' ) { %>
                                 <div class="alert alert-danger alert-dismissible fade show" id="errorAlert">
                                     <i class="bi-exclamation-octagon-fill"></i>
                                     <strong class="mx-auto"><%- message %></strong>
                                 </div>
-                            <% } %>
-                        
-                            <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="categoryName" name="name" value="<%= data.name %>" >
-                                <div class="error-message" id="nameError"></div>
-                            </div>
-                        
-                            <!-- Category Description -->
-                            <div class="form-group">
-                                <label for="description">Description:</label>
-                                <input class="form-control" value="<%= data.description %>" id="categoryDescription" name="description" >
-                                <input type="hidden" name="id" value="<%= data._id %>">
-                                <div class="error-message" id="descriptionError"></div>
-                            </div>
-                        
-                            <div style="margin-top: 1.2rem;">
-                                <button type="submit" class="btn btn-primary">Add Category</button>
-                                <a href="/admin/category" type="submit" class="btn btn-primary">Back</a>
-                            </div>
+                                <% } %>
+
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" id="categoryName" name="name"
+                                            value="<%= data.name %>">
+                                        <div class="error-message" id="nameError"></div>
+                                    </div>
+
+                                    <!-- Category Description -->
+                                    <div class="form-group">
+                                        <label for="description">Description:</label>
+                                        <input class="form-control" value="<%= data.description %>"
+                                            id="categoryDescription" name="description">
+                                        <input type="hidden" name="id" value="<%= data._id %>">
+                                        <div class="error-message" id="descriptionError"></div>
+                                    </div>
+
+                                    <div style="margin-top: 1.2rem;">
+                                        <button type="submit" class="btn btn-primary">Add Category</button>
+                                        <a href="/admin/category" type="submit" class="btn btn-primary">Back</a>
+                                    </div>
                         </form>
 
                         <!-- End Category Form -->

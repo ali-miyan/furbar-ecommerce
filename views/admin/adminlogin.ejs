@@ -17,61 +17,58 @@
     <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
 </head>
 <div class="preloader"></div>
-    <section class="content-main mt-80 mb-80">
-        <div class="card mx-auto card-login">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Sign in</h4>
-                <form action="" method="post">
+<section class="content-main mt-180 mb-80">
+    <div class="card mx-auto card-login">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Sign in</h4>
+            <form action="" method="post">
 
-                    <% if(typeof message !=='undefined' ){ %>
-                        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                            <i class="bi-exclamation-octagon-fill"></i>
-                            <strong class="mx-auto"> <%- message %></strong>
+                <% if(typeof message !=='undefined' ){ %>
+                    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <strong class="mx-auto"> <%- message %></strong>
 
+                    </div>
+                    <% } %>
+
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Username or email" type="email" name="email" />
                         </div>
-                        <% } %>
+                        <!-- form-group// -->
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" name="password" />
+                        </div>
 
-                            <div class="mb-3">
-                                <input class="form-control" placeholder="Username or email" type="email" name="email" />
-                            </div>
-                            <!-- form-group// -->
-                            <div class="mb-3">
-                                <input class="form-control" placeholder="Password" type="password" name="password" />
-                            </div>
+                        <!-- form-group form-check .// -->
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </div>
+                        <!-- form-group// -->
 
-                            <!-- form-group form-check .// -->
-                            <div class="mb-4">
-                                <button type="submit" class="btn btn-primary w-100">Login</button>
-                            </div>
-                            <!-- form-group// -->
-                            <div class="mb-3">
-                                <a href="#" class="font-sm text-muted">Forgot password?</a>
-                                <!-- <label class="form-check">
-                                    <input type="checkbox" class="form-check-input" checked="" />
-                                    <span class="form-check-label">Remember</span>
-                                </label> -->
-                            </div>
-                </form>
-
-
-                <p class="text-center mb-4">Don't have account? <a href="#">Sign up</a></p>
-            </div>
+            </form>
         </div>
-    </section>
-    <footer class="main-footer font-xs">
-        <div class="row pb-30 pt-15">
-            <div class="col-sm-6">
-                <script>
-                    document.write(new Date().getFullYear());
-                </script>
-                &copy; Nest - HTML Ecommerce Template .
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end">All rights reserved</div>
-            </div>
+    </div>
+</section>
+<footer class="main-footer font-xs">
+    <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            &copy; Nest - HTML Ecommerce Template .
         </div>
-    </footer>
+        <div class="col-sm-6">
+            <div class="text-sm-end">All rights reserved</div>
+        </div>
+    </div>
+</footer>
 </main>
+<style>
+    body,
+    html {
+        overflow: hidden;
+    }
+</style>
 <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
 <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/vendors/select2.min.js"></script>
@@ -84,4 +81,5 @@
 
 
 </body>
+
 </html>

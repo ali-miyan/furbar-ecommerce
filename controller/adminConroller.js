@@ -1,10 +1,6 @@
-const express = require("express");
-const routeAdmin = express();
-const config = require("../config/config");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const categoryModel = require('../models/categoryModel');
-const adminController = require("../controller/adminConroller");
 const orderModel = require('../models/orderModal');
 const offerModel = require("../models/offerModel");
 const Product = require("../models/productModel");
@@ -69,17 +65,17 @@ const loadDashboard = async (req, res) => {
     const cashOnDelivery = await orderModel.countDocuments({
       payment: "Cash on delivery",
     });
-    
+
     const razorpay = await orderModel.countDocuments({
       payment: "Razorpay",
     });
-    
+
     const wallet = await orderModel.countDocuments({
       payment: "Wallet",
     });
-    
 
-    res.render("adminhome", { totalOrders, totalProducts, revenue, monthlyRevenue,currentMonthName,graphValue,cashOnDelivery,wallet,razorpay});
+
+    res.render("adminhome", { totalOrders, totalProducts, revenue, monthlyRevenue, currentMonthName, graphValue, cashOnDelivery, wallet, razorpay });
   } catch (error) {
     console.log(error);
     res.status(500).render('500');
@@ -212,13 +208,13 @@ const blockCategory = async (req, res) => {
     console.log(userValue);
     if (userValue.is_blocked) {
       await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: false } });
-      await Product.updateMany({categoryId:user},{$set:{isCategoryBlocked:false}})
+      await Product.updateMany({ categoryId: user }, { $set: { isCategoryBlocked: false } })
     } else {
       await categoryModel.updateOne({ _id: user }, { $set: { is_blocked: true } });
-      await Product.updateMany({categoryId:user},{$set:{isCategoryBlocked:true}})
+      await Product.updateMany({ categoryId: user }, { $set: { isCategoryBlocked: true } })
     }
     console.log(userValue);
-    res.json({ blocked: true });  
+    res.json({ blocked: true });
   } catch (error) {
     console.log(error.message);
     res.status(500).render('500');
@@ -303,10 +299,10 @@ const detailOrder = async (req, res) => {
   }
 }
 
-const reportPage = async (req,res) => {
+const reportPage = async (req, res) => {
   try {
     const orders = await orderModel.find()
-    res.render('reportPage',{orders})
+    res.render('reportPage', { orders })
   } catch (error) {
     console.log(error);
     res.status(500).render('500');
@@ -316,35 +312,35 @@ const reportPage = async (req,res) => {
 
 const salesReport = async (req, res) => {
   try {
-      console.log('heloooooooooo');
-      const orderData = await orderModel.find().populate('products.productId')
-      const totalOrders = await orderModel.countDocuments();
-      const totalProducts = await Product.countDocuments();
-  
-      const revenue = await orderModel.aggregate([
-        {
-          $group: {
-            _id: null,
-            revenue: { $sum: "$subtotal" }
-          }
+    console.log('heloooooooooo');
+    const orderData = await orderModel.find().populate('products.productId')
+    const totalOrders = await orderModel.countDocuments();
+    const totalProducts = await Product.countDocuments();
+
+    const revenue = await orderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          revenue: { $sum: "$subtotal" }
         }
-      ]);
+      }
+    ]);
 
-      const ejsPagePath = path.join(__dirname, '../views/admin/report.ejs');
-      const ejsPage = await ejs.renderFile(ejsPagePath, { orderData,totalOrders,totalProducts,revenue });
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.setContent(ejsPage);
-      const pdfBuffer = await page.pdf();
-      await browser.close();
+    const ejsPagePath = path.join(__dirname, '../views/admin/report.ejs');
+    const ejsPage = await ejs.renderFile(ejsPagePath, { orderData, totalOrders, totalProducts, revenue });
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setContent(ejsPage);
+    const pdfBuffer = await page.pdf();
+    await browser.close();
 
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
-      res.send(pdfBuffer);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+    res.send(pdfBuffer);
 
   } catch (error) {
-      console.log(error.message);
-      res.status(500).render('500');
+    console.log(error.message);
+    res.status(500).render('500');
   }
 }
 
@@ -368,7 +364,7 @@ const salesReportExel = async (req, res) => {
     const worksheet = workbook.addWorksheet('Sales Report');
 
     worksheet.addRow(['Order ID', 'Billing Name', 'Date', 'Total', 'Payment Method']);
-    
+
     orderData.forEach(order => {
       worksheet.addRow([
         order._id,
@@ -387,7 +383,7 @@ const salesReportExel = async (req, res) => {
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename=sales_report.xlsx');
-    
+
     res.send(buffer);
 
   } catch (error) {
