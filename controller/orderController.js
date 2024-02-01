@@ -151,8 +151,8 @@ const checkoutPost = async (req, res) => {
           { $inc: { quantity: -item.quantity } }
         );
       }
+      await cartData.deleteOne({ user: user._id })
       return res.json({ orderId, success: true })
-
     } else {
       let options = {
         amount: totalPrice * 100,
