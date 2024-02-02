@@ -471,10 +471,16 @@
     if (!newPassword) {
         errorElement.innerText = 'Please enter a new password.';
         return;
+    }else if(newPassword.length < 8){
+        errorElement.innerText = 'Password cannot be less than 8';
+        return;
     }
 
     if (!confirmPassword) {
         errorElement.innerText = 'Please confirm your new password.';
+        return;
+    }else if(confirmPassword.length < 8){
+        errorElement.innerText = 'Password cannot be less than 8';
         return;
     }
 

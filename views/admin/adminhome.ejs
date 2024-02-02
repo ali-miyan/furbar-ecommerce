@@ -229,6 +229,7 @@
                                 <h6 class="mb-1 card-title">
                                     <%=currentMonthName%> Earnings
                                 </h6>
+                                <%console.log(monthlyRevenue[0].monthlyRevenue,"uhssuchs")%>
                                 <span>₹<%=monthlyRevenue[0].monthlyRevenue%></span>
                                 <span class="text-sm">monthly revenue </span>
                             </div>
@@ -309,6 +310,7 @@
                                 data: <%= JSON.stringify(graphValue) %>
                             }
                         ]
+                        
                     },
                     options: {
                         plugins: {

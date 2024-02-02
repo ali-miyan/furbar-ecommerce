@@ -36,8 +36,9 @@ const loadDashboard = async (req, res) => {
     ]);
 
     const currentMonth = new Date();
-    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-    const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    const currentMonthIndex = currentMonth.getMonth(); 
+    const startOfMonth = new Date(currentMonth.getFullYear(), 0, 1); 
+    const endOfMonth = new Date(currentMonth.getFullYear() + 1, 0, 1); 
     endOfMonth.setMilliseconds(endOfMonth.getMilliseconds() - 1);
     const currentMonthName = (new Date()).toLocaleString('default', { month: 'long' });
 
@@ -52,14 +53,18 @@ const loadDashboard = async (req, res) => {
       },
       {
         $group: {
-          _id: null,
+          _id: { $month: "$orderDate" },
           monthlyRevenue: { $sum: "$subtotal" }
         }
       }
     ]);
 
-    const graph = monthlyRevenue.map(entry => entry.monthlyRevenue)
-    const graphValue = graph.concat(Array(12 - graph.length).fill(0))
+    const graphValue = Array(12).fill(0);
+
+    monthlyRevenue.forEach(entry => {
+      const monthIndex = entry._id - 1; 
+      graphValue[monthIndex] = entry.monthlyRevenue;
+    });
     console.log(graphValue);
 
     const cashOnDelivery = await orderModel.countDocuments({

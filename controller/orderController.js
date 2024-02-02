@@ -55,7 +55,7 @@ const checkoutPost = async (req, res) => {
     const paymentMethod = req.body.payment;
     const cartData = await cartModel.findOne({ user: userId }).populate('couponDiscount');
 
-    let status = paymentMethod == "Cash on delivery" ? "placed" : "pending"
+    let status = paymentMethod === "Cash on delivery" || paymentMethod === "Wallet" ? "placed" : "pending";
     const orderItems = [];
 
     for (const product of cartData.product) {
