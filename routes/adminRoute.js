@@ -81,5 +81,4 @@ routeAdmin.get('/downloadreport', adminController.salesReport)
 
 routeAdmin.get('/downloadreportexel', adminController.salesReportExel)
 
-
 module.exports = routeAdmin;

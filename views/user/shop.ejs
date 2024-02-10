@@ -36,7 +36,6 @@
                                 <div class="shop-product-wrapper" >
                                     <div class="row" id="productContainer">
                                         <p class="text-center mt-5"><%= typeof totalPages === 'string' ? totalPages : '' %></p>
-                                        <%console.log(totalPages,'ssss')%>
                                         <% product.forEach(product=> { %>
                                             <% if (!product.is_blocked && !product.isCategoryBlocked) { %>
                                                 <div class="col-lg-4 col-sm-6" >
@@ -240,7 +239,6 @@ function updateSort() {
             nextPageLink.style.display = "block";
         });
     let productsPerPage = 7
-    console.log(products);
     function showProducts() {
         let startIndex = (currentPage - 1) * productsPerPage;
         let endIndex = startIndex + productsPerPage;
