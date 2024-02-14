@@ -125,8 +125,8 @@ const checkoutPost = async (req, res) => {
     const orderId = order._id;
     req.session.orderId = order._id
 
-    if (order.orderStatus == "placed") {
-      console.log("placeeddddddddddddddd");
+    if (paymentMethod == "Cash on delivery") {
+      console.log("placeeddddddddddddddd cod");
       for (const item of orderItems) {
         await Product.updateOne(
           { _id: item.productId },
@@ -136,7 +136,7 @@ const checkoutPost = async (req, res) => {
       await cartData.deleteOne({ user: user._id });
       res.json({ orderId, success: true })
     } else if (paymentMethod == "Wallet") {
-
+      console.log('placed wallettt');
       const data = {
         amount: -totalPrice,
         date: new Date()

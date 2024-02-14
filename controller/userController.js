@@ -232,7 +232,7 @@ const verifyPost = async (req, res) => {
         const userOTPVerificationrecord = await userVerification.findOne({ user_id: userId });
         console.log(userOTPVerificationrecord, 'reccccccccc');
 
-        if (!userOTPVerificationrecord) {
+        if (!userOTPVerificationrecord) {   
             res.json({ otp: false, message: "Record doesn't exist" });
         }
 
@@ -245,12 +245,12 @@ const verifyPost = async (req, res) => {
             const validOTP = await bcrypt.compare(userOtp, otp);
             if (!validOTP) {
                 console.log('invaallidddddddd verify');
-                res.json({ otp: 'invalid', message: "Invalid code, try again..." });
+               return res.json({ otp: 'invalid', message: "Invalid code, try again..." });
             } else {
                 await User.updateOne({ _id: userId }, { $set: { verfied: true } });
                 await userVerification.deleteOne({ user_id: userId });
                 req.session.user_id = userId;
-                res.json({ otp: true });
+                return res.json({ otp: true });
             }
         }
     } catch (error) {
