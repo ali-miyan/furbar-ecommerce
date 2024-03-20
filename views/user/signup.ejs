@@ -189,12 +189,18 @@ function userSignUp() {
             console.log(data,'response');
             if (!data.referal) {
                 signupError.textContent = data.message
+<<<<<<< HEAD
+            } if(data.user == false){
+                signupError.textContent = data.message
+            }if(data.data){
+=======
             }
             if(data.user == false){
                 signupError.textContent = data.message
             }
             if(data.success){
                 console.log('reached hereee');
+>>>>>>> 843888a6ee90c07fb2ace540f1d16a3fc89ae6f8
                 location.href = `/verifyOtp?id=${data.id}`;
             }
             
