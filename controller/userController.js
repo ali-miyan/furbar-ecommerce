@@ -202,8 +202,8 @@ const signupPost = async (req, res) => {
             }
             const id = result._id
             console.log(result, 'otp 2');
-            res.json({ data: true, id })
-            sendOTPverification(result, res);
+            await sendOTPverification(result, res);
+            return res.json({ success: true, id })
         }
     } catch (error) {
         console.error(error);
@@ -348,7 +348,7 @@ const sendOTPverification = async ({ _id, email }, res, message) => {
                         </div>
                     </body>
                 </html>`,
-        };
+        }
         const hashedOTP = await bcrypt.hash(otp, 10);
 
         const newOTP = await new userOTP({
@@ -364,7 +364,13 @@ const sendOTPverification = async ({ _id, email }, res, message) => {
         }
         console.log(message, 'message');
         await newOTP.save();
-        await transporter.sendMail(mail);
+        await transporter.sendMail(mail,(error,info)=>{
+            if (error) {
+                console.error('Error sending email:', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
 
     } catch (error) {
         console.log(error);
@@ -375,9 +381,14 @@ const sendOTPverification = async ({ _id, email }, res, message) => {
 //node mailer
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
+    port:465,
+    secure:true,
     auth: {
         user: process.env.user_email,
         pass: process.env.user_password
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 })
 
