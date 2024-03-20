@@ -332,7 +332,7 @@ const salesReport = async (req, res) => {
     ]);
 
     const ejsPagePath = path.join(__dirname, '../views/admin/report.ejs');
-    const ejsPage = await ejs.renderFile(ejsPagePath, { orderData, totalOrders, totalProducts, revenue });
+    const ejsPage = await ejs.renderFile(ejsPagePath, {orderData, totalOrders, totalProducts, revenue});
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(ejsPage);

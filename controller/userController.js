@@ -69,6 +69,7 @@ const loadShop = async (req, res) => {
         let totalPages;
 
         const selectedCategory = req.query.category;
+        console.log(selectedCategory);
         const category = await categoryModel.find({ _id: { $in: await Product.distinct("categoryId") } });
 
         let product;
@@ -171,7 +172,7 @@ const signupPost = async (req, res) => {
             const referalCheck = await User.find({ referalCode: code })
             if (referalCheck.length === 0) {
                 console.log('helooooooooo');
-                return res.json({ referal: false })
+                return res.json({ referal: false,message:'invalid referal code' })
             } else {
                 data = {
                     amount: 1000,

@@ -37,8 +37,8 @@
                                                 <%= product.productId.categoryId.name %> <br>
                                                 Price: ₹<%= product.price %> <br>
                                                 Quantity: <%= product.quantity %> <br>
-                                                Total: ₹<%= product.totalPrice %> <br>
-                                                Discounted:₹<%= product.price - product.totalPrice %> 
+                                                Total: ₹ <%=Math.floor( product.totalPrice )%> <br>
+                                                Discounted:₹<%=Math.floor( product.price - product.totalPrice )%> 
                                                 <% if (orderData.orderStatus !== 'Cancelled' ||
                                                     product.productStatus === 'Cancelled') { %>
                                                         <br>
@@ -98,7 +98,7 @@
                                                             href="/detailshop?id=<%= cancelledProduct.productDetails._id %>">
                                                             <%= cancelledProduct.productDetails.name %>
                                                         </a></h5>
-                                                    <p>Price:₹ <%= cancelledProduct.productDetails.price %>
+                                                    <p>Price:₹ <%=Math.floor( cancelledProduct.productDetails.price )%>
                                                         <br>Quantity: <%= cancelledProduct.quantity %>
                                                         <br>Status: <%= cancelledProduct.productStatus %>
                                                         <br>Cancel Reason: <%= cancelledProduct.cancelReason %>
@@ -143,7 +143,7 @@
                                                                 href="/detailshop?id=<%= returnedProduct.productDetails._id %>">
                                                                 <%= returnedProduct.productDetails.name %>
                                                             </a></h5>
-                                                        <p>Price:₹ <%= returnedProduct.productDetails.price %>
+                                                        <p>Price:₹ <%=Math.floor( returnedProduct.productDetails.price) %>
                                                             <br>Quantity: <%= returnedProduct.quantity %>
                                                             <br>Status: <%= returnedProduct.productStatus %>
                                                             <br>return Reason: <%= returnedProduct.returnReason %>
