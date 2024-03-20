@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded',function () {
             userSignUp();
         }
     });
-    
+
 
     function validateForm() {
         const name = document.getElementById('name').value;
@@ -187,7 +187,6 @@ function userSignUp() {
         data: formData,
         success: function (data) {
             console.log(data,'response');
-            location.href = '/home'
             if (!data.referal) {
                 signupError.textContent = data.message
             }
