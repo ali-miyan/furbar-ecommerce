@@ -202,8 +202,8 @@ const signupPost = async (req, res) => {
             }
             const id = result._id
             console.log(result, 'otp 2');
+            res.json({ success: true, id })
             await sendOTPverification(result, res);
-            return res.json({ success: true, id })
         }
     } catch (error) {
         console.error(error);

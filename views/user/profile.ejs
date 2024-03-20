@@ -268,7 +268,7 @@
                                 <span class="close" id="closeModal">&times;</span>
                                 <h4 class="account-title">Add Address</h4>
                                 <!-- Your form goes here -->
-                                <form id="myForm" action='/addressform' method="post" onsubmit="return validateForm()">
+                                <form id="myForm" onsubmit="return validateForm()">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="single-form">
@@ -319,7 +319,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-hover-dark mt-4 text-center">Save Change</button>
+                                    <button type="button" onclick="updateAddress()" class="btn btn-primary btn-hover-dark mt-4 text-center">Save Change</button>
                                 </form>
                             </div>
                         </div>
