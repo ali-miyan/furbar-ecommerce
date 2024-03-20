@@ -188,10 +188,10 @@ function userSignUp() {
             console.log(data,'response');
             if (!data.referal) {
                 signupError.textContent = data.message
-            } else if(data.user == false){
+            } if(data.user == false){
                 signupError.textContent = data.message
-            }else if(data){
-                window.location.href = `/verifyOtp?id=${data.id}`;
+            }if(data.data){
+                location.href = `/verifyOtp?id=${data.id}`;
             }
             
         },
