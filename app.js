@@ -42,12 +42,6 @@ app.use('/',userRoute)
 app.use('/admin',adminRoute)
 
 
-
-app.use((req, res, next) => {
-  res.status(404).render('404');
-})
-
-
 app.listen(PORT,()=>{
     console.log(`server is running in port:http://localhost:${PORT}`);
 })
